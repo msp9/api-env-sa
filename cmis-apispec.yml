@@ -1,1 +1,1463 @@
+---
+openapi: 3.0.2
+info:
+  title: CMIS API Specification
+  version: "0.3"
+  description: Case Management and Intelligence System (CMIS) - Webservice API specification
+  contact:
+    name: DEW Business Information Systems Unit - SI&T Branch
+    email: DLDEWInformationBranchOnlineServices@sa.gov.au
+  license:
+    name: Creative Commons Attribution 4.0 Licence
+    url: https://creativecommons.org/licenses/by/4.0/
+servers:
+- url: https://{domain}.cmis.env.sa.gov.au
+  description: API Server
+  variables:
+    domain:
+      default: qa-api
+      description: QA domain
+paths:
+  /crm-apis/v0.2/businesses:
+    summary: Business establishment details end-point
+    description: Resource URI for interacting with registered Business establishments
+      in CMIS
+    get:
+      tags:
+      - crm-apis
+      parameters:
+      - name: businessNameContains
+        description: Filter reprsenting a value to string match with `businessName`
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: abnNumber
+        description: |-
+          ABN Number of the Business establishment.
 
+          The ABN Number should be of the format `nnnnnnnnnnn`. For eg: '36702093234'
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/business-page'
+          description: Successful operation
+        "400":
+          description: "Bad request - Atleast one of the following query parameters\
+            \ required : \n\n`businessNameContains`, or `abnNumber`"
+        "401":
+          description: Unauthorized
+      operationId: GetBusinesses
+      summary: List all  Businesses registered in the system
+      description: "Paginated list of all Businesses registered in the CMIS system.\n\
+        \nNote: Atleast one of the following query parameters required for this end-point\
+        \ : \n\n`businessNameContains`, or `abnNumber`"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/business'
+        required: true
+      tags:
+      - crm-apis
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/business'
+          description: Successful operation
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      operationId: CreateBusiness
+      summary: Create a new `business` establishment
+      description: Create a new `business` entity in the CMIS System
+  /auth/v0.2/token:
+    summary: Authentication and Authorization
+    description: Authentication and authorization end points
+    post:
+      tags:
+      - auth-apis
+      parameters:
+      - examples:
+          WWW-Authenticate:
+            value: QWxhZGRpbjpPcGVuU2VzYW1l
+        name: WWW-Authenticate
+        description: username:password Base64-encoded
+        schema:
+          type: string
+        in: header
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: User authorized - Token generated
+        "401":
+          description: Unauthorized
+      security:
+      - Basic: []
+      operationId: GetToken()
+      summary: Generate bearer token
+      description: Request to generate and return a bearer token.
+  /case-apis/v0.2/cases/{id}:
+    summary: Endpoint to manage a single case.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `case`.  This path contains `GET` and `PATCH` operations.
+    get:
+      tags:
+      - case-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/casedetail'
+          description: Successful response - returns a single `case`.
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      operationId: GetCasedetails
+      summary: Get case details
+      description: Gets the details of a single instance of a `case`.
+    patch:
+      requestBody:
+        description: Updated `case` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/casedetail'
+        required: true
+      tags:
+      - case-apis
+      parameters:
+      - name: id
+        description: A unique identifier for a `case`.
+        schema:
+          type: string
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/casedetail'
+          description: Update successful
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      operationId: UpdateCase
+      summary: Update a case
+      description: Updates details an existing `case`.
+    parameters:
+    - name: id
+      description: |-
+        A unique identifier for a `case`.
+
+        System generated `caseNumber` field in the `case` data-type will be used as the unique identifier
+      schema:
+        type: string
+      in: path
+      required: true
+  /case-apis/v0.2/offencetypes:
+    summary: Endpoint for querying Offence types
+    description: "The REST endpoint/path used to list zero or more `offencetype` entities.\
+      \  \n\nThis path contains a `GET` operation to query all the offence types registered\
+      \ in the system."
+    get:
+      tags:
+      - case-apis
+      parameters:
+      - name: actTitleContains
+        description: Act or Regulation title contains
+        schema:
+          type: string
+        in: query
+      - name: offenceCode
+        description: Offence Code
+        schema:
+          type: integer
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offencetype-page'
+          description: Successful response - returns an page of `offencetype` entities.
+        "401":
+          description: Unauthorized
+      operationId: GetOffenceTypes
+      summary: List all offencetypes
+      description: Gets a list of all `offencetype` entities that match the supplied
+        filters
+  /case-apis/v0.3/cases/{id}/documents:
+    summary: Endpoint for querying and uploading and downloading documents attached
+      to a case
+    description: The REST endpoint/path used to list, upload and download documents
+      assosiated with a `case`.  This path contains a `GET` and `POST` operation to
+      perform the list and create tasks, respectively.
+    get:
+      tags:
+      - case-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/document-metadata'
+          description: Successful response - list of attached documents (metadata
+            only)
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      operationId: GetDocumentList
+      summary: Get list of attached documents (metadata only)
+      description: Get list of attached documents (metadata only). The metadat contains
+        the `fileURL` which can be used to download the document if required by the
+        client.
+    post:
+      requestBody:
+        description: File content (binary format)
+        content:
+          application/octet-stream: {}
+        required: true
+      tags:
+      - case-apis
+      parameters:
+      - name: fileName
+        description: Name of the uploaded document including extension
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: Content-Length
+        description: "The `Content-Length` entity header indicates the size of the\
+          \ entity-body, in bytes, sent to the recipient.  \n\nhttps://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length"
+        schema:
+          format: int64
+          type: integer
+        in: header
+        required: true
+      - name: uploadedBy
+        description: Username of uploading user
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "202":
+          description: Request accepted
+      operationId: UploadDocument
+      summary: Upload a document to the case
+      description: Uploaed a document to the case
+    parameters:
+    - name: id
+      description: |-
+        A unique identifier for a `case`.
+
+        System generated `caseNumber` field in the `case` data-type will be used as the unique identifier
+      schema:
+        type: string
+      in: path
+      required: true
+  /crm-apis/v0.3/clients:
+    summary: End-point used to manage the list of client
+    description: The REST endpoint/path used to list zero or more `client` entities
+    get:
+      tags:
+      - crm-apis
+      parameters:
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: firstNameContains
+        description: Client `First name` contains
+        schema:
+          type: string
+        in: query
+      - name: lastNameContains
+        description: Client `Last name` contains
+        schema:
+          type: string
+        in: query
+      - name: postCode
+        description: |-
+          `postCode` filter for searching `client`s
+
+          Both the Residential and Postal (if different) addresses are checked for the supplied `postCode`
+        schema:
+          type: integer
+        in: query
+      - name: clientId
+        description: Unique Client ID
+        schema:
+          type: string
+        in: query
+      - name: emailAddress
+        description: Email address of the client
+        schema:
+          type: string
+        in: query
+      - name: mobilePhoneNumber
+        description: Mobile phone number of the client
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client-page'
+          description: Single page of `client` records
+        "400":
+          description: "Bad request - Atleast one of the following query parameters\
+            \ required : \n\n`firstNameContains`, \n`lastNameContains`, or\n`postCode`"
+        "401":
+          description: Unauthorized
+      operationId: GetClients
+      summary: List all Clients registered in the system
+      description: Get `client` records that match the requested filters
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/client'
+        required: true
+      tags:
+      - crm-apis
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client'
+          description: Successful operation
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      operationId: CreateClient
+      summary: Create a new `client`
+      description: Create a new Client in the CMIS System
+  /case-apis/v0.3/acts:
+    summary: Path used to manage the list of acts.
+    description: The REST endpoint/path used to list and create zero or more `act`
+      entities.  This path contains a `GET` operation to perform the list task.
+    get:
+      tags:
+      - case-apis
+      parameters:
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: titleContains
+        description: Title contains
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/act'
+          description: Successful response - returns an array of `act` entities.
+      operationId: GetActs
+      summary: List All acts
+      description: Gets a list of all `act` entities.
+  /case-apis/v0.3/acts/{id}:
+    summary: Path used to manage a single acts.
+    description: The REST endpoint/path used to get single instances of an `act`.  This
+      path contains `GET`operation used to perform the get task.
+    get:
+      tags:
+      - case-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/act'
+          description: Successful response - returns a single `acts`.
+      operationId: GetAct
+      summary: Get details of an Act
+      description: Gets the details of a single instance of a `act`.
+    parameters:
+    - name: id
+      description: A unique identifier for an `act`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /case-apis/v0.3/cases:
+    summary: End-point for querying and creating cases.
+    description: The REST endpoint/path used to list and create zero or more `case`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - case-apis
+      parameters:
+      - name: allegedOffenders
+        description: Comma separated list of `client` or `business` ids to be queried
+          for allegedOffender(s) in cases
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: caseStatus
+        description: "CMIS Status. Possible values:   \n`0` - Open   \n`1` - Closed"
+        schema:
+          enum:
+          - "0"
+          - "1"
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: actIds
+        description: Comma separated list of Act IDs to be filtered on.
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/case-page'
+          description: Successful response - returns an array of `case` entities.
+        "400":
+          description: "Bad request - Following query parameter required : \n\n`allegedOffenders`,\
+            \ or `caseStatus`"
+        "401":
+          description: Unauthorized
+      operationId: GetCases
+      summary: List all cases
+      description: Gets a list of `case` entities that match the supplied filters
+    post:
+      requestBody:
+        description: A new `case` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/casedetail'
+        required: true
+      tags:
+      - case-apis
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/casedetail'
+          description: Successful response.
+        "401":
+          description: Unauthorized
+        "409":
+          description: 'Business error: Supplied client / business establishment not
+            recognized by the system'
+      operationId: CreateCase
+      summary: Create a case
+      description: Creates a new instance of a `case`.
+components:
+  schemas:
+    client:
+      title: Root Datatype - client
+      description: "Generic representation of a client (individual). \nThe client\
+        \ could play different roles in different situatations."
+      required:
+      - firstname
+      - lastname
+      - residentialAddress
+      - mobilePhone
+      type: object
+      properties:
+        firstname:
+          description: First name of the client
+          type: string
+        middlename:
+          description: Middle name of the client
+          type: string
+        lastname:
+          description: Last name of the client
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/address'
+          description: Residential Address
+        postalAddress:
+          $ref: '#/components/schemas/address'
+          description: "Postal Address. \n`Note:` When Postal address is not present,\
+            \ it is considered to be same as Residential address."
+        driversLicenseDetails:
+          $ref: '#/components/schemas/driverslicense'
+          description: Driver's License Details
+        emailaddress:
+          description: Email address
+          type: string
+        mobilePhone:
+          description: 'Contact number: Mobile Phone'
+          type: string
+        workPhone:
+          description: 'Contact number: Work Phone'
+          type: string
+        dateofbirth:
+          format: date
+          description: Date of Birth
+          type: string
+        occupation:
+          description: Client Occupation
+          type: string
+        clientId:
+          description: Unique (system generate) identifier for the client
+          type: string
+        whsRisks:
+          description: Plausible Workplace Health and Safety risks associated with
+            the client
+          type: array
+          items:
+            $ref: '#/components/schemas/whsrisk'
+        allegedCasesCount:
+          description: Count of cases where this client is / has been an alleged offender
+          type: integer
+        convictedCasesCount:
+          description: Count of cases where this client has been convicted
+          type: integer
+      example:
+        firstname: Joe
+        middlename: Blogger
+        lastname: Bloggs
+        residentialAddress:
+          streetLine1: 81-95 Wamyouth Ave
+          suburb: ADELAIDE
+          postcode: 5000
+          state: SA
+          country: AU
+        driversLicenseDetails:
+          licenseNumber: XX1000
+          licenseState: SA
+          licenseExpiry: 2022-10-10
+        emailaddress: joe.bloggs@blooger.com
+        mobilePhone: "0123456789"
+        workPhone: 987-654-3210
+        dateofbirth: 1960-01-17
+        occupation: Serial Blogger
+        clientId: some text
+        whsRisks:
+        - whsSafetyRiskCategory: Aggressive dog(s)
+          description: Couple of dogs usually not on leash
+        - whsSafetyRiskCategory: Possesses firearms
+          description: In possession, claims to be never loaded
+        allegedCasesCount: 47
+        convictedCasesCount: 22
+    case-basicinfo:
+      title: Root Datatype - case-basicinfo
+      description: "Brief extract of a `case`. \r\n"
+      type: object
+      properties:
+        caseNumber:
+          description: System generated Case Reference number
+          type: string
+        allegedOffenders:
+          $ref: '#/components/schemas/parties'
+          description: List of allegedOffenders
+        casePriority:
+          description: "'Priority of the case. Possible values:   \n`0` - Low,   \n\
+            `1` - Normal,   \n`2` - High'\n"
+          enum:
+          - "0"
+          - "1"
+          - "2"
+        caseJurisdiction:
+          description: "Jurisdiction of the case. Possible values:   \n`0` - NRM,\
+            \   \n`1` - Parks & Wildlife\n"
+          enum:
+          - "0"
+          - "1"
+        caseStatus:
+          description: "CMIS Status. Possible values:   \n`0` - Open   \n`1` - Closed"
+          enum:
+          - "0"
+          - "1"
+          type: string
+        caseDistrict:
+          description: District of the case.
+          type: string
+        createdBy:
+          description: Created By User
+          type: string
+        caseTitle:
+          description: Title of the case
+          type: string
+        offenceDetails:
+          description: Details of offences
+          type: array
+          items:
+            $ref: '#/components/schemas/offencedetail'
+      example:
+        caseNumber: ENV-01486-B2T0
+        caseTitle: Test Case
+        casePriority: "1"
+        offenceOccuredDate: 2018-02-10
+        caseJurisdiction: "1"
+        caseStatus: "756340000"
+        caseDistrict: AMLR
+        createdBy: John Citizen
+        allegedOffenders:
+          clientOffenders:
+          - firstname: Joe
+            middlename: Blogger
+            lastname: Bloggs
+            residentialAddress:
+              streetLine1: 81-95 Wamyouth Ave
+              suburb: ADELAIDE
+              postcode: 5000
+              state: SA
+              country: AU
+            driversLicenseDetails:
+              licenseNumber: XX1000
+              licenseState: SA
+              licenseExpiry: 2022-10-10
+            emailaddress: joe.bloggs@blooger.com
+            mobilePhone: "0123456789"
+            workPhone: 987-654-3210
+            dateofbirth: 1960-01-17
+            occupation: Serial Blogger
+            clientId: some text
+            whsRisks:
+            - whsSafetyRiskCategory: Aggressive dog(s)
+              description: Couple of dogs usually not on leash
+            - whsSafetyRiskCategory: Possesses firearms
+              description: In possession, claims to be never loaded
+            allegedCasesCount: 47
+            convictedCasesCount: 22
+    driverslicense:
+      title: Nested Datatype - driverslicense
+      description: Driver's License details
+      type: object
+      properties:
+        licenseNumber:
+          description: Driver's License Number
+          type: string
+        licenseState:
+          description: Driver's License Issuing State
+          type: string
+        licenseExpiry:
+          format: date
+          description: Driver's License Expiry Date
+          type: string
+      example:
+        licenseNumber: XX1000
+        licenseState: SA
+        licenseExpiry: 2022-10-10
+    investigationnote:
+      title: Nested Datatype - investigationnote
+      description: Note or comments recorded as part of investigation
+      required:
+      - noteTitle
+      - createdOn
+      - createdBy
+      type: object
+      properties:
+        noteTitle:
+          description: Short description or title of the notes
+          type: string
+        notesText:
+          description: Details of the note
+          type: string
+        createdOn:
+          format: date
+          description: Date when the note was entered into the system
+          type: string
+        createdBy:
+          description: User/Staff who entered the note into the system
+          type: string
+      example:
+        noteTitle: Equiry 12.Dec.2011
+        notesText: Unable to contact client
+        createdOn: 2012-01-05
+        createdBy: Dick Tracy (DEW)
+    locationdetail:
+      title: Nested Datatype - locationdetail
+      description: Location details of a case
+      required:
+      - address
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/address'
+          description: Address of the location
+        northing:
+          description: Northing (geographic cartesian coordinate).
+          type: string
+        easting:
+          description: Easting (geographic cartesian coordinate).
+          type: string
+        zone:
+          description: Coordinate system Zone
+          type: string
+        shortDescription:
+          description: Short description of the location
+          type: string
+        detailDescription:
+          description: Detailed description of the location
+          type: string
+      example:
+        address:
+          streetLine1: 81-95 Wamyouth Ave
+          suburb: ADELAIDE
+          postcode: 5000
+          state: SA
+          country: AU
+        northing: "6379468"
+        easting: "270398"
+        zone: "54"
+    offencedetail:
+      title: Nested Datatype - offenceDetails
+      description: Details of the Act/Regulation and Offence that is convicted or
+        alleged to be committed.
+      required:
+      - offencetype
+      type: object
+      properties:
+        occuranceDate:
+          format: date
+          description: Date Offence Occurred
+          type: string
+        statutoryLimitDate:
+          format: date
+          description: Statutory Limit Date
+          type: string
+        offencetype:
+          $ref: '#/components/schemas/offencetype'
+          description: Offence Type
+      example:
+        occuranceDate: 2018-01-17
+        statutoryLimitDate: 2018-06-17
+        offencetype:
+          section: 127(6)(AB)
+          act: Natural Resource Mangaement Act 2004
+          description: 127(6)(AB) Contravene Term Of Water Management Authorisation
+          offenceCode: 23665
+          statutoryTimeInMonths: 2
+    offencetype:
+      title: Root Datatype - offencetype
+      description: Deatils of an Offence
+      required:
+      - act
+      - description
+      type: object
+      properties:
+        section:
+          description: Section number of the Offence
+          type: string
+        act:
+          description: Associated Act or Legistation this offence falls under
+          type: string
+        description:
+          description: Description of the offence
+          type: string
+        offenceCode:
+          format: int32
+          description: Sytem generated identifier for the Offence
+          type: integer
+        statutoryTimeInMonths:
+          format: int32
+          description: Statutory Time (in months) for the offence
+          type: integer
+      example:
+        section: 127(6)(AB)
+        act: Natural Resource Mangaement Act 2004
+        description: 127(6)(AB) Contravene Term Of Water Management Authorisation
+        offenceCode: 23665
+        statutoryTimeInMonths: 2
+    parties:
+      title: Nested Datatype - parties
+      description: "List containing a combination of clients and Business entities.\
+        \ \nThere can be zero or more entries in either the client list of business\
+        \ entities."
+      type: object
+      properties:
+        businessParties:
+          description: List of involved Business establishments
+          type: array
+          items:
+            $ref: '#/components/schemas/business'
+        clientParties:
+          description: List of involved clients
+          type: array
+          items:
+            $ref: '#/components/schemas/client'
+      example:
+        businessParties:
+        - businessId: da801abe-91a7-e911-a2cc-005056a719a3
+          businessName: Dr. Dolittle Inc
+          contactNumber: "0123456789"
+          website: http://www.webaddress.com
+          abnNumber: "11000111000"
+          allegedCasesCount: 41
+          convictedCasesCount: 35
+          businessAddress:
+            streetLine1: 81-95 WAMYOUTH STREET
+            suburb: ADELAIDE
+            postcode: 5000
+            state: VIC
+            country: AU
+          primaryContact:
+            firstname: Joe
+            middlename: Blogger
+            lastname: Bloggs
+            residentialAddress:
+              streetLine1: 81-95 Wamyouth Ave
+              suburb: ADELAIDE
+              postcode: 5000
+              state: SA
+              country: AU
+            driversLicenseDetails:
+              licenseNumber: XX1000
+              licenseState: SA
+              licenseExpiry: 2022-10-10
+            emailaddress: joe.bloggs@blooger.com
+            mobilePhone: "0123456789"
+            workPhone: 987-654-3210
+            dateofbirth: 1960-01-17
+            occupation: Serial Blogger
+            clientId: some text
+            whsRisks:
+            - whsSafetyRiskCategory: Aggressive dog(s)
+              description: Couple of dogs usually not on leash
+            - whsSafetyRiskCategory: Possesses firearms
+              description: In possession, claims to be never loaded
+            allegedCasesCount: 47
+            convictedCasesCount: 22
+        clientParties:
+        - firstname: Joe
+          middlename: Blogger
+          lastname: Cloggs
+          residentialAddress:
+            streetLine1: 81-95 Wamyouth Ave
+            suburb: ADELAIDE
+            postcode: 5000
+            state: SA
+            country: AU
+          driversLicenseDetails:
+            licenseNumber: XX1000
+            licenseState: SA
+            licenseExpiry: 2022-10-10
+          emailaddress: joe.bloggs@blooger.com
+          mobilePhone: "0123456789"
+          workPhone: 987-654-3210
+          dateofbirth: 1961-01-17
+          occupation: Serial Clogger
+          clientId: da801abe-91a7-e911-a2cc-005056a719a2
+          allegedCasesCount: 0
+          convictedCasesCount: 0
+    business-page:
+      title: Page - business Datatype
+      description: "A page of `business` resources. \n\nThe `nextPage` and `prevPage`\
+        \ urls are optional and will be present only when more matching results exists\
+        \ beyond this collection of data."
+      required:
+      - businesses
+      - totalRecords
+      - pageSize
+      - pageNumber
+      type: object
+      properties:
+        businesses:
+          description: A collection of `business` resources
+          type: array
+          items:
+            $ref: '#/components/schemas/business'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    client-page:
+      title: Page - client Datatype
+      description: |-
+        A page of `client` resources.
+
+        The `nextPage` and `prevPage` urls are optional and will be present only when more matching results exists beyond this collection of data.
+      required:
+      - clients
+      - pageNumber
+      - pageSize
+      - totalRecords
+      type: object
+      properties:
+        clients:
+          description: Collection of `client` resources
+          type: array
+          items:
+            $ref: '#/components/schemas/client'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    offencetype-page:
+      title: Page - offencetype Datatype
+      description: |-
+        A page of `offencetype` resources.
+
+        The `nextPage` and `prevPage` urls are optional and will be present only when more matching results exists beyond this collection of data.
+      required:
+      - offencetypes
+      type: object
+      properties:
+        offencetypes:
+          description: Collection of offence types
+          type: array
+          items:
+            $ref: '#/components/schemas/offencetype'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    whsrisk:
+      title: Nested Datatype - whsrisk
+      description: Workplace Health and Safety risk details
+      required:
+      - whsSafetyRiskCategory
+      - creationDate
+      type: object
+      properties:
+        whsSafetyRiskCategory:
+          description: Workplace Health and Safety risk category
+          type: string
+        description:
+          description: Further comments / details
+          type: string
+        creationDate:
+          format: date
+          description: Date when the risk was registered in the system
+          type: string
+      example:
+        whsSafetyRiskCategory: Agressive dog(s)
+        description: Owns two agressive dogs that are usually off-leash
+        creationDate: 2018-01-17
+    case-page:
+      title: Page - case-basicinfo Datatype
+      description: |-
+        A page of `case` resources.
+
+        The `nextPage` and `prevPage` urls are optional and will be present only when more data exists ahead/behind this collection of resources.
+      required:
+      - cases
+      type: object
+      properties:
+        cases:
+          description: A collection of case (basic) details
+          type: array
+          items:
+            $ref: '#/components/schemas/case-basicinfo'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    business:
+      title: Root Datatype - business
+      description: Details of a Business establishment
+      required:
+      - businessName
+      - businessAddress
+      type: object
+      properties:
+        businessName:
+          description: Registered name of the Business establishment
+          type: string
+        businessId:
+          description: Unique (system generated) identified for the Business establishment
+          type: string
+        description:
+          description: Description of the Business establishment
+          type: string
+        abnNumber:
+          description: Registered ABN of the Business establishment
+          type: string
+        businessAddress:
+          $ref: '#/components/schemas/address'
+          description: Registered address of the Business establishment
+        contactNumber:
+          description: Registered contact number of the Business establishment
+          type: string
+        website:
+          description: Registered website of the Business establishment
+          type: string
+        allegedCasesCount:
+          description: Count of cases where this Business establishment is / has been
+            an alleged offender
+          type: integer
+        convictedCasesCount:
+          description: Count of cases where this Business establishment has been convicted
+          type: integer
+        primaryContact:
+          $ref: '#/components/schemas/client'
+          description: Primary contact for the Business establishment
+      example:
+        businessId: da801abe-91a7-e911-a2cc-005056a719a3
+        businessName: Dr. Dolittle Inc
+        contactNumber: "0123456789"
+        website: http://www.webaddress.com
+        abnNumber: "11000111000"
+        allegedCasesCount: 41
+        convictedCasesCount: 35
+        businessAddress:
+          streetLine1: 81-95 WAMYOUTH STREET
+          suburb: ADELAIDE
+          postcode: 5000
+          state: VIC
+          country: AU
+        primaryContact:
+          firstname: Joe
+          middlename: Blogger
+          lastname: Bloggs
+          residentialAddress:
+            streetLine1: 81-95 Wamyouth Ave
+            suburb: ADELAIDE
+            postcode: 5000
+            state: SA
+            country: AU
+          driversLicenseDetails:
+            licenseNumber: XX1000
+            licenseState: SA
+            licenseExpiry: 2022-10-10
+          emailaddress: joe.bloggs@blooger.com
+          mobilePhone: "0123456789"
+          workPhone: 987-654-3210
+          dateofbirth: 1960-01-17
+          occupation: Serial Blogger
+          clientId: some text
+          whsRisks:
+          - whsSafetyRiskCategory: Aggressive dog(s)
+            description: Couple of dogs usually not on leash
+          - whsSafetyRiskCategory: Possesses firearms
+            description: In possession, claims to be never loaded
+          allegedCasesCount: 47
+          convictedCasesCount: 22
+    casedetail:
+      title: Root Datatype - casedetail
+      description: Represention of a Case in CMIS
+      required:
+      - casePriority
+      - caseJurisdiction
+      - caseStatus
+      - caseDistrict
+      - caseTitle
+      - createdBy
+      type: object
+      properties:
+        caseNumber:
+          description: System generated Case Reference number
+          type: string
+        caseTitle:
+          description: Case Title
+          type: string
+        createdBy:
+          description: Created By User
+          type: string
+        casePriority:
+          description: "'Priority of the case. Possible values:   \n`0` - Low,   \n\
+            `1` - Normal,   \n`2` - High\n"
+          enum:
+          - "0"
+          - "1"
+          - "2"
+          type: string
+        caseSummary:
+          description: Summary of the case
+          type: string
+        caseJurisdiction:
+          description: "Jurisdiction of the case. Possible values:   \n`0` - NRM,\
+            \   \n`1` - Parks & Wildlife\n"
+          enum:
+          - "0"
+          - "1"
+        caseDistrict:
+          description: District of the case.
+          type: string
+        caseStatus:
+          description: "CMIS Status. Possible values:   \n`0` - Open   \n`1` - Closed"
+          enum:
+          - "0"
+          - "1"
+          type: string
+        locationDetails:
+          $ref: '#/components/schemas/locationdetail'
+          description: Case location details
+        investigationNotes:
+          description: Investigation notes, if any
+          maxItems: 50
+          type: array
+          items:
+            $ref: '#/components/schemas/investigationnote'
+        offenceDetails:
+          description: List of offences either convicted or alleged.
+          type: array
+          items:
+            $ref: '#/components/schemas/offencedetail'
+        allegedOffenders:
+          $ref: '#/components/schemas/parties'
+          description: List of alleged offenders
+        reporters:
+          $ref: '#/components/schemas/parties'
+          description: List of reporters of the case
+        witnesses:
+          $ref: '#/components/schemas/parties'
+          description: List of witnesses for the case
+      example:
+        caseNumber: ENV-01486-B2T0
+        caseTitle: Test Case
+        createdBy: John Citizen
+        casePriority: "1"
+        caseSummary: Summary of a Test Case
+        caseJurisdiction: "1"
+        caseStatus: "756340010"
+        caseDistrict: AMLR
+        locationDetails:
+          address:
+            streetLine1: 81-95 Wamyouth Ave
+            suburb: ADELAIDE
+            postcode: 5000
+            state: SA
+            country: AU
+          northing: "6379468"
+          easting: "270398"
+          zone: "54"
+        investigationNotes:
+        - noteTitle: Enquiry 2018-10-10
+          notesText: Attempted Phone call to witness, but failed
+          createdOn: 2019-01-17
+          createdBy: John Citizen
+        offenceDetails:
+        - occuranceDate: 2018-01-17
+          statutoryLimitDate: 2018-06-17
+          offencetype:
+            section: 127(6)(AB)
+            act: Natural Resource Mangaement Act 2004
+            description: 127(6)(AB) Contravene Term Of Water Management Authorisation
+            offenceCode: 23665
+            statutoryTimeInMonths: 2
+        allegedOffenders:
+          clientParties:
+          - firstname: Joe
+            middlename: Blogger
+            lastname: Bloggs
+            residentialAddress:
+              streetLine1: 81-95 Wamyouth Ave
+              suburb: ADELAIDE
+              postcode: 5000
+              state: SA
+              country: AU
+            driversLicenseDetails:
+              licenseNumber: XX1000
+              licenseState: SA
+              licenseExpiry: 2022-10-10
+            emailaddress: joe.bloggs@blooger.com
+            mobilePhone: "0123456789"
+            workPhone: 987-654-3210
+            dateofbirth: 1960-01-17
+            occupation: Serial Blogger
+            clientId: da801abe-91a7-e911-a2cc-005056a719a0
+            whsRisks:
+            - whsSafetyRiskCategory: Aggressive dog(s)
+              description: Couple of dogs usually not on leash
+            - whsSafetyRiskCategory: Possesses firearms
+              description: In possession, claims to be never loaded
+            allegedCasesCount: 47
+            convictedCasesCount: 22
+        reporters:
+          clientParties:
+          - firstname: Joe
+            middlename: Blogger
+            lastname: Cloggs
+            residentialAddress:
+              streetLine1: 81-95 Wamyouth Ave
+              suburb: ADELAIDE
+              postcode: 5000
+              state: SA
+              country: AU
+            driversLicenseDetails:
+              licenseNumber: XX1000
+              licenseState: SA
+              licenseExpiry: 2022-10-10
+            emailaddress: joe.bloggs@blooger.com
+            mobilePhone: "0123456789"
+            workPhone: 987-654-3210
+            dateofbirth: 1961-01-17
+            occupation: Serial Clogger
+            clientId: da801abe-91a7-e911-a2cc-005056a719a2
+            allegedCasesCount: 0
+            convictedCasesCount: 0
+        witnesses:
+          clientParties:
+          - firstname: Joe
+            middlename: Blogger
+            lastname: Gloggs
+            residentialAddress:
+              streetLine1: 81-95 Wamyouth Ave
+              suburb: ADELAIDE
+              postcode: 5000
+              state: SA
+              country: AU
+            driversLicenseDetails:
+              licenseNumber: XX1000
+              licenseState: SA
+              licenseExpiry: 2022-10-10
+            emailaddress: joe.bloggs@blooger.com
+            mobilePhone: "0123456789"
+            workPhone: 987-654-3210
+            dateofbirth: 1962-01-17
+            occupation: Serial Glogger
+            clientId: da801abe-91a7-e911-a2cc-005056a719a3
+            allegedCasesCount: 0
+            convictedCasesCount: 0
+    address:
+      title: Nested Datatype - address
+      description: Represents an address data
+      required:
+      - country
+      - postcode
+      - streetLine1
+      - suburb
+      type: object
+      properties:
+        streetLine1:
+          description: Street address - line one
+          type: string
+        streetLine2:
+          description: Street address - cont.
+          type: string
+        suburb:
+          description: Suburb or town of the address
+          type: string
+        postcode:
+          description: Postcode of the address
+          type: string
+        state:
+          description: State / District of the address
+          enum:
+          - NSW
+          - QLD
+          - VIC
+          - SA
+          - WA
+          - NT
+          - TAS
+          - ACT
+          - Other
+          type: string
+        country:
+          description: ISO 3166-1 alpha-2 country code of the address
+          pattern: ^[A-Z]{2}$
+          type: string
+      example:
+        streetLine1: 81-95 Wamyouth Ave
+        suburb: ADELAIDE
+        postcode: 5000
+        state: SA
+        country: AU
+    document-metadata:
+      description: Metadata of documents attached to a case
+      required:
+      - fileName
+      - fileSize
+      - uploadedDate
+      - fileURL
+      type: object
+      properties:
+        fileName:
+          description: File name of the document
+          type: string
+        fileSize:
+          description: Size of the document in KB
+          type: integer
+        uploadedDate:
+          format: date
+          description: Date of document upload
+          type: string
+        fileURL:
+          description: URL to the file
+          type: string
+    act:
+      description: Act (or Regulation) details
+      required:
+      - title
+      - offences
+      - id
+      type: object
+      properties:
+        title:
+          description: Title of the Act (or Regulation)
+          type: string
+        offences:
+          description: List of offences linked to this Act (or Regulation)
+          type: array
+          items:
+            $ref: '#/components/schemas/offencetype'
+        id:
+          description: Unique (system generated) ID of the Act (or Regulation)
+          type: string
+    act-page:
+      description: "Page of `act` entities. \n\nThe `nextPage` and `prevPage` urls\
+        \ are optional and will be present only when more matching results exists\
+        \ beyond this collection of data."
+      required:
+      - acts
+      type: object
+      properties:
+        acts:
+          description: Array of `act` entities
+          type: array
+          items:
+            $ref: '#/components/schemas/act'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+  securitySchemes:
+    Bearer:
+      scheme: bearer
+      type: http
+      description: JWT Bearer Token
+    Basic:
+      scheme: basic
+      type: http
+      description: HTTP Basic
+security:
+- Bearer: []
+tags:
+- name: case-apis
+  description: ""
+- name: crm-apis
+  description: ""
+- name: auth-apis
+  description: ""
