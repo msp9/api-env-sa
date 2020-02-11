@@ -2,7 +2,7 @@
 openapi: 3.0.2
 info:
   title: CMIS API Specification
-  version: "0.3"
+  version: "1.0"
   description: Case Management and Intelligence System (CMIS) - Webservice API specification
   contact:
     name: DEW Business Information Systems Unit - SI&T Branch
@@ -18,7 +18,7 @@ servers:
       default: qa-api
       description: QA domain
 paths:
-  /crm-apis/v0.2/businesses:
+  /crm-apis/v1/businesses:
     summary: Business establishment details end-point
     description: Resource URI for interacting with registered Business establishments
       in CMIS
@@ -92,7 +92,7 @@ paths:
       operationId: CreateBusiness
       summary: Create a new `business` establishment
       description: Create a new `business` entity in the CMIS System
-  /auth/v0.2/token:
+  /auth/v1/token:
     summary: Authentication and Authorization
     description: Authentication and authorization end points
     post:
@@ -122,7 +122,7 @@ paths:
       operationId: GetToken()
       summary: Generate bearer token
       description: Request to generate and return a bearer token.
-  /case-apis/v0.2/cases/{id}:
+  /case-apis/v1/cases/{id}:
     summary: Endpoint to manage a single case.
     description: The REST endpoint/path used to get, update, and delete single instances
       of an `case`.  This path contains `GET` and `PATCH` operations.
@@ -184,7 +184,7 @@ paths:
         type: string
       in: path
       required: true
-  /case-apis/v0.2/offencetypes:
+  /case-apis/v1/offencetypes:
     summary: Endpoint for querying Offence types
     description: "The REST endpoint/path used to list zero or more `offencetype` entities.\
       \  \n\nThis path contains a `GET` operation to query all the offence types registered\
@@ -228,7 +228,7 @@ paths:
       summary: List all offencetypes
       description: Gets a list of all `offencetype` entities that match the supplied
         filters
-  /case-apis/v0.3/cases/{id}/documents:
+  /case-apis/v1/cases/{id}/documents:
     summary: Endpoint for querying and uploading and downloading documents attached
       to a case
     description: The REST endpoint/path used to list, upload and download documents
@@ -301,7 +301,7 @@ paths:
         type: string
       in: path
       required: true
-  /crm-apis/v0.3/clients:
+  /crm-apis/v1/clients:
     summary: End-point used to manage the list of client
     description: The REST endpoint/path used to list zero or more `client` entities
     get:
@@ -391,7 +391,7 @@ paths:
       operationId: CreateClient
       summary: Create a new `client`
       description: Create a new Client in the CMIS System
-  /case-apis/v0.3/acts:
+  /case-apis/v1/acts:
     summary: Path used to manage the list of acts.
     description: The REST endpoint/path used to list and create zero or more `act`
       entities.  This path contains a `GET` operation to perform the list task.
@@ -428,7 +428,7 @@ paths:
       operationId: GetActs
       summary: List All acts
       description: Gets a list of all `act` entities.
-  /case-apis/v0.3/acts/{id}:
+  /case-apis/v1/acts/{id}:
     summary: Path used to manage a single acts.
     description: The REST endpoint/path used to get single instances of an `act`.  This
       path contains `GET`operation used to perform the get task.
@@ -452,7 +452,7 @@ paths:
         type: string
       in: path
       required: true
-  /case-apis/v0.3/cases:
+  /case-apis/v1/cases:
     summary: End-point for querying and creating cases.
     description: The REST endpoint/path used to list and create zero or more `case`
       entities.  This path contains a `GET` and `POST` operation to perform the list
