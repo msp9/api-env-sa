@@ -1,1 +1,2257 @@
+---
+openapi: 3.0.1
+info:
+  title: 'SA Geodata API '
+  version: "0.1"
+  description: SA Geodata - Webservice API specification
+  contact:
+    name: DEW Business Information Systems Unit - SI&T Branch
+    email: DLDEWInformationBranchOnlineServices@sa.gov.au
+  license:
+    name: Creative Commons Attribution 4.0 Licence
+    url: https://creativecommons.org/licenses/by/4.0/
+servers:
+- url: https://{domain}.sageodata.env.sa.gov.au
+  description: API Server
+  variables:
+    domain:
+      default: qa-api
+      description: QA domain
+paths:
+  /wcr/v0.1/wellcompletionreports:
+    summary: Path used to manage the list of wellcompletionreports.
+    description: The REST endpoint/path used to list and create zero or more `wellcompletionreport`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - wcr
+      parameters:
+      - name: id
+        description: Well Completion Report ID
+        schema:
+          type: string
+        in: query
+      - name: permitNumber
+        description: Well Permit Number
+        schema:
+          type: string
+        in: query
+      - examples:
+          unitNumber:
+            value: 6130-1358
+        name: unitNumber
+        description: Unit Number (including unit sequence number)
+        schema:
+          type: string
+        in: query
+      - name: drillholeNumber
+        description: Drillhole Number
+        schema:
+          type: integer
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellcompletionreport-page'
+          description: Successful response - returns an array of `wellcompletionreport`
+            entities.
+        "404":
+          description: No matching results
+      operationId: getwellcompletionreports
+      summary: List All wellcompletionreports
+      description: Gets a list of all `wellcompletionreport` entities.
+    post:
+      requestBody:
+        description: A new `wellcompletionreport` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/wellcompletionreport'
+        required: true
+      tags:
+      - wcr
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellcompletionreport'
+          description: Successful response.
+        "409":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                wcr-validation-error-response:
+                  value:
+                  - 'Horizontal accuracy out of range. Range: [0, 99999.99]'
+                  - Case depth From is greater than Case Depth To
+          description: Validation errors. Please check response body for details
+      operationId: createwellcompletionreport
+      summary: Create a wellcompletionreport
+      description: Creates a new instance of a `wellcompletionreport`.
+  /wcr/v0.1/wellcompletionreports/{id}:
+    summary: Path used to manage a single wellcompletionreport.
+    description: |-
+      The REST endpoint/path used to get, update, and delete single instances of an `wellcompletionreport`.  This path contains `GET` operation used to perform the get task.
 
+      Business requirements do not expect a `DELETE` or `PUT` operation on Well Completion Reports
+    get:
+      tags:
+      - wcr
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellcompletionreport'
+          description: Successful response - returns a single `wellcompletionreport`.
+        "404":
+          description: Well Completion Report not found
+      operationId: getwellcompletionreport
+      summary: Get a wellcompletionreport
+      description: Gets the details of a single instance of a `wellcompletionreport`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `wellcompletionreport`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /wcr/v0.1/welldrillers:
+    summary: Path used to manage the list of welldrillers.
+    description: |-
+      The REST endpoint/path used to list `welldrillers` entities.  This path contains a `GET` operation to perform the list task.
+
+      The endpoint does not provide a provision to create `welldriller`s. A new `welldriller` is created when an new `welldrillerlicence` is created in the system and a existing/matching `welldriller` is not found in the system.
+    get:
+      tags:
+      - wcr
+      parameters:
+      - name: licenceNumber
+        description: License Number
+        schema:
+          type: integer
+        in: query
+      - name: firstNameContains
+        description: First name contains
+        schema:
+          type: string
+        in: query
+      - name: lastNameContains
+        description: Last Name contains
+        schema:
+          type: string
+        in: query
+      - name: postCode
+        description: Comma separated value of Post Codes
+        schema:
+          type: string
+        in: query
+      - name: drillerNumber
+        description: Driller Number
+        schema:
+          type: integer
+        in: query
+      - name: expiryDateFrom
+        description: Licence Expiry Date To
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: expiryDateTo
+        description: Licence Expiry Date From
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/welldriller'
+          description: Successful response - returns an array of `welldrillers` entities.
+      operationId: getwelldrillers
+      summary: List All welldrillers
+      description: Gets a list of all `welldrillers` entities.
+  /wcr/v0.1/welldrillers/{id}:
+    summary: Path used to manage a single welldriller.
+    description: |
+      The REST endpoint/path used to get, update, and delete single instances of an `welldrillers`.  This path contains `GET` and `PUT` operations used to perform the get and update tasks, respectively.
+    get:
+      tags:
+      - wcr
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/welldriller'
+          description: Successful response - returns a single `welldriller`.
+      operationId: getwelldriller
+      summary: Get a welldrillers
+      description: Gets the details of a single instance of a `welldriller`.
+    put:
+      requestBody:
+        description: Updated `welldriller` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/welldriller'
+        required: true
+      tags:
+      - wcr
+      responses:
+        "200":
+          description: Successful response.
+      operationId: updatewelldrillers
+      summary: Update Driller details
+      description: Updates an existing `welldriller`.
+    parameters:
+    - name: id
+      description: '`Driller Number` of the driller'
+      schema:
+        type: integer
+      in: path
+      required: true
+  /wcr/v0.1/welldrillerlicences:
+    summary: Endpoints to query / create Driller Licences
+    description: Create or query `drillerlicence`.
+    get:
+      tags:
+      - wcr
+      parameters:
+      - name: licenceNumber
+        description: License Number
+        schema:
+          type: integer
+        in: query
+      - name: firstNameContains
+        description: First name contains
+        schema:
+          type: string
+        in: query
+      - name: lastNameContains
+        description: Last Name contains
+        schema:
+          type: string
+        in: query
+      - name: postCode
+        description: Comma separated value of Post Codes
+        schema:
+          type: string
+        in: query
+      - name: drillerNumber
+        description: Driller Number
+        schema:
+          type: integer
+        in: query
+      - name: expiryDateFrom
+        description: Expiry Date From
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: expiryDateTo
+        description: Expiry Date To
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/welldrillerlicence-page'
+          description: Query returned successfully
+      operationId: GetDrillerLicences
+      summary: Query Driller Licenses
+      description: Fetch Driller Licences that match the supplied filter conditions
+    post:
+      requestBody:
+        description: A new `drillerlicence` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/welldrillerlicence'
+        required: true
+      tags:
+      - wcr
+      responses:
+        "200":
+          description: Created
+      operationId: CreateDrillerLicence
+      summary: Create a Driller Licence
+      description: Create driller licence
+  /wcr/v0.1/welldrillerlicences/{id}:
+    summary: Endpoint to interact with a specific driller licence
+    description: API to inspect and/or update a specific driller licence
+    get:
+      tags:
+      - wcr
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/welldrillerlicence'
+          description: Successful
+      operationId: GetDrillerLicence
+      summary: Get a specific driller licence
+      description: API to fetch a specific driller licence detail
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/welldrillerlicence'
+        required: true
+      tags:
+      - wcr
+      responses:
+        "200":
+          description: Update successful
+      operationId: UpdateDrillerLicence
+      summary: Update a driller licence
+      description: Updates an existing `welldrillerlicence`
+    parameters:
+    - name: id
+      description: Driller license number
+      schema:
+        type: integer
+      in: path
+      required: true
+  /wcr/v0.1/wellpermits:
+    summary: Path used to manage the list of wellpermits.
+    description: The REST endpoint/path used to list and create zero or more `wellpermit`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - wcr
+      parameters:
+      - name: permitNumber
+        description: Construction Permit Number
+        schema:
+          type: string
+        in: query
+      - name: expiryDateFrom
+        description: Construction Expriy Date from
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: expiryDateTo
+        description: Construction Expriy Date to
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: postCode
+        description: Post Code of Permit Holder
+        schema:
+          type: integer
+        in: query
+      - name: drillholeNumber
+        description: Drillhole Number
+        schema:
+          type: integer
+        in: query
+      - name: unitNumber
+        description: Unit Number of format `unit number`-`sequence number`
+        schema:
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellpermit-page'
+          description: Successful response - returns a page of `wellpermit` entities.
+      operationId: getwellpermits
+      summary: List All wellpermits
+      description: Gets a list of all `wellpermit` entities.
+    post:
+      requestBody:
+        description: A new `wellpermit` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/wellpermit'
+        required: true
+      tags:
+      - wcr
+      responses:
+        "201":
+          description: Successful response.
+      operationId: createwellpermit
+      summary: Create a wellpermit
+      description: Creates a new instance of a `wellpermit`.
+  /ww/v0.1b/waterwells:
+    summary: Path used to manage the list of waterwells.
+    description: The REST endpoint/path used to list and create zero or more `waterwell`
+      entities.  This path contains a `GET`, `PUT`, `POST` and `DELETE` operations.
+    get:
+      tags:
+      - ww-beta
+      parameters:
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: drillholeId
+        description: Drillhole ID
+        schema:
+          type: integer
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterwell-page'
+          description: Successful operation
+      security:
+      - {}
+      operationId: GetDrillholes
+      summary: List All obswells
+      description: Gets a paginated list of all `drillhole` entities.
+  /ww/v0.1b/waterwells/{id}:
+    summary: Endpoint to interact with a specific drillhole
+    description: API to inspect and/or update a specific drillhole
+    get:
+      tags:
+      - ww-beta
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterwell'
+          description: Drillhole details for requested ID
+        "404":
+          description: Drillhole with requested Id not found
+      security:
+      - {}
+      operationId: GetDrillhole
+      summary: Get details of requested drillhole
+      description: Endpoint to get details of requested drillhole
+    parameters:
+    - name: id
+      description: Drillhole Id for which details are requested
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /ww/v0.1b/waterwells/{id}/wellcompletionreports:
+    summary: Path used to manage the list of wellcompletionreports of a drillhole
+    description: The REST endpoint/path used to list and create `wellcompletionreport`
+      entities associated with a drillhole.  This path contains a `GET` and `POST`
+      operation to perform the list and create tasks, respectively.
+    get:
+      tags:
+      - ww-beta
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellcompletionreport-page'
+          description: Provides an array of well completion reports for the drillhole
+        "404":
+          description: No Well Completion Reports found for this drillhole
+      operationId: GetWellCompletionReportFor
+      summary: Get well completion reports for a `drillhole`
+      description: Get well completion reports for a `drillhole`
+    post:
+      requestBody:
+        description: Well completion report data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/wellcompletionreport'
+        required: true
+      tags:
+      - ww-beta
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellcompletionreport'
+          description: Successful creation of a well completion report
+        "409":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                wcr-validation-error-response:
+                  value:
+                  - 'Horizontal accuracy out of range. Range: [0, 99999.99]'
+                  - Case depth From is greater than Case Depth To
+          description: Validation error. Please check response body for error description
+      operationId: createWellCompletionReportFor
+      summary: Create a new well completion report for the 'drillhole`
+      description: Create a new well completion report for the 'drillhole`
+    parameters:
+    - name: id
+      description: Drillhole ID of the well completion reports
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /wcr/v0.1/wellpermits/{id}:
+    summary: Path used to manage a single wellpermit.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `wellpermit`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - wcr
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wellpermit'
+          description: Successful response - returns a single `wellpermit`.
+      operationId: getwellpermit
+      summary: Get a wellpermit
+      description: Gets the details of a single instance of a `wellpermit`.
+    put:
+      requestBody:
+        description: Updated `wellpermit` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/wellpermit'
+        required: true
+      tags:
+      - wcr
+      responses:
+        "200":
+          description: Successful response.
+      operationId: updatewellpermit
+      summary: Update a wellpermit
+      description: Updates an existing `wellpermit`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `wellpermit`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /auth/v0.1/token:
+    summary: Authentication and Authorization
+    description: Authentication and authorization end points
+    post:
+      tags:
+      - auth
+      parameters:
+      - examples:
+          WWW-Authenticate:
+            value: QWxhZGRpbjpPcGVuU2VzYW1l
+        name: WWW-Authenticate
+        description: username:password Base64-encoded
+        schema:
+          type: string
+        in: header
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: User authorized - Token generated
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+      - Basic: []
+      operationId: GetToken()
+      summary: Generate bearer token
+      description: Request to generate and return a bearer token.
+components:
+  schemas:
+    address:
+      description: Address details
+      type: object
+      properties:
+        addressLineOne:
+          description: Address Line 1
+          type: string
+        addressLineTwo:
+          description: Address Line 2
+          type: string
+        suburb:
+          description: Suburb
+          type: string
+        postCode:
+          description: Post Code
+          type: integer
+        state:
+          description: State
+          enum:
+          - SA
+          - NSW
+          - WA
+          - VIC
+          - TAS
+          - ACT
+          - NT
+          - QLD
+          - Other
+          type: string
+      example:
+        addressLineOne: 5 Lithgow Terrace
+        addressLineTwo: Test
+        suburb: Adelaide
+        postCode: 5000
+        state: SA
+    wellcompletionreport:
+      description: Well Completion Report data
+      required:
+      - eventType
+      - drillerName
+      - drillerLicenceNumber
+      - wellPurposes
+      - coordinateData
+      - constructionDetails
+      type: object
+      properties:
+        id:
+          description: Well Completion Report ID
+          type: string
+        eventType:
+          description: "Event type of the well work. \n\nPossible values are: `New`,\
+            \ `Alter`, `Replace`, and `Decommission`"
+          enum:
+          - NEW
+          - ALTER
+          - REPLACE
+          - DECOMM
+          type: string
+        unitNumber:
+          format: int32
+          description: Unit Number of the well.
+          type: integer
+        drillholeName:
+          description: Drillhole name
+          type: string
+        drillholeOtherName:
+          description: Drillhole othere name
+          type: string
+        surveyDate:
+          format: date
+          description: Survey Date
+          type: string
+        waterPointType:
+          description: "Water Point Type. If left blank the well is marked as NOT\
+            \ a Water Point Type. \n\nPossible values:  \n`DAM` - Dam\t\n`HOL` - Water\
+            \ Hole\t\n`LAK` - Lake\t\n`RIV` - River\t\n`SEA` - Sea Water\t\n`SOK`\
+            \ - Soak\t\n`SPR` - Spring\t\n`MDS` - Mound Spring\t\n`MWS` - Mine Water\
+            \ Supply\t\n`UKN` - Water Point type not known\t\n`SMP` - Swamp\t\n`DRN`\
+            \ - drain; Bore drain\t\n`CRK` - Creek\t\n`SNK` - Sink hole\t\n`GSP` -\
+            \ GAB Spring (incl previous mound springs)\t\n`RES` - Reservoir\t\n`VWP`\
+            \ - Vibrating Wire Piezometer\t\n`MIN` - Mine"
+          maxLength: 3
+          minLength: 3
+          type: string
+        isWaterWellClass:
+          description: Is the well a Waterwell Class
+          type: boolean
+        isWaterWellLicenced:
+          description: Is Water Well Licenced
+          type: boolean
+        isTradeWell:
+          description: Is Trade Well
+          type: boolean
+        isBackFill:
+          description: Is back-fill
+          type: boolean
+        isDeepened:
+          description: Is Deepened
+          type: boolean
+        isEnlarged:
+          description: Is Enlarged
+          type: boolean
+        isRehabilitate:
+          description: Is rehabilitate
+          type: boolean
+        isInspected:
+          description: Is Inspected
+          type: boolean
+        isAbandoned:
+          description: Is Abandoned
+          type: boolean
+        isFlowing:
+          description: Is Flowing
+          type: boolean
+        isDry:
+          description: Is Dry
+          type: boolean
+        isReplacement:
+          description: Is Replacement
+          type: boolean
+        finalSWLInMeters:
+          format: double
+          description: Final Standing Water Level in meters
+          type: number
+        finalYieldInMeters:
+          format: double
+          description: Final Yield in meters
+          type: number
+        drillerName:
+          description: Driller Name
+          type: string
+        drillerLicenceNumber:
+          description: Driller Licence Number
+          type: string
+        plantOperator:
+          description: Plant Operator
+          type: string
+        wellPurposes:
+          description: "Well Purposes.\n\nArray of one or more purpose from the list\
+            \ below:   \n`DEP` - Deepening\t\n`DOM` - Domestic\t\n`DRN` - Drainage\t\
+            \n`DWT` - Dewatering\t\n`ENV` - Environmental\t\n`ETH` - Earthing\t\n\
+            `EXP` - Exploration\t\n`FIR` - Fire Fighting\t\n`GEN` - General Usage\t\
+            \n`GHP` - Ground source heat pump exchange\t\n`GTH` - Geothermal Energy\t\
+            \n`HOL` - Water Hole\t\n`IND` - Industrial\t\n`INV` - Investigation\t\n\
+            `IRR` - Irrigation\t\n`ISR` - In-situ recovery\t\n`LAK` - Lake\t\n`LWD`\
+            \ - Liquid Waste Disposal\t\n`MAR` - Managed Aquifer Recharge (incl ASR)\t\
+            \n`MON` - Monitoring\t\n`MWS` - Mine Water Supply\t\n`OBS` - Observation\t\
+            \n`RCL` - Recreational\t\n`RDC` - Road Construction / Maintenance\t\n\
+            `REC` - Recharge\t\n`RHL` - Rock Hole\t\n`RIV` - River\t\n`SEA` - Sea\
+            \ Water\t\n`SIS` - Interception scheme production well\t\n`SOK` - Soak\t\
+            \n`SPR` - Spring\t\n`STK` - Stock\t\n`TNK` - Tank\t\n`TWS` - Town Water\
+            \ Supply (Public/Muncipal)\t\n`WAS` - Waste Disposal"
+          type: array
+          items:
+            type: string
+        coordinateData:
+          $ref: '#/components/schemas/wcr-coordinatedata'
+          description: Coordinate information
+        constructionDetails:
+          description: Array of Construction details
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-constructiondata'
+        drillingDetails:
+          description: Array of Drilling data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-drillingdata'
+        casingDetails:
+          description: Array of Casing data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-casingdata'
+        productionDetails:
+          description: Array of Production Data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-productiondata'
+        constructionComment:
+          description: Construction comment
+          type: string
+        linearSealDetails:
+          description: Array of Linear Seal Data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-linearsealdata'
+        gravelPackingDetails:
+          description: Array of Gravel Packing data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-gravelpackingdata'
+        wellDevelopmentDetails:
+          description: Array of Well Development data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-welldevelopmentdata'
+        waterCutDetails:
+          description: Array of Water Cut data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-watercutdata'
+        pumpTestDetails:
+          description: Array of Pump Test data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-pumptestdata'
+        formationLogDetails:
+          description: Array of Formation Log data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-formationlogdata'
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+    wellcompletionreport-page:
+      description: Page of Well Completion Reports
+      required:
+      - wellcompletionreports
+      - totalRecords
+      - pageSize
+      - pageNumber
+      type: object
+      properties:
+        wellcompletionreports:
+          description: A collection of `wellcompletionreport`
+          type: array
+          items:
+            $ref: '#/components/schemas/wellcompletionreport'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    wcr-coordinatedata:
+      description: Well Completion Report - Coordinate Data
+      required:
+      - datum
+      - easting
+      - northing
+      - zone
+      type: object
+      properties:
+        datum:
+          description: "The coordinate system of the datum. \nPossible values: `WGS84`,\
+            \ `GDA94`, `GDA2020`"
+          enum:
+          - GDA94
+          - GDA2020
+          - WGS84
+          type: string
+        easting:
+          format: int32
+          description: Easting
+          type: integer
+        northing:
+          format: int32
+          description: Northing
+          type: integer
+        zone:
+          format: int32
+          description: Zone
+          type: integer
+        lat:
+          format: double
+          description: Latitude
+          type: number
+        long:
+          format: double
+          description: Longitude
+          type: number
+        surveyAccuracyInMetres:
+          format: double
+          description: Survey Accuracy in meters
+          type: number
+        surveyMethod:
+          description: "Survey Method. Possible values: \n\n`AMGRD` - Controlled AMG/MGA\
+            \ map\t\n`CAL` - (DISUSED) Calculated\t\n`CLGRD` - Controlled CLARKE map\t\
+            \n`COCH` - (DISUSED) Compass and Chain\t\n`COOD` - (DISUSED) Compass and\
+            \ Odometer\t\n`DEM` - Digital Elevation Model\t\n`DIG` - Digitised\t\n\
+            `DOCM` - Sourced from documents (PLANS, ENV, RB,etc)\t\n`EDM` - (DISUSED)\
+            \ EDM\t\n`GCN` - (DISUSED) MESA Geog conversion from Clarke coords\t\n\
+            `GISP` - GIS software on PDA or similar mobile device\t\n`GISW` - GIS\
+            \ software on full Windows OS PC\t\n`GOEAR` - Google Earth image\t\n`GOMAP`\
+            \ - Google Maps image\t\n`GPS` - (DISUSED, use GPSUN) Global Positioning\
+            \ System\t\n`GPSAP` - GPS Averaged Position\t\n`GPSAU` - GPS Post Processed\
+            \ Using AUSPOS Service\t\n`GPSDG` - GPS Differential Generic\t\n`GPSDM`\
+            \ - GPS Multi Base Wide Area Differential (was GPSPD)\t\n`GPSDS` - GPS\
+            \ Single Base Wide Area Differential (was GPSRD)\t\n`GPSPD` - GPS Post\
+            \ Processed Differential (nav level)\t\n`GPSRD` - GPS Real-time Differential\
+            \ (nav level)\t\n`GPSSK` - GPS Svy Grade- Real Time Kinematic (RTK)/Kinematic\t\
+            \n`GPSSL` - GPS Survey Grade (kinematic/static)\t\n`GPSSN` - GPS Standalone\
+            \ Navigational\t\n`GPSSS` - GPS Survey Grade - Static\t\n`GPSUN` - GPS\
+            \ type unknown\t\n`GTRAV` - Interpolated traverse site between GPS endpoints\t\
+            \n`IMGD` - Digital Image\t\n`INFER` - (DISUSED) Inferred\t\n`LOCAL` -\
+            \ (DISUSED) Approximate local methods\t\n`MAP` - (DISUSED) Map Plot\t\n\
+            `ODOM` - (DISUSED) Odometer\t\n`PHOTO` - Air Photo\t\n`PRO` - (DISUSED)\
+            \ Provisional (Estimated)\t\n`SAN` - (DISUSED) Santos conversion from\
+            \ Clarke coords\t\n`SUR` - Surveying\t\n`TRX` - GDA94 Transformed\t\n\
+            `UCMAP` - Uncontrolled map\t\n`UKN` - (DISUSED) Unknown\t\n`VERBL` - (DISUSED)\
+            \ Verbal"
+          enum:
+          - AMGRD
+          - CAL
+          - CLGRD
+          - COCH
+          - COOD
+          - DEM
+          - DIG
+          - DOCM
+          - EDM
+          - GCN
+          - GISP
+          - GISW
+          - GOEAR
+          - GOMAP
+          - GPS
+          - GPSAP
+          - GPSAU
+          - GPSDG
+          - GPSDM
+          - GPSDS
+          - GPSPD
+          - GPSRD
+          - GPSSK
+          - GPSSL
+          - GPSSN
+          - GPSSS
+          - GPSUN
+          - GTRAV
+          - IMGD
+          - INFER
+          - LOCAL
+          - MAP
+          - ODOM
+          - PHOTO
+          - PRO
+          - SAN
+          - SUR
+          - TRX
+          - UCMAP
+          - UKN
+          - VERBL
+          type: string
+    wcr-constructiondata:
+      description: Well Completion Report - Construction Data
+      required:
+      - commenceDate
+      - completionDate
+      - maxDepthInMeters
+      - finalDepthInMeters
+      - currentDepthInMeters
+      - isOriginal
+      type: object
+      properties:
+        commenceDate:
+          format: date
+          description: Commencement date
+          type: string
+        completionDate:
+          format: date
+          description: Completion date
+          type: string
+        maxDepthInMeters:
+          format: double
+          description: Maximum depth in meters
+          type: number
+        finalDepthInMeters:
+          format: double
+          description: Final depth in meters
+          type: number
+        currentDepthInMeters:
+          format: double
+          description: Current depth in meters
+          type: number
+        isOriginal:
+          description: Is original
+          type: boolean
+    wcr-drillingdata:
+      description: Well Completion Report - Drilling Data
+      required:
+      - fromInMeters
+      - toInMeters
+      - diamInMillis
+      - drillingMethodCode
+      type: object
+      properties:
+        fromInMeters:
+          format: double
+          description: Depth detail - From value in meters
+          type: number
+        toInMeters:
+          format: double
+          description: Depth value - To value in meters
+          type: number
+        diamInMillis:
+          format: double
+          description: Diameter in millimmeters
+          type: number
+        widthInMeters:
+          format: double
+          description: widthInMeters
+          type: number
+        lengthInMeters:
+          format: double
+          description: Length in meters
+          type: number
+        drillingMethodCode:
+          description: "Drilling Method - code value. Possible values are:\n\n`ACR`\
+            \ - Aircore (see also RCA)\t\n`AGR` - Auger (details unspecified)\t\n\
+            `AUC` - Auger (Mechanised) - Coring\t\n`AUG` - Auger (Mechanised)\t\n\
+            `BDE` - Blade\t\n`BKH` - Backhoe\t\n`CAB` - Cable Tool \t\n`CWL` - Calweld\t\
+            \n`DIA` - Diamond Bit - Coring\t\n`HDA` - Auger (Hand) \t\n`HDG` - Hand\
+            \ Dug\t\n`JET` - Hydraulic Jet\t\n`OHP` - Open hole percussion\t\n`PER`\
+            \ - Rotary - Percussion\t\n`PUT` - Push Tube\t\n`RAB` - Rotary Air Blast\
+            \ (see also RTA)\t\n`RC` - Reverse Circulation \t\n`RCA` - Reverse Circulation\
+            \ - Air \t\n`RCD` - Reverse Circulation Diamond\t\n`RCM` - Reverse Circulation\
+            \ - Mud \t\n`RCP` - Reverse Circulation Percussion\t\n`ROT` - Rotary \t\
+            \n`RTA` - Rotary - Air \t\n`RTF` - Rotary - Foam\t\n`RTM` - Rotary - Mud\t\
+            \n`RTW` - Rotary - Water\t\n`SON` - Sonic\t\n`SPR` - Spearpoint\t\n`TUC`\
+            \ - Tungsten Carbide Bit - Coring\t\n`UKN` - Unknown\t\n`VAC` - Vacuum\t\
+            \n`VIB` - Vibrocore"
+          enum:
+          - ACR
+          - AGR
+          - AUC
+          - AUG
+          - BDE
+          - BKH
+          - CAB
+          - CWL
+          - DIA
+          - HDA
+          - HDG
+          - JET
+          - OHP
+          - PER
+          - PUT
+          - RAB
+          - RC
+          - RCA
+          - RCD
+          - RCM
+          - RCP
+          - ROT
+          - RTA
+          - RTF
+          - RTM
+          - RTW
+          - SON
+          - SPR
+          - TUC
+          - UKN
+          - VAC
+          - VIB
+          type: string
+    wcr-casingdata:
+      description: Well Completion Report - Casing Data
+      required:
+      - casingType
+      - casingDepthFromInMeters
+      - casingDepthToInMeters
+      - casingDiamInMillis
+      - casingMaterial
+      - cementingType
+      - cementDepthFromInMeters
+      - cementDepthToInMeters
+      - cementingMethod
+      - doesShoeExist
+      - isShoeCemented
+      type: object
+      properties:
+        casingType:
+          description: "Casing Type. Possible values are: \n\n`P` - Production\n`S`\
+            \ - Surface\n`I` - Intermediate"
+          enum:
+          - P
+          - S
+          - I
+          type: string
+        casingDepthFromInMeters:
+          format: double
+          description: Casing Depth - From value in meters
+          type: number
+        casingDepthToInMeters:
+          format: double
+          description: Casing Depth - To value in meters
+          type: number
+        casingDiamInMillis:
+          format: double
+          description: Casing diameter - value in millimeters
+          type: number
+        casingMaterial:
+          description: 'Casing Material. For eg: PVC'
+          type: string
+        cementingType:
+          description: "Cementing type. Possible values: \n\n`G` - Gravity\n`P` -\
+            \ Pressure\n`N` - Not Known"
+          enum:
+          - G
+          - P
+          - "N"
+          type: string
+        cementDepthFromInMeters:
+          format: double
+          description: Cement Depth - From value in meters
+          type: number
+        cementDepthToInMeters:
+          format: double
+          description: Cement Depth - To value in meters
+          type: number
+        cementingMethod:
+          description: "Cementing Method code. Possible values are: \n\n`DISP` - Displacement\
+            \ ,general\t\n`DSPC` - Displacement through casing\t\n`DSPD` - Displacement\
+            \ through drill pipe\t\n`DUMP` - Dump Bail method\t\n`GRAV` - Gravity\t\
+            \n`NDC` - No cementing method declared\t\n`TREM` - Tremi Line"
+          enum:
+          - DISP
+          - DSPC
+          - DSPD
+          - DUMP
+          - GRAV
+          - NDC
+          - TREM
+          type: string
+        doesShoeExist:
+          description: Does Shoe exist
+          type: boolean
+        shoeDiamInMillis:
+          format: double
+          description: Shoe diameter - value in millimeters
+          type: number
+        isShoeCemented:
+          description: Is Shoe cemented
+          type: boolean
+        comments:
+          description: Comments
+          type: string
+    wcr-productiondata:
+      description: Well Completion Report - Production Data
+      required:
+      - levelType
+      - fromInMeters
+      - toInMeters
+      - material
+      - apertureInMillis
+      type: object
+      properties:
+        levelType:
+          description: "Production Zone Type. Possible values are: \n\n`OH` - Open\
+            \ Hole Completion\t\n`PC` - Perforated Casing Completion\t\n`PLV` - Production\
+            \ Level\t\n`S` - Screen\t\n`SB` - Screen Blank\t\n`SC` - Slotted Casing\
+            \ Completion\t\n`SMP` - Sump\t\n`UKN` - Unknown Completion\t\n`WS` - Wirewound\
+            \ Screen Completion"
+          enum:
+          - OH
+          - PC
+          - PLV
+          - S
+          - SB
+          - SC
+          - SMP
+          - UKN
+          - WS
+          type: string
+        fromInMeters:
+          format: double
+          description: From value in meters
+          type: number
+        toInMeters:
+          format: double
+          description: To value in meters
+          type: number
+        material:
+          description: "Consturction material - code. Possible values are: \n\n`ABS`\
+            \ - Acrylonitrile Butadiene Styrene\t\n`BEN` - Bentonite\t\n`BRK` - Brick\t\
+            \n`CEM` - Cement\t\n`CON` - Concrete\t\n`COP` - Copper\t\n`CTI` - Cast\
+            \ Iron\t\n`CUT` - Cuttings\t\n`FRP` - Fibre Reinforced Pipe (assumed low\
+            \ temp FRP)\t\n`FRPH` - High temperature FRP casing\t\n`GLI` - Galvanised\
+            \ Iron\t\n`LED` - Lead\t\n`NEP` - Neoprene\t\n`NON` - None (Open Hole\
+            \ Completion)\t\n`PLY` - Polyethylene Pipe\t\n`PVC` - Polyvinylchloride\
+            \ (class not known)\t\n`PVC12` - Class 12 PVC (PN12)\t\n`PVC15` - Class\
+            \ 15 PVC\t\n`PVC16` - PVC PN16\t\n`PVC18` - Class 18 PVC (PN18)\t\n`PVC45`\
+            \ - Class 4.5 PVC\t\n`PVC6` - Class 6 PVC\t\n`PVC9` - Class 9 PVC\t\n\
+            `RUB` - Rubber\t\n`SST` - Stainless Steel (assumed grade 316)\t\n`STL`\
+            \ - Steel\t\n`STLLB` - STEEL CASING - API5LB (WELDED JOINT)\t\n`STLLCT`\
+            \ - STEEL CASING - API5LCT (THREADED JOINT)\t\n`STLOFG` - Steel casing\
+            \  - oil field grade (API 5L)\t\n`STN` - Stone\t\n`TIM` - Timber\t\n`TIN`\
+            \ - Tin Fluming\t\n`WST` - Welded Steel"
+          enum:
+          - ABS
+          - BEN
+          - BRK
+          - CEM
+          - CON
+          - COP
+          - CTI
+          - CUT
+          - FRP
+          - FRPH
+          - GLI
+          - LED
+          - NEP
+          - NON
+          - PLY
+          - PVC
+          - PVC12
+          - PVC15
+          - PVC16
+          - PVC18
+          - PVC45
+          - PVC6
+          - PVC9
+          - RUB
+          - SST
+          - STL
+          - STLLB
+          - STLLCT
+          - STLOFG
+          - STN
+          - TIM
+          - TIN
+          - WST
+          type: string
+        apertureInMillis:
+          format: double
+          description: Aperture - value in millimetres
+          type: number
+        outerDiamInMillis:
+          format: double
+          description: Outer diameter - value in millimetres
+          type: number
+        innerDiamInMillis:
+          format: double
+          description: Inner Diameter - value in millimeters
+          type: number
+        comments:
+          description: Comments
+          type: string
+    wcr-linearsealdata:
+      description: Well Completion Report - Linear Seal Data
+      required:
+      - sealDepthInMeters
+      - caseDiamInMillis
+      type: object
+      properties:
+        sealDepthInMeters:
+          format: double
+          description: Seal Depth - value in meters
+          type: number
+        caseDiamInMillis:
+          format: double
+          description: Case Diameter - value in millimeters
+          type: number
+        caseMaterial:
+          description: "Case construction material. Possible values are: \n\n`ABS`\
+            \ - Acrylonitrile Butadiene Styrene\t\n`BEN` - Bentonite\t\n`BRK` - Brick\t\
+            \n`CEM` - Cement\t\n`CON` - Concrete\t\n`COP` - Copper\t\n`CTI` - Cast\
+            \ Iron\t\n`CUT` - Cuttings\t\n`FRP` - Fibre Reinforced Pipe (assumed low\
+            \ temp FRP)\t\n`FRPH` - High temperature FRP casing\t\n`GLI` - Galvanised\
+            \ Iron\t\n`LED` - Lead\t\n`NEP` - Neoprene\t\n`NON` - None (Open Hole\
+            \ Completion)\t\n`PLY` - Polyethylene Pipe\t\n`PVC` - Polyvinylchloride\
+            \ (class not known)\t\n`PVC12` - Class 12 PVC (PN12)\t\n`PVC15` - Class\
+            \ 15 PVC\t\n`PVC16` - PVC PN16\t\n`PVC18` - Class 18 PVC (PN18)\t\n`PVC45`\
+            \ - Class 4.5 PVC\t\n`PVC6` - Class 6 PVC\t\n`PVC9` - Class 9 PVC\t\n\
+            `RUB` - Rubber\t\n`SST` - Stainless Steel (assumed grade 316)\t\n`STL`\
+            \ - Steel\t\n`STLLB` - STEEL CASING - API5LB (WELDED JOINT)\t\n`STLLCT`\
+            \ - STEEL CASING - API5LCT (THREADED JOINT)\t\n`STLOFG` - Steel casing\
+            \  - oil field grade (API 5L)\t\n`STN` - Stone\t\n`TIM` - Timber\t\n`TIN`\
+            \ - Tin Fluming\t\n`WST` - Welded Steel"
+          enum:
+          - ABS
+          - BEN
+          - BRK
+          - CEM
+          - CON
+          - COP
+          - CTI
+          - CUT
+          - FRP
+          - FRPH
+          - GLI
+          - LED
+          - NEP
+          - NON
+          - PLY
+          - PVC
+          - PVC12
+          - PVC15
+          - PVC16
+          - PVC18
+          - PVC45
+          - PVC6
+          - PVC9
+          - RUB
+          - SST
+          - STL
+          - STLLB
+          - STLLCT
+          - STLOFG
+          - STN
+          - TIM
+          - TIN
+          - WST
+          type: string
+    wcr-gravelpackingdata:
+      description: Well Completion Report - Gravel Packing Data
+      required:
+      - methodOfPlacement
+      - fromInMeters
+      type: object
+      properties:
+        methodOfPlacement:
+          description: "Gravel method of placement. Possible values are: \n\n`BACK`\
+            \ - Backfilled\t\n`BAIL` - Bailed\t\n`BUCK` - Bucket\t\n`DROP` - Dropped\t\
+            \n`FUNL` - Funnel\t\n`GRAV` - Gravity\t\n`HAND` - Hand\t\n`MNUL` - Manual\t\
+            \n`PACK` - Packed\t\n`POUR` - Poured\t\n`REVC` - Reverse Circulation\t\
+            \n`SHOV` - Shovel\t\n`TREM` - Tremi line\t\n`VIBR` - Vibration\t\n`WASH`\
+            \ - Washed Down"
+          enum:
+          - BACK
+          - BAIL
+          - BUCK
+          - DROP
+          - FUNL
+          - GRAV
+          - HAND
+          - MNUL
+          - PACK
+          - POUR
+          - REVC
+          - SHOV
+          - TREM
+          - VIBR
+          - WASH
+          type: string
+        fromInMeters:
+          format: double
+          description: From value in meters
+          type: number
+        toInMeters:
+          format: double
+          description: To value in meters
+          type: number
+        gravelMeshSizeInMillis:
+          format: double
+          description: Gravel mesh size - value in millimeters
+          type: number
+        comments:
+          description: Comments
+          type: string
+    wcr-welldevelopmentdata:
+      description: Well Completion Report - Well Development Data
+      required:
+      - devMethod
+      - durationInHours
+      type: object
+      properties:
+        devMethod:
+          description: "Well Development Method. Possible values are: \n\n`AIRL` -\
+            \ Air Lifting\t\n`BAIL` - Bailing\t\n`CHEM` - Chemical\t\n`FLOW` - Flow\t\
+            \n`FRAC` - Fracturing\t\n`JET` - Jetting\t\n`NIL` - No Development\t\n\
+            `PUMP` - Pumping\t\n`SURG` - Surging\t\n`WASH` - Washing"
+          enum:
+          - AIRL
+          - BAIL
+          - CHEM
+          - FLOW
+          - FRAC
+          - JET
+          - NIL
+          - PUMP
+          - SURG
+          - WASH
+          type: string
+        durationInHours:
+          format: double
+          description: Duration in hours
+          type: number
+        comments:
+          description: Comments
+          type: string
+    wcr-watercutdata:
+      description: Well Completion Report - Water Cut Data
+      required:
+      - date
+      - isArtesian
+      type: object
+      properties:
+        date:
+          format: date
+          description: Date
+          type: string
+        isArtesian:
+          description: Is Artesian
+          type: boolean
+        fromInMeters:
+          format: double
+          description: From value in meters
+          type: number
+        toInMeters:
+          format: double
+          description: To value in metres
+          type: number
+        depthToWaterInMeters:
+          format: double
+          description: Depth To Water - value in meters
+          type: number
+        depthAtTestInMeters:
+          format: double
+          description: Depth at Test - value in meters
+          type: number
+        casingAtTestInMeters:
+          format: double
+          description: Casing at test - value in meters
+          type: number
+        wellYieldInLitreSec:
+          format: double
+          description: Well Yield - value in litreSec
+          type: number
+        extractionMethod:
+          description: "Extraction Method: Possible values are: \n\n`AIRL` - Air Lift\t\
+            \n`BAIL` - Bailer\t\n`BUCK` - Bucket\t\n`EST ` - Estimated\t\n`FLOW` -\
+            \ Flow\t\n`HAND` - Hand\t\n`PUMP` - Pump\t\n`UKN ` - Unknown\t\n`WMLL`\
+            \ - Windmill"
+          enum:
+          - AIRL
+          - BAIL
+          - BUCK
+          - EST
+          - FLOW
+          - HAND
+          - PUMP
+          - UKN
+          - WMLL
+          type: string
+        salinityExtractionMethod:
+          description: "Salinity Extraction Method: Possible values are: \n\n`AIRL`\
+            \ - Air Lift\t\n`BAIL` - Bailer\t\n`BUCK` - Bucket\t\n`EST ` - Estimated\t\
+            \n`FLOW` - Flow\t\n`HAND` - Hand\t\n`PUMP` - Pump\t\n`UKN ` - Unknown\t\
+            \n`WMLL` - Windmill"
+          enum:
+          - AIRL
+          - BAIL
+          - BUCK
+          - EST
+          - FLOW
+          - HAND
+          - PUMP
+          - UKN
+          - WMLL
+          type: string
+        salinityUnit:
+          description: "Salinity Unit. Possible values are: \n\n`TDS` - Total Dissolved\
+            \ Salts\n`EC`  - Electrical conductivity"
+          enum:
+          - TDS
+          - EC
+          type: string
+        salinity:
+          description: |-
+            Salinity value. A null or blank value represents no salinity data.
+
+            String representation is used here because a value of 0.0 is a valid salinity value and does not represent no data.
+          type: string
+        pH:
+          description: |-
+            PH value.  A null or blank value represents no pH data.
+
+            String representation is used here because a value of 0.0 is a valid pH value and does not represent no data.
+          type: string
+        tempInCelcius:
+          description: |-
+            Temperate in degree celcius. A null or blank value represents no temperature data.
+
+            String representation is used here because a value of 0.0 is a valid temperature value and does not represent no data.
+          type: string
+        comments:
+          description: Comments
+          type: string
+    wcr-pumptestdata:
+      description: Well Completion Report - Pump Test Data
+      required:
+      - testMethod
+      - dischargeRateInLitersPerSec
+      type: object
+      properties:
+        fromInMeters:
+          format: double
+          description: From value in meters
+          type: number
+        toInMeters:
+          format: double
+          description: To value in meters
+          type: number
+        waterLevelInMeters:
+          format: double
+          description: Water Level in meters
+          type: number
+        testMethod:
+          description: "Pump test method. Possible values are: \n\n`AIRL` - Air Lift\t\
+            \n`BAIL` - Bailer\t\n`BUCK` - Bucket\t\n`EST ` - Estimated\t\n`FLOW` -\
+            \ Flow\t\n`HAND` - Hand\t\n`PUMP` - Pump\t\n`UKN ` - Unknown\t\n`WMLL`\
+            \ - Windmill"
+          enum:
+          - AIRL
+          - BAIL
+          - BUCK
+          - EST
+          - FLOW
+          - HAND
+          - PUMP
+          - UKN
+          - WMLL
+          type: string
+        depthOfPumpInMeters:
+          format: double
+          description: Dept of pump - value in meters
+          type: number
+        dischargeRateInLitersPerSec:
+          format: double
+          description: Discharge Rate - value in liters/sec
+          type: number
+        dischargeMeasurementMethod:
+          description: "Dischange measurement method. Possible values: \n\n`AIRL`\
+            \ - Air Lift\t\n`BAIL` - Bailer\t\n`BUCK` - Bucket\t\n`CRNT` - Current\
+            \ meter\t\n`CUMT` - Cumulative\t\n`EST ` - Estimated\t\n`GAUG` - Gauge\t\
+            \n`INLM` - Inline Meter\t\n`ORBU` - Ofifice Bucket\t\n`ORIF` - Orifice\t\
+            \n`ORPL` - Orifice Plate\t\n`PUMP` - Pump\t\n`UKN ` - Unknown\t\n`USNC`\
+            \ - Ultrasonic\t\n`VNT ` - V-Notch"
+          enum:
+          - AIRL
+          - BAIL
+          - BUCK
+          - CRNT
+          - CUMT
+          - EST
+          - GAUG
+          - INLM
+          - ORBU
+          - ORIF
+          - ORPL
+          - PUMP
+          - UKN
+          - USNC
+          - VNT
+          type: string
+        noOfHoursPumped:
+          format: double
+          description: Number of hours pumped
+          type: number
+        drawDownInMeters:
+          format: double
+          description: Draw down in meters
+          type: number
+    wcr-formationlogdata:
+      description: Well Completion Report - Formation Log Data
+      required:
+      - fromInMeters
+      - toInMeters
+      - material
+      - description
+      type: object
+      properties:
+        fromInMeters:
+          format: double
+          description: From value in meters
+          type: number
+        toInMeters:
+          format: double
+          description: To value in meters
+          type: number
+        material:
+          description: "Approved standard lithology code for use by geologists. \n\
+            This should be match the code as found from the `ST_APPROVED_LITHOLOGY`\
+            \ table in SAGeodata\n\n"
+          type: string
+        isConfidential:
+          description: Is Confidential
+          type: boolean
+        description:
+          description: Description
+          type: string
+    wellpermit:
+      description: Well Permit data
+      required:
+      - issueDate
+      - purpose
+      - permitHolderName
+      - wellUse
+      - expiryDate
+      - address
+      - areaDescription
+      type: object
+      properties:
+        permitNumber:
+          description: Well Construction Permit Number
+          type: number
+        issueDate:
+          format: date
+          description: Permit Issue Date
+          type: string
+        purpose:
+          description: "Permit purpose. Possible values: \n\n`0` - (Not Specified)\
+            \   \n`1034941140` - Well Backfill\t\n`1034941150` - Well Construction\t\
+            \n`1034941151` - Well Construction and Backfill\t\n`1034941160` - Well\
+            \ Deepen\t\n`1034941170` - Well Enlarge\t\n`1034941240` - Well Line\t\n\
+            `1034941280` - Well Plug/Seal\t\n`1034941300` - Well Recase\t\n`1034941301`\
+            \ - Well Rehabilitation"
+          enum:
+          - "0"
+          - "1034941140"
+          - "1034941150"
+          - "1034941151"
+          - "1034941160"
+          - "1034941170"
+          - "1034941240"
+          - "1034941280"
+          - "1034941300"
+          - "1034941301"
+          type: string
+        permitHolderName:
+          description: Permit Holder Name
+          type: string
+        wellUse:
+          description: "Well Use. Possible values: \n\n`0` - (Not Specified)\t\n`135724070`\
+            \ - Cathodic Protection\t\n`196644160` - Drainage\t\n`237652240` - Engineering\t\
+            \n`417066090` - Investigation\t\n`596970260` - Monitoring\t\n`1031213920`\
+            \ - Water Supply"
+          enum:
+          - "0"
+          - "135724070"
+          - "196644160"
+          - "237652240"
+          - "417066090"
+          - "596970260"
+          - "1031213920"
+          type: string
+        expiryDate:
+          format: date
+          description: Permit Expiry Date
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
+          description: Permit Holder Address
+        areaDescription:
+          description: Area Description
+          type: string
+        notes:
+          description: List of Notes against the permit
+          type: array
+          items:
+            type: string
+        conditions:
+          description: List of conditions against the permit
+          type: array
+          items:
+            type: string
+        specialConditions:
+          description: List of special conditions against the permit
+          type: array
+          items:
+            type: string
+        propertyTitle:
+          description: "Property Title details in the format `<prefix>-<volume>-<folio>`\
+            \   \n\nSupported format: `^(\\w{2})?[-](\\w{1,4})?[-](\\w{1,2})?$`  \
+            \ \n`prefix` - alphanumeric of max size 2 (can be blank)   \n`volume`\
+            \ - alphanumeric of max size 4 (can be blank)  \n`folio`  - alphanumeric\
+            \ of max size 2 (can be blank)  \n\nPossible values for `prefix` are:\
+            \   \n`44` - 44\t\n`CL` - CL\t\n`CR` - CR\t\n`CT` - CT\t\n`D3` - D3\t\n\
+            `GM` - GM\t\n`LT` - LT\t\n`R2` - R2\t\n`R3` - R3\t\n`R4` - R4\t\n`R5`\
+            \ - R5\t\n`R6` - R6\t\n`R7` - R7\t\n`R8` - R8\t\n`D1` - D1\t\n`D2` - D2\t\
+            \n`F4` - F4\t\n`R1` - R1\t\n`F1` - F1"
+          type: string
+        propertyParcel:
+          description: "Property Parcel details in the format `<type>-<number>`  \n\
+            \nSupported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
+            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
+            \ 6 (can be blank)  \n\nPossible values for `type` are: \n`*` - *\t\n\
+            `9` - 9\t\n`A` - Allotment\t\n`B` - Block\t\n`C` - Closed Road\t\n`M`\
+            \ - Mineral Section\t\n`P` - Pastoral Run\t\n`Q` - Pieces\t\n`S` - Section\t\
+            \n`X` - Site "
+          type: string
+        propertyPlan:
+          description: "Property Plan details in the format `<type>-<number>`  \n\n\
+            Supported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
+            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
+            \ 6 (can be blank)  \n\nPossible values for `type` are:     \n`C` - Cluster\
+            \ Plan\t\n`D` - Deposited Plan\t\n`F` - Filed Plan\t\n`G` - G.R.O. Deposited\
+            \ Plan\t\n`E` - G.R.O. Enrolled Plan\t\n`H` - Hundred Plan\t\n`N` - N\t\
+            \n`P` - Parish (Outside SA)\t\n`R` - Road Plan\t\n`S` - Strata Plan\t\n\
+            `T` - Township Plan"
+          type: string
+        propertyHunderdName:
+          description: Hundred Name of the property
+          type: string
+        sectionLotDetail:
+          description: "Section No and Lot No of the property in the format `<section_no>-<lot_no>`\
+            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`section_no`\
+            \   - alphanumeric of max size 7 (can be blank)   \n`lot_no` - alphanumeric\
+            \ of max size 7 (can be blank)  "
+          type: string
+        pastoralDetails:
+          description: "Pastoral details of the property in the format `<block_no>-<lease_no>`\
+            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`block_no`\
+            \   - alphanumeric of max size 7 (can be blank)   \n`lease_no` - alphanumeric\
+            \ of max size 7 (can be blank)  "
+          type: string
+    wellpermit-page:
+      description: Page of Well Permits
+      required:
+      - wellPermits
+      type: object
+      properties:
+        wellPermits:
+          description: Collection of Well Permits
+          type: array
+          items:
+            $ref: '#/components/schemas/wellpermit'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    welldriller:
+      description: Well Driller details
+      required:
+      - drillerFirstName
+      - drillerLastName
+      - drillerNumber
+      - addressDetails
+      - drillerClass
+      type: object
+      properties:
+        drillerFirstName:
+          description: Driller First Name
+          type: string
+        drillerLastName:
+          description: Driller Last Name
+          type: string
+        drillerNumber:
+          description: Driller Number
+          type: integer
+        comments:
+          description: Comments
+          type: string
+        addressDetails:
+          $ref: '#/components/schemas/address'
+          description: Address Details
+        drillerClass:
+          description: |-
+            Driller Class. Possible values are:
+
+            `1` - Class 1
+            `2` - Class 2
+            `3` - Class 3
+          enum:
+          - "1"
+          - "2"
+          - "3"
+          type: string
+        drillerMiddleName:
+          description: 'Driller''s Middle Name '
+          type: string
+    welldriller-page:
+      description: Well Driller Page
+      required:
+      - wellDrillers
+      type: object
+      properties:
+        wellDrillers:
+          description: Array of Well Driller details
+          type: array
+          items:
+            $ref: '#/components/schemas/welldriller'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    welldrillerlicence:
+      description: Well Driller License details
+      required:
+      - licenceNumber
+      - expiryDate
+      - wellDriller
+      type: object
+      properties:
+        licenceNumber:
+          description: License Number
+          type: integer
+        expiryDate:
+          format: date
+          description: Licence Expiry Date
+          type: string
+        wellDriller:
+          $ref: '#/components/schemas/welldriller'
+          description: Well Driller Details
+    welldrillerlicence-page:
+      description: Page of Well Driller Licences
+      required:
+      - drillerLicences
+      type: object
+      properties:
+        drillerLicences:
+          description: 'Collection of drillerLicences   '
+          type: array
+          items:
+            $ref: '#/components/schemas/welldrillerlicence'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    waterwell:
+      required:
+      - licensedWell
+      - location
+      - status
+      type: object
+      properties:
+        name:
+          description: Name of the drillhole
+          type: string
+        licensedWell:
+          description: Indicates if the well is licensed or not
+          type: boolean
+        drillholeId:
+          description: Drillhole ID as maintained by SAGeodata
+          type: string
+        location:
+          $ref: '#/components/schemas/ww-locationdata'
+          description: Location of the drillhole
+        nrmRegion:
+          description: NRM Region where the drillhole is located
+          type: string
+        otherName:
+          description: Any other name for the drillhole
+          type: string
+        waterPointType:
+          description: "Water Point Type of the drillhole. Possible values: \n\nPossible\
+            \ values:  \n`DAM` - Dam\t\n`HOL` - Water Hole\t\n`LAK` - Lake\t\n`RIV`\
+            \ - River\t\n`SEA` - Sea Water\t\n`SOK` - Soak\t\n`SPR` - Spring\t\n`MDS`\
+            \ - Mound Spring\t\n`MWS` - Mine Water Supply\t\n`UKN` - Water Point type\
+            \ not known\t\n`SMP` - Swamp\t\n`DRN` - drain; Bore drain\t\n`CRK` - Creek\t\
+            \n`SNK` - Sink hole\t\n`GSP` - GAB Spring (incl previous mound springs)\t\
+            \n`RES` - Reservoir\t\n`VWP` - Vibrating Wire Piezometer\t\n`MIN` - Mine"
+          enum:
+          - DAM
+          - HOL
+          - LAK
+          - RIV
+          - SEA
+          - SOK
+          - SPR
+          - MDS
+          - MWS
+          - UKN
+          - SMP
+          - DRN
+          - CRK
+          - SNK
+          - GSP
+          - RES
+          - VWP
+          - MIN
+          type: string
+        waterPointClass:
+          description: Indicates if the drillhole is a water point or not
+          type: boolean
+        abandoned:
+          description: Indicates if the well is abandoned or not
+          type: boolean
+        backfill:
+          description: Indicates if the well is backfill or not
+          type: boolean
+        commencedDate:
+          description: Construction commence date
+          type: string
+        comments:
+          description: Construction comment
+          type: string
+        completionDate:
+          description: Construction completion date
+          type: string
+        status:
+          description: "Status of the drillhole. Possible values are\r\n\r\n\r\n`ABD`\
+            \ Abandoned\t\r\n`BKF` Backfilled\t\r\n`BLK` Blocked\t\r\n`CAP` Capped\t\
+            \r\n`CAM` Care and Maintenance\t\r\n`CAS` Cased\t\r\n`CLP` Collapsed\t\
+            \r\n`COM` Completed\t\r\n`CSH` Controlled - shut in\t\r\n`CFL` Controlled\
+            \ Flowing\t\r\n`WWT` Converted to WW\t\r\n`DMG` Damaged\t\r\n`DMP` Damp\t\
+            \r\n`DEC` Decommissioned\t\r\n`DRY` Dry\t\r\n`DCM` Dual Completion\t\r\
+            \n`EQP` Equipped (pump, windmill, etc)\t\r\n`EXS` Extinct Spring\t\r\n\
+            `FL` Flowing\t\r\n`FWT` Free water and tail\t\r\n`GEQ` Geotechnically\
+            \ Equiped\t\r\n`INJ` Injector\t\r\n`MND` Mined (removed by mining)\t\r\
+            \n`NEQ` Not Equipped\t\r\n`NIU` Not In Use\t\r\n`NL` Not Located\t\r\n\
+            `NOP` Not Operational\t\r\n`OPR` Operational\t\r\n`OPQ` Operational as\
+            \ required\t\r\n`PLG` Plugged\t\r\n`PND` Pond, free water\t\r\n`RHB` Rehabilitated\t\
+            \r\n`SAT` Saturated\t\r\n`SHT` Shut In\t\r\n`SCM` Single Completion\t\r\
+            \n`STO` Storage\t\r\n`SUS` Suspended\t\r\n`UFL` Uncontrolled Flowing\t\
+            \r\n`UEQ` Unequipped\t\r\n`UKN` Unknown\t\r\n`UNW` Unworked"
+          enum:
+          - ABD
+          - BKF
+          - BLK
+          - CAP
+          - CAM
+          - CAS
+          - CLP
+          - COM
+          - CSH
+          - CFL
+          - WWT
+          - DMG
+          - DMP
+          - DEC
+          - DRY
+          - DCM
+          - EQP
+          - EXS
+          - FL
+          - FWT
+          - GEQ
+          - INJ
+          - MND
+          - NEQ
+          - NIU
+          - NL
+          - NOP
+          - OPR
+          - OPQ
+          - PLG
+          - PND
+          - RHB
+          - SAT
+          - SHT
+          - SCM
+          - STO
+          - SUS
+          - UFL
+          - UEQ
+          - UKN
+          - UNW
+        casingdetails:
+          description: 'Casing details  '
+          type: array
+          items:
+            $ref: '#/components/schemas/ww-casingdata'
+    waterwell-page:
+      description: Data type that represents a collection/page of drillholes
+      required:
+      - drillholes
+      type: object
+      properties:
+        drillholes:
+          description: Collection of drillholes
+          type: array
+          items:
+            $ref: '#/components/schemas/waterwell'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+    ww-casingdata:
+      description: Water Well Casing Data
+      required:
+      - casingType
+      - casingDepthFromInMeters
+      - casingDepthToInMeters
+      - casingDiamInMillis
+      - casingMaterial
+      - cementingType
+      - cementDepthFromInMeters
+      - cementDepthToInMeters
+      - cementingMethod
+      - doesShoeExist
+      - isShoeCemented
+      type: object
+      properties:
+        casingType:
+          description: "Casing Type. Possible values are: \n\n`P` - Production\n`S`\
+            \ - Surface\n`I` - Intermediate"
+          enum:
+          - P
+          - S
+          - I
+          type: string
+        casingDepthFromInMeters:
+          format: double
+          description: Casing Depth - From value in meters
+          type: number
+        casingDepthToInMeters:
+          format: double
+          description: Casing Depth - To value in meters
+          type: number
+        casingDiamInMillis:
+          format: double
+          description: Casing diameter - value in millimeters
+          type: number
+        casingMaterial:
+          description: 'Casing Material. For eg: PVC'
+          type: string
+        cementingType:
+          description: "Cementing type. Possible values: \n\n`G` - Gravity\n`P` -\
+            \ Pressure\n`N` - Not Known"
+          enum:
+          - G
+          - P
+          - "N"
+          type: string
+        cementDepthFromInMeters:
+          format: double
+          description: Cement Depth - From value in meters
+          type: number
+        cementDepthToInMeters:
+          format: double
+          description: Cement Depth - To value in meters
+          type: number
+        cementingMethod:
+          description: "Cementing Method code. Possible values are: \n\n`DISP` - Displacement\
+            \ ,general\t\n`DSPC` - Displacement through casing\t\n`DSPD` - Displacement\
+            \ through drill pipe\t\n`DUMP` - Dump Bail method\t\n`GRAV` - Gravity\t\
+            \n`NDC` - No cementing method declared\t\n`TREM` - Tremi Line"
+          enum:
+          - DISP
+          - DSPC
+          - DSPD
+          - DUMP
+          - GRAV
+          - NDC
+          - TREM
+          type: string
+        doesShoeExist:
+          description: Does Shoe exist
+          type: boolean
+        shoeDiamInMillis:
+          format: double
+          description: Shoe diameter - value in millimeters
+          type: number
+        isShoeCemented:
+          description: Is Shoe cemented
+          type: boolean
+        comments:
+          description: Comments
+          type: string
+    ww-wellconstructiondata:
+      description: Well construction details of a drillhole
+      type: object
+      properties:
+        wellConstructionInspection:
+          type: boolean
+        permitNumber:
+          format: int32
+          description: Well Construction Permit Number
+          type: integer
+        permitNumberExt:
+          description: Well Construction Permit Number - extension
+          type: string
+        totalDepthMetres:
+          format: int32
+          description: Total Depth in meters
+          type: integer
+        isReplacementWell:
+          description: Is Replacement Well
+          type: boolean
+        isAbandoned:
+          description: Is Abandoned
+          type: boolean
+        isBackfill:
+          description: Is Backfill
+          type: boolean
+        commencedDate:
+          format: date
+          description: Construction commencement date
+          type: string
+        comments:
+          description: Construction comments
+          type: string
+        completionDate:
+          format: date
+          description: Construction completion date
+          type: string
+        currentDepthInMetres:
+          format: int32
+          description: Current Dept in metres
+          type: integer
+        isDeepened:
+          description: Is Deepend
+          type: boolean
+        drillerLicenceNumber:
+          format: int32
+          description: Driller Licence Number
+          type: integer
+        isDry:
+          description: Is Dry
+          type: boolean
+        isEnlarged:
+          description: Is Enlarged
+          type: boolean
+        finalDepthMetres:
+          format: int32
+          description: Final Depth in meters
+          type: integer
+        isTraditionalWell:
+          description: Is Traditional Well
+          type: boolean
+    ww-locationdata:
+      description: Represents location data
+      type: object
+      properties:
+        easting:
+          description: Easting, from the reference co-ordinate system, of the drillhole
+          type: string
+        northing:
+          description: Northing, from the reference co-ordinate system, of the drillhole
+          type: string
+        latitude:
+          description: Latitude of the drillhole
+          type: string
+        longitude:
+          description: Longitude of the drillhole
+          type: string
+        mgaZone:
+          type: string
+        coordinateSystem:
+          description: Reference co-ordinate system used to define this location data
+          enum:
+          - WGS84
+      example:
+        easting: "280829"
+        northing: "6137625"
+        latitude: ""
+        longitude: ""
+        mgaZone: "54"
+        coordinateSystem: WGS84
+  responses:
+    UnauthorizedError:
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+      description: API key is missing or invalid
+  securitySchemes:
+    Bearer:
+      scheme: bearer
+      type: http
+      description: JWT Bearer Token
+    Basic:
+      scheme: basic
+      type: http
+      description: HTTP Basic
+security:
+- Bearer: []
+tags:
+- name: wcr
+  description: API endpoints that relate to Well Completion Report, Driller Licence
+    and Well Construction Permits
+- name: auth
+  description: API endpoints related to Authentication
+- name: ww-beta
+  description: |-
+    Beta APIs - definition not finalized
+
+    API endpoints that allow inspection or manipulation of Water Wells
+externalDocs:
+  description: Find out more about SA Geodata API - iShare location
+  url: http://swagger.io
