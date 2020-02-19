@@ -1,1 +1,160 @@
-
+---
+openapi: 3.0.1
+info:
+  title: Masterpiece encoder
+  description: A gateway to enter masterpiece payment data.
+  contact:
+    name: 'Online Services Team : DEW'
+    url: https://www.environment.sa.gov.au/Home
+    email: ""
+  license:
+    name: For internal use only
+    url: https://www.environment.sa.gov.au/Home
+  version: "1.0"
+paths:
+  /api/CashTransactions:
+    post:
+      tags:
+      - CashTransactions
+      summary: Post a cash transaction to masterpiece
+      parameters:
+      - name: api-version
+        in: header
+        schema:
+          type: string
+      requestBody:
+        description: This is cash transaction request contract.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashTransactionRequest'
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+components:
+  schemas:
+    LineItem:
+      required:
+      - glCode
+      - netPriceFull
+      - productCode
+      - productDescription
+      - quantity
+      - taxCode
+      - taxRate
+      - totalTax
+      type: object
+      properties:
+        netPriceFull:
+          type: number
+          format: double
+        taxCode:
+          type: string
+          nullable: true
+        taxRate:
+          type: number
+          format: double
+        quantity:
+          type: integer
+          format: int32
+        productCode:
+          type: string
+          nullable: true
+        productDescription:
+          type: string
+          nullable: true
+        glCode:
+          type: string
+          nullable: true
+        totalTax:
+          type: number
+          format: double
+      additionalProperties: false
+    PurchasePaymentDetail:
+      required:
+      - paymentReceivedAmount
+      - paymentReferenceNumber
+      type: object
+      properties:
+        paymentReceivedAmount:
+          type: number
+          format: double
+        paymentReferenceNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PurchaseDetail:
+      required:
+      - customerId
+      - dueDate
+      - invoiceId
+      - lineItems
+      - purchaseNetAmount
+      - purchasePaymentDetails
+      - purchaseTaxAmount
+      - purchaseTotalAmount
+      - transactionDate
+      type: object
+      properties:
+        customerId:
+          type: string
+          nullable: true
+        transactionDate:
+          type: string
+          format: date-time
+        dueDate:
+          type: string
+          format: date-time
+        invoiceId:
+          type: string
+          nullable: true
+        purchaseNetAmount:
+          type: number
+          format: double
+        purchaseTaxAmount:
+          type: number
+          format: double
+        purchaseTotalAmount:
+          type: number
+          format: double
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+          nullable: true
+        purchasePaymentDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchasePaymentDetail'
+          nullable: true
+      additionalProperties: false
+    CashTransactionRequest:
+      required:
+      - purchaseDetails
+      - transactionGroupDate
+      type: object
+      properties:
+        transactionGroupDate:
+          type: string
+          description: Its a transaction processing date / batch date for masterpiece
+          format: date-time
+        purchaseDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseDetail'
+          nullable: true
+      additionalProperties: false
+    TransactionResponse:
+      type: object
+      properties:
+        result:
+          type: string
+          nullable: true
+        batchNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
