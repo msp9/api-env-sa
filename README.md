@@ -9,8 +9,6 @@ The API Catalogue (master) has the following definitions
 
 3. [SA Geodata](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/sageodata-apispec.yml)
 
-4. [Masterpiece AR](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/masterpiece-ar-apispec.yml)
+4. [Masterpiece AR](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/sageodata-apispec.yml)
 
-5. [Wildlife Permit System](https://redocly.github.io/redoc/?url=https://github.com/n8-coder/api-env-sa/blob/master/wps-apispec.yml)
-
-6. [SA Geodata](https://redocly.github.io/redoc/?url=)
+5. [Wildlife Permit System](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/wps-apispec.yml)
