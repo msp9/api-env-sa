@@ -1,1 +1,1155 @@
-
+---
+openapi: 3.0.1
+info:
+  title: Wildlife Permit System(WPS) - API Spec
+  description: WPS API Spec (ASP.NET Core 3.1)
+  contact:
+    name: 'Online Services Team : DEW'
+    url: http://env.com.au
+    email: ""
+  version: "1.0"
+paths:
+  /api/address/{applicantId}:
+    get:
+      tags:
+      - Address
+      summary: Retrieves an applicants list of addresses
+      parameters:
+      - name: applicantId
+        in: path
+        description: The applicants id (Guid)
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns a collection of address information.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressResponse'
+  /api/applicant/{applicantId}:
+    get:
+      tags:
+      - Applicant
+      parameters:
+      - name: applicantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns applicant information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicantResponse'
+  /api/authentication/authenticate:
+    post:
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        "200":
+          description: Successful response - returns a new authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /api/applications/hunting/{sessionId}:
+    get:
+      tags:
+      - Applications
+      summary: Retrieve an Application
+      description: Retrieve a hunting application details based on a Session Id (Application
+        Process).
+      parameters:
+      - name: sessionId
+        in: path
+        description: Session Id of the record to be retrieved.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns a Hunting application.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HuntingApplicationResponse'
+  /api/applications/hunting:
+    post:
+      tags:
+      - Applications
+      summary: Create a Application
+      description: Creates a new instance of a hunting application.
+      parameters:
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      requestBody:
+        description: A new application to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HuntingPermitApplication'
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "201":
+          description: Successful response.
+  /api/payments:
+    post:
+      tags:
+      - Payments
+      summary: Create a payment transaction result
+      parameters:
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      requestBody:
+        description: Payment transaction data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "201":
+          description: Created response.
+  /api/payments/status/{sessionId}:
+    get:
+      tags:
+      - Payments
+      summary: Get current payment status for a customer transaction
+      parameters:
+      - name: sessionId
+        in: path
+        description: The Session Id (Application Process) for the transaction
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns a Payment Status enumeration
+            value.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatus'
+  /api/payments/{sessionId}:
+    get:
+      tags:
+      - Payments
+      summary: Get payment history for a transaction
+      parameters:
+      - name: sessionId
+        in: path
+        description: The Session Id (Application Process) of the payment
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns Payment history for an application
+            process.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
+  /api/permit-products/{viewId}:
+    get:
+      tags:
+      - PermitProducts
+      summary: Permit product information
+      description: "Gets a collection of permit product information.\r\n         \
+        \   \r\n            Sample Permit Products viewId: b2b5550b-fcc9-e911-a2ce-005056a719a3"
+      parameters:
+      - name: viewId
+        in: path
+        description: The Guid that represents a View of permit information stored
+          within the CRM
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns a collection of permit product
+            information.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermitProduct'
+  /api/permit-types/{viewId}:
+    get:
+      tags:
+      - PermitTypes
+      summary: GetPermitTypes
+      description: Gets a collection of permit types using a permit type View Id.
+      parameters:
+      - name: viewId
+        in: path
+        description: The view id of the permit types to retrieve
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: header
+        description: The requested API version
+        required: true
+        schema:
+          default: "1.0"
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "200":
+          description: Successful response - returns a collection of permit types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermitTypeResponse'
+  /api/user-management/register:
+    post:
+      tags:
+      - UserManagement
+      summary: Register new client / user
+      parameters:
+      - name: userName
+        in: query
+        schema:
+          type: string
+      - name: roleName
+        in: query
+        schema:
+          type: string
+      - name: password
+        in: query
+        schema:
+          type: string
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "403":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "201":
+          description: Successful response - created an user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionResult'
+  /api/user-management/changepassword:
+    post:
+      tags:
+      - UserManagement
+      summary: Change password for client / user
+      parameters:
+      - name: userName
+        in: query
+        schema:
+          type: string
+      - name: newPassword
+        in: query
+        schema:
+          type: string
+      responses:
+        "401":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "403":
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                type: string
+        "201":
+          description: Successful response - updated password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionResult'
+components:
+  schemas:
+    AddressType:
+      enum:
+      - 1
+      - 2
+      type: integer
+      format: int32
+    AddressResponse:
+      type: object
+      properties:
+        addressId:
+          type: string
+          format: uuid
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+        addressLine1:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        suburb:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Title:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      type: integer
+      format: int32
+    ApplicantResponse:
+      type: object
+      properties:
+        title:
+          $ref: '#/components/schemas/Title'
+        firstName:
+          type: string
+          nullable: true
+        otherNames:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        mobile:
+          type: string
+          nullable: true
+        telephone:
+          type: string
+          nullable: true
+        otherPhone:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          format: date-time
+        hasOffences:
+          type: boolean
+        hasAcceptedDeclaration:
+          type: boolean
+        hasAcknowledgedTermsAndConditions:
+          type: boolean
+      additionalProperties: false
+    TokenRequest:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SessionResponse:
+      type: object
+      properties:
+        sessionFullName:
+          type: string
+          nullable: true
+        totalPaid:
+          type: number
+          format: double
+          nullable: true
+        primaryApplicantId:
+          type: string
+          format: uuid
+        primaryApplicantName:
+          type: string
+          nullable: true
+        applicationNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PaymentStatus:
+      enum:
+      - 0
+      - 1
+      - 2
+      type: integer
+      format: int32
+    PaymentResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          format: uuid
+        paymentFullName:
+          type: string
+          nullable: true
+        apiResponseCode:
+          type: string
+          nullable: true
+        apiResponseText:
+          type: string
+          nullable: true
+        responseCode:
+          type: string
+          nullable: true
+        responseText:
+          type: string
+          nullable: true
+        bankResponseCode:
+          type: string
+          nullable: true
+        processedDateTime:
+          type: string
+          format: date-time
+        amount:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+        amountPaid:
+          type: number
+          format: double
+        paymentStatus:
+          $ref: '#/components/schemas/PaymentStatus'
+        merchantNumber:
+          type: string
+          nullable: true
+        crn1:
+          type: string
+          nullable: true
+        crn2:
+          type: string
+          nullable: true
+        crn3:
+          type: string
+          nullable: true
+        cardType:
+          type: string
+          nullable: true
+        cardExpiryDate:
+          type: string
+          nullable: true
+        cardMaskedCardNumber:
+          type: string
+          nullable: true
+        receiptNumber:
+          type: string
+          nullable: true
+        transactionNumber:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PermitProductResponse:
+      type: object
+      properties:
+        permitProductId:
+          type: string
+          format: uuid
+        permitProductFullName:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        productTypeName:
+          type: string
+          nullable: true
+        productTypeId:
+          type: string
+          format: uuid
+        concessionTypeName:
+          type: string
+          nullable: true
+        concessionTypeId:
+          type: integer
+          format: int64
+        permitTypeName:
+          type: string
+          nullable: true
+        permitTypeId:
+          type: string
+          format: uuid
+        yearsValid:
+          type: integer
+          format: int64
+        appliesFromDate:
+          type: string
+          format: date-time
+        appliesToDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    InvoiceResponse:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+          nullable: true
+        invoiceFullName:
+          type: string
+          nullable: true
+        totalOwing:
+          type: number
+          format: double
+        totalExcludingGst:
+          type: number
+          format: double
+        recieptNumber:
+          type: string
+          nullable: true
+        totalGst:
+          type: number
+          format: double
+        totalIncludingGst:
+          type: number
+          format: double
+        paymentStatus:
+          $ref: '#/components/schemas/PaymentStatus'
+        numberOfLineItems:
+          type: integer
+          format: int32
+        invoiceDate:
+          type: string
+          format: date-time
+        invoiceToAddress:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PermitTypeResponse:
+      type: object
+      properties:
+        permitTypeId:
+          type: string
+          nullable: true
+        permitTypeFullName:
+          type: string
+          nullable: true
+        isRenewable:
+          type: boolean
+        currentSeasonStartDate:
+          type: string
+          format: date-time
+        currentSeasonEndDate:
+          type: string
+          format: date-time
+        applicationOpenDate:
+          type: string
+          format: date-time
+        permitClassName:
+          type: string
+          nullable: true
+        minimumAge:
+          type: integer
+          format: int32
+        permitTypePrefix:
+          type: string
+          nullable: true
+        dailyBagLimit:
+          type: integer
+          format: int32
+        currentBagLimit:
+          type: integer
+          format: int32
+        needsQualifications:
+          type: boolean
+      additionalProperties: false
+    ApplicationResponse:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        applicationName:
+          type: string
+          nullable: true
+        applicationStatus:
+          type: string
+          nullable: true
+        permitCost:
+          type: number
+          format: double
+        paymentDescription:
+          type: string
+          nullable: true
+        hasAcknowledgeTermsConditions:
+          type: boolean
+        invoiceId:
+          type: string
+          format: uuid
+        invoiceNumber:
+          type: string
+          nullable: true
+        approvalDecisionReason:
+          type: string
+          nullable: true
+        hasAcceptedDeclaration:
+          type: boolean
+        manualAssessmentRequired:
+          type: boolean
+        payment:
+          $ref: '#/components/schemas/PaymentResponse'
+        permitProduct:
+          $ref: '#/components/schemas/PermitProductResponse'
+        invoice:
+          $ref: '#/components/schemas/InvoiceResponse'
+        permitType:
+          $ref: '#/components/schemas/PermitTypeResponse'
+      additionalProperties: false
+    ChildDeclarationResponse:
+      type: object
+      properties:
+        childDeclarationId:
+          type: string
+          format: uuid
+        childDeclarationName:
+          type: string
+          nullable: true
+        adultFirstName:
+          type: string
+          nullable: true
+        adultOtherNames:
+          type: string
+          nullable: true
+        adultLastName:
+          type: string
+          nullable: true
+        adultDateOfBirth:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    WaterfowlIdentificationResponse:
+      type: object
+      properties:
+        witId:
+          type: string
+          format: uuid
+        witName:
+          type: string
+          nullable: true
+        witNumber:
+          type: string
+          nullable: true
+        isValidWitNumber:
+          type: boolean
+        hasPassedAssessment:
+          type: boolean
+      additionalProperties: false
+    HuntingApplicationResponse:
+      type: object
+      properties:
+        sessionDetails:
+          $ref: '#/components/schemas/SessionResponse'
+        applicationDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationResponse'
+          nullable: true
+        applicantDetails:
+          $ref: '#/components/schemas/ApplicantResponse'
+        childDeclarationDetails:
+          $ref: '#/components/schemas/ChildDeclarationResponse'
+        waterfowlIdentificationDetails:
+          $ref: '#/components/schemas/WaterfowlIdentificationResponse'
+        applicantAddressDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressResponse'
+          nullable: true
+      additionalProperties: false
+    ApplicantAddress:
+      required:
+      - addressLine1
+      - country
+      - postcode
+      - state
+      - suburb
+      type: object
+      properties:
+        addressId:
+          type: string
+          format: uuid
+        addressType:
+          $ref: '#/components/schemas/AddressType'
+        addressLine1:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        suburb:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        postcode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+      additionalProperties: false
+      description: The address details of the applicant
+    WaterfowlIdentification:
+      type: object
+      properties:
+        witNumber:
+          type: string
+          description: Waterfowl identification number
+          nullable: true
+        isValidWitNumber:
+          type: boolean
+          description: Identifies if the supplied WIT number is valid
+        hasPassedAssessment:
+          type: boolean
+          description: Identifies if the applicant has passed a Waterfowl Identification
+            Test
+      additionalProperties: false
+      description: Waterfowl identification details
+    Applicant:
+      required:
+      - applicantAddresses
+      - dateOfBirth
+      - email
+      - firstName
+      - lastName
+      - mobile
+      - telephone
+      - title
+      type: object
+      properties:
+        title:
+          $ref: '#/components/schemas/Title'
+        firstName:
+          type: string
+          nullable: true
+        otherNames:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        preferredName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        mobile:
+          type: string
+          description: You must enter at least one phone number! Either Mobile or
+            Telephone.
+          nullable: true
+        telephone:
+          type: string
+          description: You must enter at least one phone number! Either Mobile or
+            Telephone.
+          nullable: true
+        otherPhone:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          nullable: true
+        hasOffences:
+          type: boolean
+          description: Whether the applicant has had any previous permit related offences
+        hasAcceptedDeclaration:
+          type: boolean
+          description: The applicant has accepted the declarations of the permit
+        hasAcknowledgedTermsAndConditions:
+          type: boolean
+          description: The applicant has accepted the T's and C's of the permit
+        applicantAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicantAddress'
+          description: Each address of the applicant
+          nullable: true
+        waterfowlIdentification:
+          type: array
+          items:
+            $ref: '#/components/schemas/WaterfowlIdentification'
+          description: Waterfowl identification details
+          nullable: true
+      additionalProperties: false
+      description: The personal details of the applicant
+    ChildDeclaration:
+      type: object
+      properties:
+        adultFirstName:
+          type: string
+          description: Parent or guardians first name
+          nullable: true
+        adultOtherNames:
+          type: string
+          description: Parent or guardians other names
+          nullable: true
+        adultLastName:
+          type: string
+          description: Parent or guardians last name
+          nullable: true
+        adultDateOfBirth:
+          type: string
+          description: Parent or guardians date of birth
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: "The details of the parent or guardian of the applicant if they\
+        \ are under the legal age for this permit type\r\n\r\nIf there is no Child\
+        \ declaration with the application, pass an empty object in the request:\r\
+        \neg. \"childDeclaration\": {}"
+    Application:
+      required:
+      - permitCost
+      - permitProductId
+      type: object
+      properties:
+        permitCost:
+          type: number
+          description: The total cost for this specific permit
+          format: double
+        permitProductId:
+          type: string
+          description: The Id of the permit product the applicant has chosen
+          format: uuid
+        childDeclaration:
+          $ref: '#/components/schemas/ChildDeclaration'
+      additionalProperties: false
+      description: The details of the permit application
+    HuntingPermitApplication:
+      required:
+      - applicant
+      - applications
+      type: object
+      properties:
+        returnDataSelectQuery:
+          type: string
+          description: Property values to be returned after a record is successfully
+            created.
+          nullable: true
+        sessionId:
+          type: string
+          description: Create an application with a specified Id
+          format: uuid
+        applicant:
+          $ref: '#/components/schemas/Applicant'
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+          description: One or more permit applications to be purchased
+          nullable: true
+      additionalProperties: false
+      description: Represents Hunting permit applications
+    Payment:
+      required:
+      - amount
+      - billerCode
+      - crn1
+      - merchantNumber
+      - processedDateTime
+      - receiptNumber
+      - sessionId
+      type: object
+      properties:
+        apiResponseCode:
+          type: string
+          description: Response code returned from Bpoint Api
+          nullable: true
+        apiResponseText:
+          type: string
+          description: Response text returned from Bpoint Api
+          nullable: true
+        amount:
+          type: number
+          description: Payment amount
+          format: double
+        bankResponseCode:
+          type: string
+          description: Transaction response code returned from the Bank
+          nullable: true
+        billerCode:
+          type: string
+          description: The company biller code
+          nullable: true
+        cardType:
+          type: string
+          description: The card type used for the payment
+          nullable: true
+        cardExpiryDate:
+          type: string
+          description: The 4 digit expiry date of the credit card used for payment
+          nullable: true
+        cardMaskedCardNumber:
+          type: string
+          description: The masked credit card number used for the payment
+          nullable: true
+        merchantNumber:
+          type: string
+          description: The Merchant number associated with the payment
+          nullable: true
+        processedDateTime:
+          type: string
+          description: The date and time the bank processed the payment
+          format: date-time
+        receiptNumber:
+          type: string
+          description: The bank payment transaction receipt number
+          nullable: true
+        responseCode:
+          type: string
+          description: The response code for the payment transaction
+          nullable: true
+        responseText:
+          type: string
+          description: The response text for the payment transaction
+          nullable: true
+        crn1:
+          type: string
+          description: The primary Customer Reference Number used to identify the
+            purchase
+          nullable: true
+        crn2:
+          type: string
+          description: Optional Customer Reference Number used to identify the purchase
+          nullable: true
+        crn3:
+          type: string
+          description: Optional Customer Reference Number used to identify the purchase
+          nullable: true
+        sessionId:
+          type: string
+          description: The Session Id identifying the saved application
+          format: uuid
+      additionalProperties: false
+      description: The processed payment information
+    PermitProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique Id representing the permit
+          format: uuid
+        displayName:
+          type: string
+          description: The display name of the permit
+          nullable: true
+        Name:
+          type: string
+          description: The permit product name.
+          nullable: true
+        concessionTypeId:
+          type: integer
+          description: The Id of the concession type
+          format: int64
+        concessionTypeName:
+          type: string
+          description: The concession type name
+          nullable: true
+          example: 'eg: Adult, Concession, Junior...'
+        permitTypeId:
+          type: string
+          description: Unique Id representing the permit type id
+          format: uuid
+        permitTypeName:
+          type: string
+          description: The name of the permit type
+          nullable: true
+        yearsValid:
+          type: integer
+          description: The period of time the permit is valid for
+          format: int32
+        minimumAge:
+          type: integer
+          description: The minimum age allowed for the permit type
+          format: int32
+        seasonStartDate:
+          type: string
+          description: The start date of the current season
+          format: date-time
+          nullable: true
+        seasonEndDate:
+          type: string
+          description: The end date of the current season
+          format: date-time
+          nullable: true
+        dailyBagLimit:
+          type: integer
+          description: Daily bag limit. Zero means unlimited
+          format: int32
+        permitClassId:
+          type: integer
+          description: Unique Id of the permit class
+          format: int64
+        permitClassName:
+          type: string
+          description: The permit class name
+          nullable: true
+        price:
+          type: number
+          description: How much the permit costs
+          format: double
+        applicationOpenDate:
+          type: string
+          description: The date a permit is available to be purchased
+          format: date-time
+      additionalProperties: false
+      description: Resource representing a permit product
+    ActionResult:
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: 'JWT Authorization header using the Bearer scheme. Example: "Authorization:
+        Bearer {token}"'
+      name: Authorization
+      in: header
+security:
+- Bearer: []
