@@ -12,3 +12,5 @@ The API Catalogue (master) has the following definitions
 4. [Masterpiece AR](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/masterpiece-ar-apispec.yml)
 
 5. [Wildlife Permit System](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/wps-apispec.yml)
+
+6. [Enterprise CRM (eCRM) System](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/ecrm-apispec.yml)
