@@ -446,133 +446,6 @@ paths:
       operationId: createwellpermit
       summary: Create a wellpermit
       description: Creates a new instance of a `wellpermit`.
-  /api/v0.1b/waterwells:
-    summary: Path used to manage the list of waterwells.
-    description: The REST endpoint/path used to list and create zero or more `waterwell`
-      entities.  This path contains a `GET`, `PUT`, `POST` and `DELETE` operations.
-    get:
-      tags:
-      - ww-beta
-      parameters:
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: drillholeId
-        description: Drillhole ID
-        schema:
-          type: integer
-        in: query
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterwell-page'
-          description: Successful operation
-      security:
-      - {}
-      operationId: GetDrillholes
-      summary: List All obswells
-      description: Gets a paginated list of all `drillhole` entities.
-  /api/v0.1b/waterwells/{id}:
-    summary: Endpoint to interact with a specific drillhole
-    description: API to inspect and/or update a specific drillhole
-    get:
-      tags:
-      - ww-beta
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterwell'
-          description: Drillhole details for requested ID
-        "404":
-          description: Drillhole with requested Id not found
-      security:
-      - {}
-      operationId: GetDrillhole
-      summary: Get details of requested drillhole
-      description: Endpoint to get details of requested drillhole
-    parameters:
-    - name: id
-      description: Drillhole Id for which details are requested
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
-  /api/v0.1b/waterwells/{id}/wellcompletionreports:
-    summary: Path used to manage the list of wellcompletionreports of a drillhole
-    description: The REST endpoint/path used to list and create `wellcompletionreport`
-      entities associated with a drillhole.  This path contains a `GET` and `POST`
-      operation to perform the list and create tasks, respectively.
-    get:
-      tags:
-      - ww-beta
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/wellcompletionreport-page'
-          description: Provides an array of well completion reports for the drillhole
-        "404":
-          description: No Well Completion Reports found for this drillhole
-      operationId: GetWellCompletionReportFor
-      summary: Get well completion reports for a `drillhole`
-      description: Get well completion reports for a `drillhole`
-    post:
-      requestBody:
-        description: Well completion report data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/wellcompletionreport'
-        required: true
-      tags:
-      - ww-beta
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/wellcompletionreport'
-          description: Successful creation of a well completion report
-        "409":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-              examples:
-                wcr-validation-error-response:
-                  value:
-                  - 'Horizontal accuracy out of range. Range: [0, 99999.99]'
-                  - Case depth From is greater than Case Depth To
-          description: Validation error. Please check response body for error description
-      operationId: createWellCompletionReportFor
-      summary: Create a new well completion report for the 'drillhole`
-      description: Create a new well completion report for the 'drillhole`
-    parameters:
-    - name: id
-      description: Drillhole ID of the well completion reports
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
   /api/v0.1/wellpermits/{id}:
     summary: Path used to manage a single wellpermit.
     description: The REST endpoint/path used to get, update, and delete single instances
@@ -2062,329 +1935,6 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
-    waterwell:
-      required:
-      - licensedWell
-      - location
-      - status
-      type: object
-      properties:
-        name:
-          description: Name of the drillhole
-          type: string
-        licensedWell:
-          description: Indicates if the well is licensed or not
-          type: boolean
-        drillholeId:
-          description: Drillhole ID as maintained by SAGeodata
-          type: string
-        location:
-          $ref: '#/components/schemas/ww-locationdata'
-          description: Location of the drillhole
-        nrmRegion:
-          description: NRM Region where the drillhole is located
-          type: string
-        otherName:
-          description: Any other name for the drillhole
-          type: string
-        waterPointType:
-          description: "Water Point Type of the drillhole. Possible values: \n\nPossible\
-            \ values:  \n`DAM` - Dam\t\n`HOL` - Water Hole\t\n`LAK` - Lake\t\n`RIV`\
-            \ - River\t\n`SEA` - Sea Water\t\n`SOK` - Soak\t\n`SPR` - Spring\t\n`MDS`\
-            \ - Mound Spring\t\n`MWS` - Mine Water Supply\t\n`UKN` - Water Point type\
-            \ not known\t\n`SMP` - Swamp\t\n`DRN` - drain; Bore drain\t\n`CRK` - Creek\t\
-            \n`SNK` - Sink hole\t\n`GSP` - GAB Spring (incl previous mound springs)\t\
-            \n`RES` - Reservoir\t\n`VWP` - Vibrating Wire Piezometer\t\n`MIN` - Mine"
-          enum:
-          - DAM
-          - HOL
-          - LAK
-          - RIV
-          - SEA
-          - SOK
-          - SPR
-          - MDS
-          - MWS
-          - UKN
-          - SMP
-          - DRN
-          - CRK
-          - SNK
-          - GSP
-          - RES
-          - VWP
-          - MIN
-          type: string
-        waterPointClass:
-          description: Indicates if the drillhole is a water point or not
-          type: boolean
-        abandoned:
-          description: Indicates if the well is abandoned or not
-          type: boolean
-        backfill:
-          description: Indicates if the well is backfill or not
-          type: boolean
-        commencedDate:
-          description: Construction commence date
-          type: string
-        comments:
-          description: Construction comment
-          type: string
-        completionDate:
-          description: Construction completion date
-          type: string
-        status:
-          description: "Status of the drillhole. Possible values are\r\n\r\n\r\n`ABD`\
-            \ Abandoned\t\r\n`BKF` Backfilled\t\r\n`BLK` Blocked\t\r\n`CAP` Capped\t\
-            \r\n`CAM` Care and Maintenance\t\r\n`CAS` Cased\t\r\n`CLP` Collapsed\t\
-            \r\n`COM` Completed\t\r\n`CSH` Controlled - shut in\t\r\n`CFL` Controlled\
-            \ Flowing\t\r\n`WWT` Converted to WW\t\r\n`DMG` Damaged\t\r\n`DMP` Damp\t\
-            \r\n`DEC` Decommissioned\t\r\n`DRY` Dry\t\r\n`DCM` Dual Completion\t\r\
-            \n`EQP` Equipped (pump, windmill, etc)\t\r\n`EXS` Extinct Spring\t\r\n\
-            `FL` Flowing\t\r\n`FWT` Free water and tail\t\r\n`GEQ` Geotechnically\
-            \ Equiped\t\r\n`INJ` Injector\t\r\n`MND` Mined (removed by mining)\t\r\
-            \n`NEQ` Not Equipped\t\r\n`NIU` Not In Use\t\r\n`NL` Not Located\t\r\n\
-            `NOP` Not Operational\t\r\n`OPR` Operational\t\r\n`OPQ` Operational as\
-            \ required\t\r\n`PLG` Plugged\t\r\n`PND` Pond, free water\t\r\n`RHB` Rehabilitated\t\
-            \r\n`SAT` Saturated\t\r\n`SHT` Shut In\t\r\n`SCM` Single Completion\t\r\
-            \n`STO` Storage\t\r\n`SUS` Suspended\t\r\n`UFL` Uncontrolled Flowing\t\
-            \r\n`UEQ` Unequipped\t\r\n`UKN` Unknown\t\r\n`UNW` Unworked"
-          enum:
-          - ABD
-          - BKF
-          - BLK
-          - CAP
-          - CAM
-          - CAS
-          - CLP
-          - COM
-          - CSH
-          - CFL
-          - WWT
-          - DMG
-          - DMP
-          - DEC
-          - DRY
-          - DCM
-          - EQP
-          - EXS
-          - FL
-          - FWT
-          - GEQ
-          - INJ
-          - MND
-          - NEQ
-          - NIU
-          - NL
-          - NOP
-          - OPR
-          - OPQ
-          - PLG
-          - PND
-          - RHB
-          - SAT
-          - SHT
-          - SCM
-          - STO
-          - SUS
-          - UFL
-          - UEQ
-          - UKN
-          - UNW
-        casingdetails:
-          description: 'Casing details  '
-          type: array
-          items:
-            $ref: '#/components/schemas/ww-casingdata'
-    waterwell-page:
-      description: Data type that represents a collection/page of drillholes
-      required:
-      - drillholes
-      type: object
-      properties:
-        drillholes:
-          description: Collection of drillholes
-          type: array
-          items:
-            $ref: '#/components/schemas/waterwell'
-        nextPage:
-          description: URI to next page of the collection
-          type: string
-        prevPage:
-          description: URI to previous page of the collection
-          type: string
-    ww-casingdata:
-      description: Water Well Casing Data
-      required:
-      - casingType
-      - casingDepthFromInMeters
-      - casingDepthToInMeters
-      - casingDiamInMillis
-      - casingMaterial
-      - cementingType
-      - cementDepthFromInMeters
-      - cementDepthToInMeters
-      - cementingMethod
-      - doesShoeExist
-      - isShoeCemented
-      type: object
-      properties:
-        casingType:
-          description: "Casing Type. Possible values are: \n\n`P` - Production\n`S`\
-            \ - Surface\n`I` - Intermediate"
-          enum:
-          - P
-          - S
-          - I
-          type: string
-        casingDepthFromInMeters:
-          format: double
-          description: Casing Depth - From value in meters
-          type: number
-        casingDepthToInMeters:
-          format: double
-          description: Casing Depth - To value in meters
-          type: number
-        casingDiamInMillis:
-          format: double
-          description: Casing diameter - value in millimeters
-          type: number
-        casingMaterial:
-          description: 'Casing Material. For eg: PVC'
-          type: string
-        cementingType:
-          description: "Cementing type. Possible values: \n\n`G` - Gravity\n`P` -\
-            \ Pressure\n`N` - Not Known"
-          enum:
-          - G
-          - P
-          - "N"
-          type: string
-        cementDepthFromInMeters:
-          format: double
-          description: Cement Depth - From value in meters
-          type: number
-        cementDepthToInMeters:
-          format: double
-          description: Cement Depth - To value in meters
-          type: number
-        cementingMethod:
-          description: "Cementing Method code. Possible values are: \n\n`DISP` - Displacement\
-            \ ,general\t\n`DSPC` - Displacement through casing\t\n`DSPD` - Displacement\
-            \ through drill pipe\t\n`DUMP` - Dump Bail method\t\n`GRAV` - Gravity\t\
-            \n`NDC` - No cementing method declared\t\n`TREM` - Tremi Line"
-          enum:
-          - DISP
-          - DSPC
-          - DSPD
-          - DUMP
-          - GRAV
-          - NDC
-          - TREM
-          type: string
-        doesShoeExist:
-          description: Does Shoe exist
-          type: boolean
-        shoeDiamInMillis:
-          format: double
-          description: Shoe diameter - value in millimeters
-          type: number
-        isShoeCemented:
-          description: Is Shoe cemented
-          type: boolean
-        comments:
-          description: Comments
-          type: string
-    ww-wellconstructiondata:
-      description: Well construction details of a drillhole
-      type: object
-      properties:
-        wellConstructionInspection:
-          type: boolean
-        permitNumber:
-          format: int32
-          description: Well Construction Permit Number
-          type: integer
-        permitNumberExt:
-          description: Well Construction Permit Number - extension
-          type: string
-        totalDepthMetres:
-          format: int32
-          description: Total Depth in meters
-          type: integer
-        isReplacementWell:
-          description: Is Replacement Well
-          type: boolean
-        isAbandoned:
-          description: Is Abandoned
-          type: boolean
-        isBackfill:
-          description: Is Backfill
-          type: boolean
-        commencedDate:
-          format: date
-          description: Construction commencement date
-          type: string
-        comments:
-          description: Construction comments
-          type: string
-        completionDate:
-          format: date
-          description: Construction completion date
-          type: string
-        currentDepthInMetres:
-          format: int32
-          description: Current Dept in metres
-          type: integer
-        isDeepened:
-          description: Is Deepend
-          type: boolean
-        drillerLicenceNumber:
-          format: int32
-          description: Driller Licence Number
-          type: integer
-        isDry:
-          description: Is Dry
-          type: boolean
-        isEnlarged:
-          description: Is Enlarged
-          type: boolean
-        finalDepthMetres:
-          format: int32
-          description: Final Depth in meters
-          type: integer
-        isTraditionalWell:
-          description: Is Traditional Well
-          type: boolean
-    ww-locationdata:
-      description: Represents location data
-      type: object
-      properties:
-        easting:
-          description: Easting, from the reference co-ordinate system, of the drillhole
-          type: string
-        northing:
-          description: Northing, from the reference co-ordinate system, of the drillhole
-          type: string
-        latitude:
-          description: Latitude of the drillhole
-          type: string
-        longitude:
-          description: Longitude of the drillhole
-          type: string
-        mgaZone:
-          type: string
-        coordinateSystem:
-          description: Reference co-ordinate system used to define this location data
-          enum:
-          - WGS84
-      example:
-        easting: "280829"
-        northing: "6137625"
-        latitude: ""
-        longitude: ""
-        mgaZone: "54"
-        coordinateSystem: WGS84
     obswell-page:
       description: Data type that represents a collection/page of water level measurements
       required:
@@ -2455,12 +2005,12 @@ components:
       example:
         drillholeNumber: 4
         measurementNumber: 1
-        measurementDate: 1990-12-06T00:00:00
+        measurementDate: 1990-12-06T00:00:00.000Z
         depthToWater: 71.6
         agencyResponsible: DEWNR
         conductedBy: DHDB
-        createdDate: 1997-07-02T18:23:52
-        modifiedDate: 2012-09-20T15:56:31
+        createdDate: 1997-07-02T18:23:52.000Z
+        modifiedDate: 2012-09-20T15:56:31.000Z
     waterlevelmeasurement-page:
       description: Data type that represents a collection/page of water level measurements.
       required:
@@ -2630,14 +2180,14 @@ components:
       example:
         drillholeNumber: 87308
         measurementNumber: 422497
-        measurementDate: 2018-08-31T00:00:00
+        measurementDate: 2018-08-31T00:00:00.000Z
         groundElevation: 226.818
         surveyMethod: DEM
         comments: Ground elevation has been interpolated from the GA 1 second SRTM
           level 2 Digital DEM v1_0 (standard, smoothed and hydro corrected). Release
           date of DEM 2010. Survey Date is date of load into database.
         conductedBy: GALDS
-        createdDate: 2018-09-14T11:53:09
+        createdDate: 2018-09-14T11:53:09.000Z
     elevationmeasurement-page:
       description: Data type that represents a collection/page of elevation measurements.
       required:
@@ -2795,8 +2345,8 @@ components:
         latitude: -26.1130886
         longitude: 129.02301
         comments: South Western Mining Company
-        createdDate: 1992-12-10T18:04:24
-        modifiedDate: 2019-08-30T09:32:00
+        createdDate: 1992-12-10T18:04:24.000Z
+        modifiedDate: 2019-08-30T09:32:00.000Z
   responses:
     UnauthorizedError:
       headers:
@@ -2821,11 +2371,6 @@ tags:
     and Well Construction Permits
 - name: auth
   description: API endpoints related to Authentication
-- name: ww-beta
-  description: |-
-    Beta APIs - definition not finalized
-
-    API endpoints that allow inspection or manipulation of Water Wells
 - name: obswell
   description: API endpoints that relate to Obswells
 externalDocs:
