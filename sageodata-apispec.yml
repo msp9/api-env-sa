@@ -2,7 +2,7 @@
 openapi: 3.0.1
 info:
   title: SA Geodata API
-  version: "0.1"
+  version: "1.0"
   description: SA Geodata - Webservice API specification
   contact:
     name: DEW Business Information Systems Unit - SI&T Branch
@@ -18,7 +18,7 @@ servers:
       default: qa-api
       description: QA domain
 paths:
-  /api/v0.1/wellcompletionreports:
+  /api/v1.0/wellcompletionreports:
     summary: Path used to manage the list of wellcompletionreports.
     description: The REST endpoint/path used to list and create zero or more `wellcompletionreport`
       entities.  This path contains a `GET` and `POST` operation to perform the list
@@ -108,7 +108,7 @@ paths:
       operationId: createwellcompletionreport
       summary: Create a wellcompletionreport
       description: Creates a new instance of a `wellcompletionreport`.
-  /api/v0.1/wellcompletionreports/{id}:
+  /api/v1.0/wellcompletionreports/{id}:
     summary: Path used to manage a single wellcompletionreport.
     description: |-
       The REST endpoint/path used to get, update, and delete single instances of an `wellcompletionreport`.  This path contains `GET` operation used to perform the get task.
@@ -136,7 +136,7 @@ paths:
         type: string
       in: path
       required: true
-  /api/v0.1/welldrillers:
+  /api/v1.0/welldrillers:
     summary: Path used to manage the list of welldrillers.
     description: |-
       The REST endpoint/path used to list `welldrillers` entities.  This path contains a `GET` operation to perform the list task.
@@ -207,7 +207,7 @@ paths:
       operationId: getwelldrillers
       summary: List All welldrillers
       description: Gets a list of all `welldrillers` entities.
-  /api/v0.1/welldrillers/{id}:
+  /api/v1.0/welldrillers/{id}:
     summary: Path used to manage a single welldriller.
     description: |
       The REST endpoint/path used to get, update, and delete single instances of an `welldrillers`.  This path contains `GET` and `PUT` operations used to perform the get and update tasks, respectively.
@@ -247,7 +247,7 @@ paths:
         type: integer
       in: path
       required: true
-  /api/v0.1/welldrillerlicences:
+  /api/v1.0/welldrillerlicences:
     summary: Endpoints to query / create Driller Licences
     description: Create or query `drillerlicence`.
     get:
@@ -329,7 +329,7 @@ paths:
       operationId: CreateDrillerLicence
       summary: Create a Driller Licence
       description: Create driller licence
-  /api/v0.1/welldrillerlicences/{id}:
+  /api/v1.0/welldrillerlicences/{id}:
     summary: Endpoint to interact with a specific driller licence
     description: API to inspect and/or update a specific driller licence
     get:
@@ -367,7 +367,7 @@ paths:
         type: integer
       in: path
       required: true
-  /api/v0.1/wellpermits:
+  /api/v1.0/wellpermits:
     summary: Path used to manage the list of wellpermits.
     description: The REST endpoint/path used to list and create zero or more `wellpermit`
       entities.  This path contains a `GET` and `POST` operation to perform the list
@@ -446,7 +446,7 @@ paths:
       operationId: createwellpermit
       summary: Create a wellpermit
       description: Creates a new instance of a `wellpermit`.
-  /api/v0.1/wellpermits/{id}:
+  /api/v1.0/wellpermits/{id}:
     summary: Path used to manage a single wellpermit.
     description: The REST endpoint/path used to get, update, and delete single instances
       of an `wellpermit`.  This path contains `GET`, `PUT`, and `DELETE` operations
@@ -487,7 +487,7 @@ paths:
         type: string
       in: path
       required: true
-  /api/v0.1/token:
+  /api/v1.0/token:
     summary: Authentication and Authorization
     description: Authentication and authorization end points
     post:
