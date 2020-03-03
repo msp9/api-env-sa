@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: 'SA Geodata API '
+  title: SA Geodata API
   version: "0.1"
   description: SA Geodata - Webservice API specification
   contact:
@@ -18,7 +18,7 @@ servers:
       default: qa-api
       description: QA domain
 paths:
-  /wcr/v0.1/wellcompletionreports:
+  /api/v0.1/wellcompletionreports:
     summary: Path used to manage the list of wellcompletionreports.
     description: The REST endpoint/path used to list and create zero or more `wellcompletionreport`
       entities.  This path contains a `GET` and `POST` operation to perform the list
@@ -108,7 +108,7 @@ paths:
       operationId: createwellcompletionreport
       summary: Create a wellcompletionreport
       description: Creates a new instance of a `wellcompletionreport`.
-  /wcr/v0.1/wellcompletionreports/{id}:
+  /api/v0.1/wellcompletionreports/{id}:
     summary: Path used to manage a single wellcompletionreport.
     description: |-
       The REST endpoint/path used to get, update, and delete single instances of an `wellcompletionreport`.  This path contains `GET` operation used to perform the get task.
@@ -136,7 +136,7 @@ paths:
         type: string
       in: path
       required: true
-  /wcr/v0.1/welldrillers:
+  /api/v0.1/welldrillers:
     summary: Path used to manage the list of welldrillers.
     description: |-
       The REST endpoint/path used to list `welldrillers` entities.  This path contains a `GET` operation to perform the list task.
@@ -207,7 +207,7 @@ paths:
       operationId: getwelldrillers
       summary: List All welldrillers
       description: Gets a list of all `welldrillers` entities.
-  /wcr/v0.1/welldrillers/{id}:
+  /api/v0.1/welldrillers/{id}:
     summary: Path used to manage a single welldriller.
     description: |
       The REST endpoint/path used to get, update, and delete single instances of an `welldrillers`.  This path contains `GET` and `PUT` operations used to perform the get and update tasks, respectively.
@@ -247,7 +247,7 @@ paths:
         type: integer
       in: path
       required: true
-  /wcr/v0.1/welldrillerlicences:
+  /api/v0.1/welldrillerlicences:
     summary: Endpoints to query / create Driller Licences
     description: Create or query `drillerlicence`.
     get:
@@ -329,7 +329,7 @@ paths:
       operationId: CreateDrillerLicence
       summary: Create a Driller Licence
       description: Create driller licence
-  /wcr/v0.1/welldrillerlicences/{id}:
+  /api/v0.1/welldrillerlicences/{id}:
     summary: Endpoint to interact with a specific driller licence
     description: API to inspect and/or update a specific driller licence
     get:
@@ -367,7 +367,7 @@ paths:
         type: integer
       in: path
       required: true
-  /wcr/v0.1/wellpermits:
+  /api/v0.1/wellpermits:
     summary: Path used to manage the list of wellpermits.
     description: The REST endpoint/path used to list and create zero or more `wellpermit`
       entities.  This path contains a `GET` and `POST` operation to perform the list
@@ -446,7 +446,7 @@ paths:
       operationId: createwellpermit
       summary: Create a wellpermit
       description: Creates a new instance of a `wellpermit`.
-  /ww/v0.1b/waterwells:
+  /api/v0.1b/waterwells:
     summary: Path used to manage the list of waterwells.
     description: The REST endpoint/path used to list and create zero or more `waterwell`
       entities.  This path contains a `GET`, `PUT`, `POST` and `DELETE` operations.
@@ -484,7 +484,7 @@ paths:
       operationId: GetDrillholes
       summary: List All obswells
       description: Gets a paginated list of all `drillhole` entities.
-  /ww/v0.1b/waterwells/{id}:
+  /api/v0.1b/waterwells/{id}:
     summary: Endpoint to interact with a specific drillhole
     description: API to inspect and/or update a specific drillhole
     get:
@@ -512,7 +512,7 @@ paths:
         type: integer
       in: path
       required: true
-  /ww/v0.1b/waterwells/{id}/wellcompletionreports:
+  /api/v0.1b/waterwells/{id}/wellcompletionreports:
     summary: Path used to manage the list of wellcompletionreports of a drillhole
     description: The REST endpoint/path used to list and create `wellcompletionreport`
       entities associated with a drillhole.  This path contains a `GET` and `POST`
@@ -573,7 +573,7 @@ paths:
         type: integer
       in: path
       required: true
-  /wcr/v0.1/wellpermits/{id}:
+  /api/v0.1/wellpermits/{id}:
     summary: Path used to manage a single wellpermit.
     description: The REST endpoint/path used to get, update, and delete single instances
       of an `wellpermit`.  This path contains `GET`, `PUT`, and `DELETE` operations
@@ -614,7 +614,7 @@ paths:
         type: string
       in: path
       required: true
-  /auth/v0.1/token:
+  /api/v0.1/token:
     summary: Authentication and Authorization
     description: Authentication and authorization end points
     post:
@@ -644,6 +644,168 @@ paths:
       operationId: GetToken()
       summary: Generate bearer token
       description: Request to generate and return a bearer token.
+  /api/v1.0/obswells:
+    summary: Endpoint to interact with the list of obswells.
+    description: Obswells are a subset of waterwells - they are waterwells that are
+      monitored and have measurement data.
+    get:
+      tags:
+      - obswell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only obswells that have been modified more recently
+          than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: false
+      - name: groupCode
+        description: If specified, only obswells that belong to the specified group
+          code will be returned.
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/obswell-page'
+          description: Successful operation
+      operationId: GetObswells
+      summary: List all obwells
+      description: ""
+  /api/v1.0/obswells/{id}/elevationmeasurements/:
+    summary: Endpoint to interact with the list of elevation measurements for a single
+      obswell.
+    description: ""
+    get:
+      tags:
+      - obswell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elevationmeasurement-page'
+          description: Successful operation
+      operationId: GetElevationMeasurements
+      summary: List all elevation measurements
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which obswell to retrieve measurements for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /api/v1.0/obswells/{id}/waterlevelmeasurements/:
+    summary: Endpoint to interact with the list of elevation measurements for a single
+      obswell.
+    description: ""
+    get:
+      tags:
+      - obswell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only water level measurements that have been modified
+          more recently than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+      operationId: GetWaterLevelMeasurements
+      summary: List all water level measurements
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which obswell to retrieve measurements for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /api/v1.0/obswells/{id}:
+    summary: Endpoint to interact with a single obswell.
+    description: ""
+    get:
+      tags:
+      - obswell
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/obswell'
+          description: Successful operation
+      operationId: GetObswell
+      summary: Return a specific obswell
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId for which details are requested
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /api/v1.0/obswells/referencepointtypes:
+    summary: Endpoint to retrieve the list of possible reference point types and their
+      code values
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/codevaluepair'
+              examples:
+                Example:
+                  value:
+                  - Code: TOC
+                    Value: Casing (Top)
+                  - Code: REF
+                    Value: Reference
+          description: Successful operation
+      summary: List all reference point types
+  /api/v1.0/obswells/surveymethods/:
+    summary: Endpoint to retrieve the list of possible survey methods and their code
+      values
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/codevaluepair'
+              examples:
+                Example:
+                  value: "[\r\n  {\r\n    \"Code\": \"DEM\",\r\n    \"Value\": \"\
+                    Digital Elevation Model\t\"\r\n  },\r\n  {\r\n    \"Code\": \"\
+                    DIG\",\r\n    \"Value\": \"Digitised\"\r\n  }\r\n]"
+          description: Successful operation
+      summary: List all survey methods
 components:
   schemas:
     address:
@@ -2223,6 +2385,418 @@ components:
         longitude: ""
         mgaZone: "54"
         coordinateSystem: WGS84
+    obswell-page:
+      description: Data type that represents a collection/page of water level measurements
+      required:
+      - results
+      type: object
+      properties:
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+        results:
+          description: Collection of obswells.
+          type: array
+          items:
+            $ref: '#/components/schemas/obswell'
+    waterlevelmeasurement:
+      title: Root Type for waterlevelmeasurement
+      description: Data type representing a water level measurement recorded during
+        a field visit to an obswell.
+      type: object
+      properties:
+        measurementDate:
+          format: date-time
+          description: Date the measurement was taken.
+          type: string
+        depthToWater:
+          format: double
+          description: The actual Depth to Water measurment value.
+          type: number
+        comments:
+          description: Comments
+          type: string
+        agencyResponsible:
+          description: Agency responsible for the measurement.
+          type: string
+        conductedBy:
+          description: The username of the field officer(s) who conducted the field
+            visit.
+          type: string
+        createdDate:
+          format: date-time
+          description: Date the measurement was added to SAGeoData.
+          type: string
+        modifiedDate:
+          format: date-time
+          description: Datetime of the most recent modification to the measurement
+            in SAGeoData.
+          type: string
+        measurementNumber:
+          format: int32
+          description: Unique identifier of the measurement specified by SAGeoData.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier of drillhole specified by SAGeoData.
+          type: integer
+      example:
+        drillholeNumber: 4
+        measurementNumber: 1
+        measurementDate: 1990-12-06T00:00:00
+        depthToWater: 71.6
+        agencyResponsible: DEWNR
+        conductedBy: DHDB
+        createdDate: 1997-07-02T18:23:52
+        modifiedDate: 2012-09-20T15:56:31
+    waterlevelmeasurement-page:
+      description: Data type that represents a collection/page of water level measurements.
+      required:
+      - results
+      type: object
+      properties:
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+        results:
+          description: Collection of water level measurements.
+          type: array
+          items:
+            $ref: '#/components/schemas/waterlevelmeasurement'
+    elevationmeasurement:
+      title: Root Type for elevationmeasurement
+      description: Data type representing an elevation measurement recorded during
+        a field visit to an obswell.
+      type: object
+      properties:
+        measurementDate:
+          format: date-time
+          description: Date the measurement was taken.
+          type: string
+        groundElevation:
+          format: int32
+          description: The well's current ground elevation in metres.
+          type: integer
+        referenceElevation:
+          format: double
+          description: The well's current elevation from the reference point in metres.
+          type: number
+        comments:
+          description: Comments
+          type: string
+        conductedBy:
+          description: The username of the field officer(s) who conducted the field
+            visit.
+          type: string
+        createdDate:
+          format: date-time
+          description: The date that the measurement was added to SAGeoData.
+          type: string
+        modifiedDate:
+          format: date-time
+          description: Datetime of the most recent modification to the obswell in
+            SAGeoData.
+          type: string
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
+        measurementNumber:
+          format: int32
+          description: Unique identifier of drillhole specified by SAGeoData.
+          type: integer
+        appliedDate:
+          format: date-time
+          description: Start date of period this elevation measurement should be used
+            for deriving level measurements.
+          type: string
+        surveyMethodCode:
+          description: "Survey Method. Possible values: \n\n`AMGRD` - Controlled AMG/MGA\
+            \ map\t\n`CAL` - (DISUSED) Calculated\t\n`CLGRD` - Controlled CLARKE map\t\
+            \n`COCH` - (DISUSED) Compass and Chain\t\n`COOD` - (DISUSED) Compass and\
+            \ Odometer\t\n`DEM` - Digital Elevation Model\t\n`DIG` - Digitised\t\n\
+            `DOCM` - Sourced from documents (PLANS, ENV, RB,etc)\t\n`EDM` - (DISUSED)\
+            \ EDM\t\n`GCN` - (DISUSED) MESA Geog conversion from Clarke coords\t\n\
+            `GISP` - GIS software on PDA or similar mobile device\t\n`GISW` - GIS\
+            \ software on full Windows OS PC\t\n`GOEAR` - Google Earth image\t\n`GOMAP`\
+            \ - Google Maps image\t\n`GPS` - (DISUSED, use GPSUN) Global Positioning\
+            \ System\t\n`GPSAP` - GPS Averaged Position\t\n`GPSAU` - GPS Post Processed\
+            \ Using AUSPOS Service\t\n`GPSDG` - GPS Differential Generic\t\n`GPSDM`\
+            \ - GPS Multi Base Wide Area Differential (was GPSPD)\t\n`GPSDS` - GPS\
+            \ Single Base Wide Area Differential (was GPSRD)\t\n`GPSPD` - GPS Post\
+            \ Processed Differential (nav level)\t\n`GPSRD` - GPS Real-time Differential\
+            \ (nav level)\t\n`GPSSK` - GPS Svy Grade- Real Time Kinematic (RTK)/Kinematic\t\
+            \n`GPSSL` - GPS Survey Grade (kinematic/static)\t\n`GPSSN` - GPS Standalone\
+            \ Navigational\t\n`GPSSS` - GPS Survey Grade - Static\t\n`GPSUN` - GPS\
+            \ type unknown\t\n`GTRAV` - Interpolated traverse site between GPS endpoints\t\
+            \n`IMGD` - Digital Image\t\n`INFER` - (DISUSED) Inferred\t\n`LOCAL` -\
+            \ (DISUSED) Approximate local methods\t\n`MAP` - (DISUSED) Map Plot\t\n\
+            `ODOM` - (DISUSED) Odometer\t\n`PHOTO` - Air Photo\t\n`PRO` - (DISUSED)\
+            \ Provisional (Estimated)\t\n`SAN` - (DISUSED) Santos conversion from\
+            \ Clarke coords\t\n`SUR` - Surveying\t\n`TRX` - GDA94 Transformed\t\n\
+            `UCMAP` - Uncontrolled map\t\n`UKN` - (DISUSED) Unknown\t\n`VERBL` - (DISUSED)\
+            \ Verbal"
+          enum:
+          - AMGRD
+          - CAL
+          - CLGRD
+          - COCH
+          - COOD
+          - DEM
+          - DIG
+          - DOCM
+          - EDM
+          - GCN
+          - GISP
+          - GISW
+          - GOEAR
+          - GOMAP
+          - GPS
+          - GPSAP
+          - GPSAU
+          - GPSDG
+          - GPSDM
+          - GPSDS
+          - GPSPD
+          - GPSRD
+          - GPSSK
+          - GPSSL
+          - GPSSN
+          - GPSSS
+          - GPSUN
+          - GTRAV
+          - IMGD
+          - INFER
+          - LOCAL
+          - MAP
+          - ODOM
+          - PHOTO
+          - PRO
+          - SAN
+          - SUR
+          - TRX
+          - UCMAP
+          - UKN
+          - VERBL
+          type: string
+        referencePointTypeCode:
+          description: "Name of the reference point. Possible values:\n\n`GRD` Ground\n\
+            \n`KB\tKelly` Bushing\n\n`CAB` Cable Access (Top)\n\n`TOC` Casing (Top)\n\
+            \n`FLR` Floor (Top)\n\n`PBP` Pump Base Plate (Top)\n\n`REF` Reference\n\
+            \n`STP` Stand Pipe (Top)\n\n`SCB` Steel Cross Bar (Top)\n\n`WEL` Well\
+            \ (Top)\n\n`WLC` Well Cover (Top)\n\n`WIN` Windmill Clamp (Top)\n\n`WDC`\
+            \ Wooden Cover (Top)"
+          enum:
+          - GRD
+          - KB
+          - CAB
+          - TOC
+          - FLR
+          - PBP
+          - REF
+          - STP
+          - SCB
+          - WEL
+          - WLC
+          - WIN
+          - WDC
+          - COL
+          - FLN
+          type: string
+      example:
+        drillholeNumber: 87308
+        measurementNumber: 422497
+        measurementDate: 2018-08-31T00:00:00
+        groundElevation: 226.818
+        surveyMethod: DEM
+        comments: Ground elevation has been interpolated from the GA 1 second SRTM
+          level 2 Digital DEM v1_0 (standard, smoothed and hydro corrected). Release
+          date of DEM 2010. Survey Date is date of load into database.
+        conductedBy: GALDS
+        createdDate: 2018-09-14T11:53:09
+    elevationmeasurement-page:
+      description: Data type that represents a collection/page of elevation measurements.
+      required:
+      - results
+      type: object
+      properties:
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+        results:
+          description: Collection of water level measurements
+          type: array
+          items:
+            $ref: '#/components/schemas/elevationmeasurement'
+    codevaluepair:
+      description: Key value pair used to display values from lookup tables.
+      type: object
+      properties:
+        Value:
+          description: The string value itself.
+          type: string
+        Code:
+          description: Code for the associated value.
+          type: string
+    obswell:
+      title: Root Type for obswell
+      description: A monitored waterwell.
+      type: object
+      properties:
+        unitNumber:
+          format: int32
+          description: A combination of the map100000Number and sequence number.
+          type: integer
+        nrmRegionCode:
+          description: "NRM region code. Possible values:\n\n`OUT` Out of NRM regions\n\
+            \n`AMLR`\tAdelaide & Mt Lofty Ranges\n\n`ATJWIL`Alinytjara Wilurara\n\n\
+            `EYRPEN`Eyre Peninsula\n\n`KI` Kangaroo Island\n\n`NTHYK`\tNorthern &\
+            \ Yorke\n\n`SAARDL` South Australian Arid Lands\n\n`STHEAST` South East\n\
+            \n`SAMDB`\tSouth Australian Murray-Darling Basin\n"
+          enum:
+          - ANGBRM
+          - CTRADL
+          - FRNTH
+          - LWRLC
+          - MAL
+          - MCLVAL
+          - MGRV
+          - NOO
+          - NTHADLPL
+          - PAD
+          - PKRBSHR
+          - STHBAS
+          - TAT
+          - TINCNP
+          - DRYCK
+          type: string
+        sequenceNumber:
+          format: int32
+          description: A unique number identifying the obswell on the 1:100000 map
+            sheet for which the obswell is located.
+          type: integer
+        latitude:
+          format: double
+          description: Latitude of the obswell.
+          type: number
+        longitude:
+          format: double
+          description: Longitude of the obswell.
+          type: number
+        obsWellPlan:
+          description: A unique code for the plan (hundred) on which an obswell is
+            located.
+          type: string
+        obsWellSequenceNumber:
+          description: A unique number identifying the obswell on the obsWellPlan.
+          type: string
+        aquiferIntersected:
+          description: Code identifying the aquifer that the well intersects.
+          type: string
+        comments:
+          description: Comments
+          type: string
+        createdDate:
+          format: date-time
+          description: Date the obswell was added to SAGeoData.
+          type: string
+        modifiedDate:
+          format: date-time
+          description: Datetime of the most recent modification to the obswell in
+            SAGeoData.
+          type: string
+        name:
+          description: Name of the obswell.
+          type: string
+        elevationMeasurementsURL:
+          description: URL to API endpoint to retrieve elevation measurements for
+            the obswell.
+          type: string
+        waterLevelMeasurementsURL:
+          description: URL to API endpoint to retrieve water level measurements for
+            the obswell.
+          type: string
+        map100kNumber:
+          format: int32
+          description: The 1:100000 map sheet number on which an obswell is located.
+            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
+            into SAGeoData.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
+        nrmRegion:
+          description: NRM region
+          type: string
+        status:
+          description: "Status of the drillhole. Possible values are:\r\n\r\n\r\n\
+            Abandoned\t\r\nBackfilled\t\r\nBlocked\t\r\nCapped\t\r\nCare and Maintenance\t\
+            \r\nCased\t\r\nCollapsed\t\r\nCompleted\t\r\nControlled - shut in\t\r\n\
+            Controlled Flowing\t\r\nConverted to WW\t\r\nDamaged\t\r\nDamp\t\r\nDecommissioned\t\
+            \r\nDry\t\r\nDual Completion\t\r\nEquipped (pump, windmill, etc)\t\r\n\
+            Extinct Spring\t\r\nFlowing\t\r\nFree water and tail\t\r\nGeotechnically\
+            \ Equiped\t\r\nInjector\t\r\nMined (removed by mining)\t\r\nNot Equipped\t\
+            \r\nNot In Use\t\r\nNot Located\t\r\nNot Operational\t\r\nOperational\t\
+            \r\nOperational as required\t\r\nPlugged\t\r\nPond, free water\t\r\nRehabilitated\t\
+            \r\nSaturated\t\r\nShut In\t\r\nSingle Completion\t\r\nStorage\t\r\nSuspended\t\
+            \r\nUncontrolled Flowing\t\r\nUnequipped\t\r\nUnknown\t\r\nUnworked"
+          type: string
+        prescribedWellAreaName:
+          description: Prescribed well area
+          type: string
+        prescribedWaterResourceAreaName:
+          description: Prescribed water resource area
+          type: string
+      example:
+        drillholeNumber: 230
+        drillholeName: A-29 (MT DAVIES)
+        unitNumber: 474500070
+        nrmRegionCode: Alinytjara Wilurara
+        waterWellClass: "N"
+        map100000Number: 4745
+        sequenceNumber: 70
+        latitude: -26.1130886
+        longitude: 129.02301
+        comments: South Western Mining Company
+        createdDate: 1992-12-10T18:04:24
+        modifiedDate: 2019-08-30T09:32:00
   responses:
     UnauthorizedError:
       headers:
@@ -2252,6 +2826,8 @@ tags:
     Beta APIs - definition not finalized
 
     API endpoints that allow inspection or manipulation of Water Wells
+- name: obswell
+  description: API endpoints that relate to Obswells
 externalDocs:
   description: Find out more about SA Geodata API - iShare location
   url: http://swagger.io
