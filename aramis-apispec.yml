@@ -216,102 +216,6 @@ paths:
         type: integer
       in: query
       required: true
-  /directorates:
-    summary: Path used to get a list of directoractes
-    description: The REST endpoint/path used to get a list of directorates.  This
-      path contains a `GET` operation to perform the list tasks.
-    get:
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/directorate'
-              examples:
-                directorates:
-                  value:
-                  - directorateId: 9
-                    directorateName: some text
-                    regions:
-                    - regionId: 70
-                      regionName: some text
-                      districts:
-                      - districtId: 1
-                        districtName: some text
-                        parks:
-                        - parkId: 34
-                          parkName: some text
-                        - parkId: 87
-                          parkName: some text
-                      - districtId: 70
-                        districtName: some text
-                        parks:
-                        - parkId: 71
-                          parkName: some text
-                        - parkId: 85
-                          parkName: some text
-                    - regionId: 11
-                      regionName: some text
-                      districts:
-                      - districtId: 59
-                        districtName: some text
-                        parks:
-                        - parkId: 18
-                          parkName: some text
-                        - parkId: 19
-                          parkName: some text
-                      - districtId: 85
-                        districtName: some text
-                        parks:
-                        - parkId: 8
-                          parkName: some text
-                        - parkId: 38
-                          parkName: some text
-                  - directorateId: 24
-                    directorateName: some text
-                    regions:
-                    - regionId: 67
-                      regionName: some text
-                      districts:
-                      - districtId: 64
-                        districtName: some text
-                        parks:
-                        - parkId: 17
-                          parkName: some text
-                        - parkId: 50
-                          parkName: some text
-                      - districtId: 50
-                        districtName: some text
-                        parks:
-                        - parkId: 67
-                          parkName: some text
-                        - parkId: 68
-                          parkName: some text
-                    - regionId: 53
-                      regionName: some text
-                      districts:
-                      - districtId: 57
-                        districtName: some text
-                        parks:
-                        - parkId: 10
-                          parkName: some text
-                        - parkId: 45
-                          parkName: some text
-                      - districtId: 70
-                        districtName: some text
-                        parks:
-                        - parkId: 24
-                          parkName: some text
-                        - parkId: 2
-                          parkName: some text
-          description: Successful response will return an array of `directorate`
-      security:
-      - HTTP-Basic: []
-      summary: Get a list of directorates
-      description: Get a list of directorates along with the regions, districts and
-        parks
   /checkout/cancel/{checkoutId}:
     summary: Removes locks on all the assets of that checkoutId
     description: |-
@@ -345,32 +249,6 @@ paths:
     - name: checkoutId
       in: path
       required: true
-  /lookups:
-    summary: Provides an array of available lookup tables
-    description: |-
-      Available operations
-
-      `GET` : Provides an array of available lookup table's id and name
-    get:
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/lookup'
-              examples:
-                sample lookup:
-                  value:
-                  - id: 11
-                    name: AssetTypeClass
-                  - id: 12
-                    name: AssetTypeName
-          description: Array of `lookup`
-      security:
-      - HTTP-Basic: []
-      summary: Provides an array of available lookup tables
   /lookups/{tableId}:
     summary: Gets data from a lookup table
     description: |-
@@ -417,54 +295,9 @@ paths:
       in: path
       required: true
   /images:
-    summary: Path used to get a list of images of an asset.
-    description: The REST endpoint/path used to list and create an `image` entity.  This
-      path contains a `GET` and `POST` operation to perform the list and create tasks,
-      respectively.
-    get:
-      parameters:
-      - name: assetId
-        description: Asset ID of the images
-        schema:
-          type: integer
-        in: query
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/image'
-              examples:
-                images:
-                  value:
-                  - imageId: 60
-                    captureDateTime: 2018-02-10T09:30Z
-                    imageDescription: some text
-                    imageTitle: some text
-                    fileName: some text
-                    assetId: 2
-                  - imageId: 66
-                    captureDateTime: 2018-02-10T09:30Z
-                    imageDescription: some text
-                    imageTitle: some text
-                    fileName: some text
-                    assetId: 72
-          description: Successful response - returns an array of `image` entities.
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/response-message'
-          description: Unable to process the request successfully
-        "500":
-          description: Unexpected error occurred when processing the request
-      security:
-      - HTTP-Basic: []
-      summary: List all images of an asset
-      description: Gets a list of all `image` entities of an asset
+    summary: Path used to insert image metadata into the database.
+    description: The REST endpoint/path used to create an `image` entity.  This path
+      contains a `POST` operation to perform the create task.
     post:
       requestBody:
         content:
@@ -488,63 +321,6 @@ paths:
       - HTTP-Basic: []
       summary: Create an image
       description: Creates a new instance of an `image`
-  /images/image/{imageId}:
-    summary: Path used to manage a single `image`.
-    description: The REST endpoint/path used to get, update, and delete single instances
-      of an `image`.  This path contains `GET`, `PUT`, and `DELETE` operations used
-      to perform the get, update, and delete tasks, respectively.
-    servers:
-    - url: http://viperon.env.sa.gov.au:10101/aramissvc/v1
-      description: ""
-    get:
-      tags: []
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/image'
-          description: Successful response - returns an `image`.
-      security:
-      - HTTP-Basic: []
-      summary: Get an image
-      description: Gets the details of a single instance of an `image`.
-    put:
-      requestBody:
-        description: Updated `image` information.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/image'
-        required: true
-      tags: []
-      responses:
-        "202":
-          description: Successful response.
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/response-message'
-          description: Unable to process the request, request is incorrect
-        "500":
-          description: Unexpected error occurred when processing the request
-      summary: Update an image
-      description: Updates an `image`.
-    delete:
-      tags: []
-      responses:
-        "204":
-          description: Successful response.
-      summary: Delete an image
-      description: Deletes an existing `image`.
-    parameters:
-    - name: imageId
-      description: A unique identifier for an `image`.
-      schema:
-        type: integer
-      in: path
-      required: true
 components:
   schemas:
     asset:
@@ -564,6 +340,7 @@ components:
           type: integer
         actionDate:
           format: date-time
+          description: The datetime string must follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
           type: string
         accountCodeActivity:
           type: integer
@@ -579,6 +356,7 @@ components:
           type: string
         invoiceDate:
           format: date-time
+          description: The datetime string must follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
           type: string
         assetDescription:
           type: string
@@ -642,11 +420,13 @@ components:
           type: string
         disposalDate:
           format: date-time
+          description: The datetime string must follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
           type: string
         inspectorId:
           type: integer
         inspectionDate:
           format: date-time
+          description: The datetime string must follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
           type: string
         agencyCompanyId:
           type: integer
@@ -748,20 +528,6 @@ components:
         verifyStatusId: 67
         lockMessage: some text
         assetId: 84
-    park:
-      title: Root Type for park
-      description: Park information
-      required:
-      - parkId
-      - parkName
-      type: object
-      properties:
-        parkId:
-          description: Uniquie Id of a park
-          type: integer
-        parkName:
-          description: Name of a park
-          type: string
     assets-page:
       description: Page of assets
       required:
@@ -1043,60 +809,6 @@ components:
         action:
           checkin-url: /assets/asset/
         checkoutId: 73
-    directorate:
-      description: Directorate information
-      required:
-      - directorateId
-      - directorateName
-      type: object
-      properties:
-        directorateId:
-          description: Unique Id of the directorate
-          type: integer
-        directorateName:
-          description: Name of the directorate
-          type: string
-        regions:
-          description: Regions of a directorate
-          type: array
-          items:
-            $ref: '#/components/schemas/region'
-    region:
-      description: Region information
-      required:
-      - regionId
-      - regionName
-      type: object
-      properties:
-        regionId:
-          description: Unique Id of the region
-          type: integer
-        regionName:
-          description: Name of the region
-          type: string
-        districts:
-          description: Districts of a region
-          type: array
-          items:
-            $ref: '#/components/schemas/district'
-    district:
-      description: District information
-      required:
-      - districtId
-      - districtName
-      type: object
-      properties:
-        districtId:
-          description: Unique Id of a district
-          type: integer
-        districtName:
-          description: Name of the district
-          type: string
-        parks:
-          description: List of Parks in a district
-          type: array
-          items:
-            $ref: '#/components/schemas/park'
     navigation-links:
       description: Contains page navigation URLs
       type: object
@@ -1110,22 +822,6 @@ components:
       example:
         nextPage: /assets/?parkId=225&offset=10&limit=25
         prevPage: /assets/?parkId=225&offset=8&limit=25
-    lookup:
-      description: ""
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          description: ""
-          type: integer
-        name:
-          description: ""
-          type: string
-      example:
-        id: 43
-        name: some text
     lookup-detail:
       description: ""
       required:
@@ -1172,7 +868,8 @@ components:
           type: integer
         captureDateTime:
           format: date-time
-          description: Capture Date and Time for the image
+          description: Capture Date and Time for the image.  The datetime string must
+            follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
           type: string
         imageDescription:
           description: Description about the image
@@ -1211,3 +908,4 @@ tags:
   description: APIs for interacting with parks
 - name: lookup-apis
   description: APIs for look-up data
+
