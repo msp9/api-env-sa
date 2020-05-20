@@ -38,8 +38,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: 1-based Page index
         schema:
           type: integer
         in: query
@@ -209,8 +209,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: 1-based Page index
         schema:
           type: integer
         in: query
@@ -314,8 +314,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: 1-based Page index
         schema:
           type: integer
         in: query
@@ -405,8 +405,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: 1-based Page index
         schema:
           type: integer
         in: query
@@ -482,8 +482,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: 1-based Page index
         schema:
           type: integer
         in: query
@@ -543,7 +543,6 @@ components:
       - firstname
       - lastname
       - residentialAddress
-      - mobilePhone
       type: object
       properties:
         firstname:
@@ -593,9 +592,6 @@ components:
         allegedCasesCount:
           description: Count of cases where this client is / has been an alleged offender
           type: integer
-        convictedCasesCount:
-          description: Count of cases where this client has been convicted
-          type: integer
       example:
         firstname: Joe
         middlename: Blogger
@@ -622,7 +618,6 @@ components:
         - whsSafetyRiskCategory: Possesses firearms
           description: In possession, claims to be never loaded
         allegedCasesCount: 47
-        convictedCasesCount: 22
     case-basicinfo:
       title: Root Datatype - case-basicinfo
       description: "Brief extract of a `case`. \r\n"
@@ -703,7 +698,6 @@ components:
             - whsSafetyRiskCategory: Possesses firearms
               description: In possession, claims to be never loaded
             allegedCasesCount: 47
-            convictedCasesCount: 22
     driverslicense:
       title: Nested Datatype - driverslicense
       description: Driver's License details
@@ -869,7 +863,6 @@ components:
           website: http://www.webaddress.com
           abnNumber: "11000111000"
           allegedCasesCount: 41
-          convictedCasesCount: 35
           businessAddress:
             streetLine1: 81-95 WAMYOUTH STREET
             suburb: ADELAIDE
@@ -902,7 +895,6 @@ components:
             - whsSafetyRiskCategory: Possesses firearms
               description: In possession, claims to be never loaded
             allegedCasesCount: 47
-            convictedCasesCount: 22
         clientParties:
         - firstname: Joe
           middlename: Blogger
@@ -924,7 +916,6 @@ components:
           occupation: Serial Clogger
           clientId: da801abe-91a7-e911-a2cc-005056a719a2
           allegedCasesCount: 0
-          convictedCasesCount: 0
     business-page:
       title: Page - business Datatype
       description: "A page of `business` resources. \n\nThe `nextPage` and `prevPage`\
@@ -1105,9 +1096,6 @@ components:
           description: Count of cases where this Business establishment is / has been
             an alleged offender
           type: integer
-        convictedCasesCount:
-          description: Count of cases where this Business establishment has been convicted
-          type: integer
         primaryContact:
           $ref: '#/components/schemas/client'
           description: Primary contact for the Business establishment
@@ -1118,7 +1106,6 @@ components:
         website: http://www.webaddress.com
         abnNumber: "11000111000"
         allegedCasesCount: 41
-        convictedCasesCount: 35
         businessAddress:
           streetLine1: 81-95 WAMYOUTH STREET
           suburb: ADELAIDE
@@ -1151,12 +1138,10 @@ components:
           - whsSafetyRiskCategory: Possesses firearms
             description: In possession, claims to be never loaded
           allegedCasesCount: 47
-          convictedCasesCount: 22
     casedetail:
       title: Root Datatype - casedetail
       description: Represention of a Case in CMIS
       required:
-      - casePriority
       - caseJurisdiction
       - caseStatus
       - caseDistrict
@@ -1282,7 +1267,6 @@ components:
             - whsSafetyRiskCategory: Possesses firearms
               description: In possession, claims to be never loaded
             allegedCasesCount: 47
-            convictedCasesCount: 22
         reporters:
           clientParties:
           - firstname: Joe
@@ -1305,7 +1289,6 @@ components:
             occupation: Serial Clogger
             clientId: da801abe-91a7-e911-a2cc-005056a719a2
             allegedCasesCount: 0
-            convictedCasesCount: 0
         witnesses:
           clientParties:
           - firstname: Joe
@@ -1328,7 +1311,6 @@ components:
             occupation: Serial Glogger
             clientId: da801abe-91a7-e911-a2cc-005056a719a3
             allegedCasesCount: 0
-            convictedCasesCount: 0
     address:
       title: Nested Datatype - address
       description: Represents an address data
