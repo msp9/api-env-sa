@@ -38,8 +38,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: Pagination index (1-based)
         schema:
           type: integer
         in: query
@@ -105,8 +105,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: Pagination index (1-based)
         schema:
           type: integer
         in: query
@@ -301,7 +301,7 @@ components:
           streetLine1: 81-95 Wamyouth Ave
           suburb: ADELAIDE
           postcode: 5000
-          state: SA
+          state: WA
           country: AU
         northing: "6379468"
         easting: "270398"
@@ -400,50 +400,19 @@ components:
         website:
           description: Registered website of the Business establishment
           type: string
-        primaryContact:
-          $ref: '#/components/schemas/client'
-          description: Primary contact for the Business establishment
       example:
         businessId: da801abe-91a7-e911-a2cc-005056a719a3
         businessName: Dr. Dolittle Inc
+        description: Speech therapy specialists
         contactNumber: "0123456789"
         website: http://www.webaddress.com
         abnNumber: "11000111000"
-        allegedCasesCount: 41
-        convictedCasesCount: 35
         businessAddress:
           streetLine1: 81-95 WAMYOUTH STREET
           suburb: ADELAIDE
           postcode: 5000
           state: VIC
           country: AU
-        primaryContact:
-          firstname: Joe
-          middlename: Blogger
-          lastname: Bloggs
-          residentialAddress:
-            streetLine1: 81-95 Wamyouth Ave
-            suburb: ADELAIDE
-            postcode: 5000
-            state: SA
-            country: AU
-          driversLicenseDetails:
-            licenseNumber: XX1000
-            licenseState: SA
-            licenseExpiry: 2022-10-10
-          emailaddress: joe.bloggs@blooger.com
-          mobilePhone: "0123456789"
-          workPhone: 987-654-3210
-          dateofbirth: 1960-01-17
-          occupation: Serial Blogger
-          clientId: some text
-          whsRisks:
-          - whsSafetyRiskCategory: Aggressive dog(s)
-            description: Couple of dogs usually not on leash
-          - whsSafetyRiskCategory: Possesses firearms
-            description: In possession, claims to be never loaded
-          allegedCasesCount: 47
-          convictedCasesCount: 22
     address:
       title: Nested Datatype - address
       description: Represents an address data
@@ -487,7 +456,7 @@ components:
         streetLine1: 81-95 Wamyouth Ave
         suburb: ADELAIDE
         postcode: 5000
-        state: SA
+        state: WA
         country: AU
   securitySchemes:
     Bearer:
