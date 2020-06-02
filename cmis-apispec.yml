@@ -1205,8 +1205,10 @@ components:
           $ref: '#/components/schemas/parties'
           description: List of reporters of the case
         witnesses:
-          $ref: '#/components/schemas/parties'
           description: List of witnesses for the case
+          type: array
+          items:
+            $ref: '#/components/schemas/client'
       example:
         caseNumber: ENV-01486-B2T0
         caseTitle: Test Case
@@ -1290,27 +1292,26 @@ components:
             clientId: da801abe-91a7-e911-a2cc-005056a719a2
             allegedCasesCount: 0
         witnesses:
-          clientParties:
-          - firstname: Joe
-            middlename: Blogger
-            lastname: Gloggs
-            residentialAddress:
-              streetLine1: 81-95 Wamyouth Ave
-              suburb: ADELAIDE
-              postcode: 5000
-              state: SA
-              country: AU
-            driversLicenseDetails:
-              licenseNumber: XX1000
-              licenseState: SA
-              licenseExpiry: 2022-10-10
-            emailaddress: joe.bloggs@blooger.com
-            mobilePhone: "0123456789"
-            workPhone: 987-654-3210
-            dateofbirth: 1962-01-17
-            occupation: Serial Glogger
-            clientId: da801abe-91a7-e911-a2cc-005056a719a3
-            allegedCasesCount: 0
+        - firstname: Joe
+          middlename: Blogger
+          lastname: Gloggs
+          residentialAddress:
+            streetLine1: 81-95 Wamyouth Ave
+            suburb: ADELAIDE
+            postcode: 5000
+            state: SA
+            country: AU
+          driversLicenseDetails:
+            licenseNumber: XX1000
+            licenseState: SA
+            licenseExpiry: 2022-10-10
+          emailaddress: joe.bloggs@blooger.com
+          mobilePhone: "0123456789"
+          workPhone: 987-654-3210
+          dateofbirth: 1962-01-17
+          occupation: Serial Glogger
+          clientId: da801abe-91a7-e911-a2cc-005056a719a3
+          allegedCasesCount: 0
     address:
       title: Nested Datatype - address
       description: Represents an address data
