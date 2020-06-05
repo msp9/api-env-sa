@@ -355,7 +355,7 @@ components:
           items:
             type: string
         customerNumber:
-          description: Customer Reference Number of the client
+          description: Customer Reference Number of the client (system generated)
           type: string
     locationdetail:
       title: Nested Datatype - locationdetail
@@ -464,6 +464,7 @@ components:
       - businessName
       - businessAddress
       - abnNumber
+      - emailAddress
       type: object
       properties:
         businessName:
@@ -493,6 +494,12 @@ components:
           type: array
           items:
             type: string
+        businessPostalAddress:
+          $ref: '#/components/schemas/address'
+          description: Postal address of the business
+        emailAddress:
+          description: Registered email address of the business
+          type: string
       example:
         businessId: da801abe-91a7-e911-a2cc-005056a719a3
         businessName: Dr. Dolittle Inc
@@ -500,11 +507,18 @@ components:
         contactNumber: "0123456789"
         website: http://www.webaddress.com
         abnNumber: "11000111000"
+        emailAddress: dr@doverylittle.com.au
         businessAddress:
           streetLine1: 81-95 WAMYOUTH STREET
           suburb: ADELAIDE
           postcode: 5000
-          state: VIC
+          state: SA
+          country: AU
+        businessPostalAddress:
+          streetLine1: GPO Box 1047
+          suburb: ADELAIDE
+          postcode: 5001
+          state: SA
           country: AU
     address:
       title: Nested Datatype - address
