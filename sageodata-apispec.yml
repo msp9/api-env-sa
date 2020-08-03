@@ -643,6 +643,8 @@ paths:
     summary: Endpoint to retrieve the list of possible reference point types and their
       code values
     get:
+      tags:
+      - obswell
       responses:
         "200":
           content:
@@ -664,6 +666,8 @@ paths:
     summary: Endpoint to retrieve the list of possible survey methods and their code
       values
     get:
+      tags:
+      - obswell
       responses:
         "200":
           content:
