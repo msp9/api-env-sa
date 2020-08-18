@@ -1,0 +1,194 @@
+---
+openapi: 3.0.2
+info:
+  title: TimeWiseWS
+  version: 1.0.0
+  description: APIs to access data in TimeWise
+paths:
+  /workgroups:
+    summary: Path used to get a list of DEW workgroup names available within TimeWise
+    description: This path contains a `GET` operation to get a list of workgroup names
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/workgroup'
+              examples:
+                workgroup-response-example:
+                  value:
+                  - workgroupId: 10
+                    workgroupName: OCE - OFFICE OF CHIEF EXECUTIVE
+                  - workgroupId: 339
+                    workgroupName: NRM - Board Members
+          description: Successful response - Returns an array of workgroup
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns a list of all DEW workgroups available within TimeWise
+      description: "Returns a list of all DEW workgroups available within TimeWise\
+        \ except workgroup names that include the following sub-strings\n•\tZER\n•\
+        \tMIN\n•\tGRE\n•\tOLD\n•\tINACTIVE\n"
+  /workgroups/workgroup/{workgroupName}:
+    summary: Path used to get a workgroup by its name
+    description: The REST endpoint/path used to get a workgroup.  This path constains
+      a `GET` operation
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workgroup'
+              examples:
+                workgroup-response:
+                  value:
+                    workgroupId: 10
+                    workgroupName: OCE - OFFICE OF CHIEF EXECUTIVE
+          description: Successful response - Returns a workgroup
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns a workgroup that matches the name
+      description: Gets the details of a single workgroup
+    parameters:
+    - name: workgroupName
+      description: Name of a workgroup
+      schema:
+        type: string
+      in: path
+      required: true
+  /users/user:
+    summary: Path used to get an `User`
+    description: The REST endpoint/path used to get an `user`.  This path contains
+      a `GET` operation
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+          description: Successful response - Returns an user
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns details about a `user`
+    parameters:
+    - name: workgroupId
+      description: When this query parameter is set the response contain the `user`
+        who is a workgroup manager
+      schema:
+        type: integer
+      in: query
+    - name: userId
+      description: When this query parameter is set the response will return the `user`
+        for the userId
+      schema:
+        type: integer
+      in: query
+  /users:
+    summary: Path used to get a list of `user`
+    description: The REST endpoint/path to get a list of `user` . This path contains
+      a `GET` operation
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+          description: Successfull response - Returns a list of `user`
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns a list of all `user` in TimeWise
+      description: Returns a list of all `user` in TimeWise.  If the query parameter
+        managerId is set then a list of `user` reporting to that manager will be returned
+    parameters:
+    - name: managerId
+      description: Set this query paramater to get a list of `user` reporting to that
+        manager
+      schema:
+        type: integer
+      in: query
+components:
+  schemas:
+    workgroup:
+      description: Workgroup data type
+      required:
+      - workgroupId
+      - workgroupName
+      type: object
+      properties:
+        workgroupId:
+          description: Value from "WorkGroup Auto ID" column in tblWorkgroups
+          type: integer
+        workgroupName:
+          description: Value from "WorkGroup Name" column in tblWorkgroups
+          type: string
+      example:
+        workgroupId: 10
+        workgroupName: OCE - OFFICE OF CHIEF EXECUTIVE
+    response-message:
+      description: Message when a request a request cannot be processed successfully
+      required: []
+      type: object
+      properties:
+        messages:
+          description: ""
+          type: array
+          items:
+            type: string
+      example:
+        messages:
+        - Some message will be displayed here explaining the reason for failure.
+    user:
+      description: Data type that represents an user in TimeWise
+      required: []
+      type: object
+      properties:
+        userId:
+          description: ""
+          type: integer
+        firstName:
+          description: ""
+          type: string
+        lastName:
+          description: ""
+          type: string
+        isManager:
+          description: ""
+          type: boolean
+        workgroup:
+          $ref: '#/components/schemas/workgroup'
+          description: ""
+        userManager:
+          $ref: '#/components/schemas/user'
+          description: ""
+  securitySchemes:
+    HTTP-Basic:
+      scheme: basic
+      type: http
+      description: HTTP-Basic
+security:
+- HTTP-Basic: []
