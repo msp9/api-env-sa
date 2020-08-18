@@ -38,8 +38,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: Pagination index (1-based)
         schema:
           type: integer
         in: query
@@ -66,7 +66,7 @@ paths:
           description: Unauthorized
       operationId: GetBusinesses
       summary: List all  Businesses registered in the system
-      description: "Paginated list of all Businesses registered in the CMIS system.\n\
+      description: "Paginated list of all Businesses registered in the eCRM system.\n\
         \nNote: Atleast one of the following query parameters required for this end-point\
         \ : \n\n`businessNameContains`, or `abnNumber`"
     post:
@@ -89,6 +89,8 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
+        "409":
+          description: Business already exists with same ABN Number
       operationId: CreateBusiness
       summary: Create a new `business` establishment
       description: Create a new `business` entity in the CMIS System
@@ -105,8 +107,8 @@ paths:
           type: integer
         in: query
         required: false
-      - name: offset
-        description: Pagination index
+      - name: page
+        description: Pagination index (1-based)
         schema:
           type: integer
         in: query
@@ -216,6 +218,76 @@ paths:
       operationId: GetToken()
       summary: Generate bearer token
       description: Request to generate and return a bearer token.
+  /apis/v1/clients/{id}/associatedBusinesses:
+    summary: End-point that allows associating businesses with a client
+    description: Resource URI for interacting with businesses associated with a client
+    post:
+      requestBody:
+        description: Request body is an array of string that holds `businessId`s of
+          the `businesses` that are required to be associated with this `client`
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      tags:
+      - crm-apis
+      responses:
+        "200":
+          description: Success
+        "409":
+          description: 'Error: Unknown `businessId`'
+      operationId: AddAssociatedBusiness
+      summary: Add new `business association` to a `client`
+      description: Adds a new `associatedBusiness`
+    delete:
+      tags:
+      - crm-apis
+      parameters:
+      - name: businessId
+        description: The `businessId` of the `business` association to be removed
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          description: Association successfully removed
+        "409":
+          description: 'Error: Requested `business` not associated with the `client`'
+      operationId: RemoveAssociatedBusiness
+      summary: Remove a `business association` with a `client`
+      description: Remove a `business` association with the `client`
+    parameters:
+    - name: id
+      description: System generated unique identifier of the client
+      schema:
+        type: string
+      in: path
+      required: true
+  /apis/v1/clients/{id}:
+    summary: End-point used to manage a client
+    description: The REST endpoint/path used to interact with a `client` entity
+    get:
+      tags:
+      - crm-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client'
+          description: Success
+      operationId: GetClient
+      summary: List a `client` registered in the system
+      description: List a `client` registered in the system
+    parameters:
+    - name: id
+      description: System generated unique identifier of the client
+      in: path
+      required: true
 components:
   schemas:
     client:
@@ -227,6 +299,7 @@ components:
       - lastname
       - residentialAddress
       - mobilePhone
+      - onlineProfileComplete
       type: object
       properties:
         firstname:
@@ -271,6 +344,19 @@ components:
             This would be the `sub` value of the OIDC ID Token as described in
             https://openid.net/specs/openid-connect-core-1_0.html#IDToken
           type: string
+        onlineProfileComplete:
+          description: Boolean to indicate if online proflie is complete or not. Defaults
+            to false.
+          type: boolean
+        associatedBusinesses:
+          description: List of `businessId`s that represent the `business`es associated
+            with this `client`
+          type: array
+          items:
+            type: string
+        customerNumber:
+          description: Customer Reference Number of the client (system generated)
+          type: string
     locationdetail:
       title: Nested Datatype - locationdetail
       description: Location details of a case
@@ -301,7 +387,7 @@ components:
           streetLine1: 81-95 Wamyouth Ave
           suburb: ADELAIDE
           postcode: 5000
-          state: SA
+          state: WA
           country: AU
         northing: "6379468"
         easting: "270398"
@@ -377,6 +463,8 @@ components:
       required:
       - businessName
       - businessAddress
+      - abnNumber
+      - emailAddress
       type: object
       properties:
         businessName:
@@ -400,50 +488,38 @@ components:
         website:
           description: Registered website of the Business establishment
           type: string
-        primaryContact:
-          $ref: '#/components/schemas/client'
-          description: Primary contact for the Business establishment
+        associatedClients:
+          description: List of `client` ids that represents the clients associated
+            with this business
+          type: array
+          items:
+            type: string
+        businessPostalAddress:
+          $ref: '#/components/schemas/address'
+          description: Postal address of the business
+        emailAddress:
+          description: Registered email address of the business
+          type: string
       example:
         businessId: da801abe-91a7-e911-a2cc-005056a719a3
         businessName: Dr. Dolittle Inc
+        description: Speech therapy specialists
         contactNumber: "0123456789"
         website: http://www.webaddress.com
         abnNumber: "11000111000"
-        allegedCasesCount: 41
-        convictedCasesCount: 35
+        emailAddress: dr@doverylittle.com.au
         businessAddress:
           streetLine1: 81-95 WAMYOUTH STREET
           suburb: ADELAIDE
           postcode: 5000
-          state: VIC
+          state: SA
           country: AU
-        primaryContact:
-          firstname: Joe
-          middlename: Blogger
-          lastname: Bloggs
-          residentialAddress:
-            streetLine1: 81-95 Wamyouth Ave
-            suburb: ADELAIDE
-            postcode: 5000
-            state: SA
-            country: AU
-          driversLicenseDetails:
-            licenseNumber: XX1000
-            licenseState: SA
-            licenseExpiry: 2022-10-10
-          emailaddress: joe.bloggs@blooger.com
-          mobilePhone: "0123456789"
-          workPhone: 987-654-3210
-          dateofbirth: 1960-01-17
-          occupation: Serial Blogger
-          clientId: some text
-          whsRisks:
-          - whsSafetyRiskCategory: Aggressive dog(s)
-            description: Couple of dogs usually not on leash
-          - whsSafetyRiskCategory: Possesses firearms
-            description: In possession, claims to be never loaded
-          allegedCasesCount: 47
-          convictedCasesCount: 22
+        businessPostalAddress:
+          streetLine1: GPO Box 1047
+          suburb: ADELAIDE
+          postcode: 5001
+          state: SA
+          country: AU
     address:
       title: Nested Datatype - address
       description: Represents an address data
@@ -487,7 +563,7 @@ components:
         streetLine1: 81-95 Wamyouth Ave
         suburb: ADELAIDE
         postcode: 5000
-        state: SA
+        state: WA
         country: AU
   securitySchemes:
     Bearer:
