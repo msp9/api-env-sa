@@ -200,9 +200,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/welldriller'
+                $ref: '#/components/schemas/welldriller-page'
           description: Successful response - returns an array of `welldrillers` entities.
       operationId: getwelldrillers
       summary: List All welldrillers
@@ -643,6 +641,8 @@ paths:
     summary: Endpoint to retrieve the list of possible reference point types and their
       code values
     get:
+      tags:
+      - obswell
       responses:
         "200":
           content:
@@ -664,6 +664,8 @@ paths:
     summary: Endpoint to retrieve the list of possible survey methods and their code
       values
     get:
+      tags:
+      - obswell
       responses:
         "200":
           content:
@@ -720,8 +722,6 @@ components:
       description: Well Completion Report data
       required:
       - eventType
-      - drillerName
-      - drillerLicenceNumber
       - wellPurposes
       - coordinateData
       - constructionDetails
@@ -809,12 +809,6 @@ components:
           format: double
           description: Final Yield in meters
           type: number
-        drillerName:
-          description: Driller Name
-          type: string
-        drillerLicenceNumber:
-          description: Driller Licence Number
-          type: string
         plantOperator:
           description: Plant Operator
           type: string
@@ -1035,40 +1029,6 @@ components:
           - UKN
           - VERBL
           type: string
-    wcr-constructiondata:
-      description: Well Completion Report - Construction Data
-      required:
-      - commenceDate
-      - completionDate
-      - maxDepthInMeters
-      - finalDepthInMeters
-      - currentDepthInMeters
-      - isOriginal
-      type: object
-      properties:
-        commenceDate:
-          format: date
-          description: Commencement date
-          type: string
-        completionDate:
-          format: date
-          description: Completion date
-          type: string
-        maxDepthInMeters:
-          format: double
-          description: Maximum depth in meters
-          type: number
-        finalDepthInMeters:
-          format: double
-          description: Final depth in meters
-          type: number
-        currentDepthInMeters:
-          format: double
-          description: Current depth in meters
-          type: number
-        isOriginal:
-          description: Is original
-          type: boolean
     wcr-drillingdata:
       description: Well Completion Report - Drilling Data
       required:
@@ -2347,6 +2307,48 @@ components:
         comments: South Western Mining Company
         createdDate: 1992-12-10T18:04:24.000Z
         modifiedDate: 2019-08-30T09:32:00.000Z
+    wcr-constructiondata:
+      description: Well Completion Report - Construction Data
+      required:
+      - commenceDate
+      - completionDate
+      - maxDepthInMeters
+      - finalDepthInMeters
+      - currentDepthInMeters
+      - isOriginal
+      - permitHolderName
+      - permitNumber
+      type: object
+      properties:
+        commenceDate:
+          format: date
+          description: Commencement date
+          type: string
+        completionDate:
+          format: date
+          description: Completion date
+          type: string
+        maxDepthInMeters:
+          format: double
+          description: Maximum depth in meters
+          type: number
+        finalDepthInMeters:
+          format: double
+          description: Final depth in meters
+          type: number
+        currentDepthInMeters:
+          format: double
+          description: Current depth in meters
+          type: number
+        isOriginal:
+          description: Is original
+          type: boolean
+        permitNumber:
+          description: Well Construction Permit Number
+          type: number
+        permitHolderName:
+          description: Permit Holder Name
+          type: string
   responses:
     UnauthorizedError:
       headers:
