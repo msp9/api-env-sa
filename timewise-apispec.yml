@@ -131,6 +131,55 @@ paths:
       schema:
         type: integer
       in: query
+  /activities:
+    summary: Path used to get a list of `activity`
+    description: REST endpoint/path to get a list of `activity`. This path contains
+      a `GET` operation
+    get:
+      parameters:
+      - name: userId
+        description: |-
+          This is a required parameter.  Set the userId for whom the activities must be retrieved.  Multiple userId query paramaters can be used in the same call for retrieving activities for more than one user.
+          E.g. &userId=10&userId=11&userId=12
+        schema:
+          type: integer
+        in: query
+        required: true
+      - name: fromDate
+        description: Start date for the user activity.  Date string must be in ISO8601
+          format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: toDate
+        description: End date for the user activity.  Date string must be in ISO8601
+          format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user-activity'
+          description: Successful response - Returns a list of `activity`
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns a list of all `activity` in TimeWise
+      description: Returns a list of all `activity` in TimeWise.
 components:
   schemas:
     workgroup:
@@ -185,6 +234,47 @@ components:
         userManager:
           $ref: '#/components/schemas/user'
           description: ""
+    activity:
+      description: Data type that represents an activity in TimeWise
+      required: []
+      type: object
+      properties:
+        activityId:
+          description: ""
+          type: integer
+        activityName:
+          description: ""
+          type: string
+      example:
+        activityId: 49
+        activityName: Normal Working Hours
+    user-activity:
+      description: Data type to represent an user and their activity in TimeWise
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/user'
+          description: ""
+        activities:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/activity'
+      example:
+        user:
+          userId: 38
+          firstName: some text
+          lastName: some text
+          isManager: true
+          workgroup:
+            workgroupId: 17
+            workgroupName: some text
+          userManager: {}
+        activities:
+        - activityId: 82
+          activityName: some text
+        - activityId: 48
+          activityName: some text
   securitySchemes:
     HTTP-Basic:
       scheme: basic
@@ -192,3 +282,4 @@ components:
       description: HTTP-Basic
 security:
 - HTTP-Basic: []
+
