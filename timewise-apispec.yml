@@ -7,7 +7,8 @@ info:
 paths:
   /workgroups:
     summary: Path used to get a list of DEW workgroup names available within TimeWise
-    description: This path contains a `GET` operation to get a list of workgroup names
+    description: |
+      This path contains a `GET` operation to get a list of workgroup names
     get:
       responses:
         "200":
@@ -30,83 +31,13 @@ paths:
       security:
       - HTTP-Basic: []
       summary: Returns a list of all DEW workgroups available within TimeWise
-      description: "Returns a list of all DEW workgroups available within TimeWise\
-        \ except workgroup names that include the following sub-strings\n•\tZER\n•\
-        \tMIN\n•\tGRE\n•\tOLD\n•\tINACTIVE\n"
-  /workgroups/workgroup/{workgroupName}:
-    summary: Path used to get a workgroup by its name
-    description: The REST endpoint/path used to get a workgroup.  This path constains
-      a `GET` operation
-    get:
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/workgroup'
-              examples:
-                workgroup-response:
-                  value:
-                    workgroupId: 10
-                    workgroupName: OCE - OFFICE OF CHIEF EXECUTIVE
-          description: Successful response - Returns a workgroup
-        "500":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/response-message'
-          description: Unable to process the request
-      security:
-      - HTTP-Basic: []
-      summary: Returns a workgroup that matches the name
-      description: Gets the details of a single workgroup
-    parameters:
-    - name: workgroupName
-      description: Name of a workgroup
-      schema:
-        type: string
-      in: path
-      required: true
-  /users/user:
-    summary: Path used to get an `User`
-    description: The REST endpoint/path used to get an `user`.  This path contains
-      a `GET` operation
-    get:
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user'
-          description: Successful response - Returns an user
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/response-message'
-          description: Unable to process the request successfully
-        "500":
-          description: Unexpected error occurred when processing the request
-      security:
-      - HTTP-Basic: []
-      summary: Returns details about a `user`
-    parameters:
-    - name: workgroupId
-      description: When this query parameter is set the response contain the `user`
-        who is a workgroup manager
-      schema:
-        type: integer
-      in: query
-    - name: userId
-      description: When this query parameter is set the response will return the `user`
-        for the userId
-      schema:
-        type: integer
-      in: query
+      description: "Requirement : getWorkGroups\n\nReturns a list of all DEW workgroups\
+        \ available within TimeWise except workgroup names that include the following\
+        \ sub-strings\n•\tZER\n•\tMIN\n•\tGRE\n•\tOLD\n•\tINACTIVE\n\n"
   /users:
     summary: Path used to get a list of `user`
-    description: The REST endpoint/path to get a list of `user` . This path contains
-      a `GET` operation
+    description: |
+      The REST endpoint/path to get a list of `user` . This path contains a `GET` operation
     get:
       responses:
         "200":
@@ -119,11 +50,20 @@ paths:
           description: Successfull response - Returns a list of `user`
         "500":
           description: Unexpected error occurred when processing the request
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
       security:
       - HTTP-Basic: []
       summary: Returns a list of all `user` in TimeWise
-      description: Returns a list of all `user` in TimeWise.  If the query parameter
-        managerId is set then a list of `user` reporting to that manager will be returned
+      description: "Requirement : getWorkGroupManager\n\nRequirement : getStaff\n\n\
+        Returns a list of all `user` in TimeWise.  \n\nIf the query parameter managerId\
+        \ is set then a list of `user` reporting to that manager will be returned.\n\
+        \nIf the query parameter workgroupId is set then an `user` who is a workgroup\
+        \ manager will be returned"
     parameters:
     - name: managerId
       description: Set this query paramater to get a list of `user` reporting to that
@@ -131,10 +71,16 @@ paths:
       schema:
         type: integer
       in: query
+    - name: workgroupId
+      description: Set this query parameter to get the `user` who is a workgroup manager
+      schema:
+        type: integer
+      in: query
   /activities:
     summary: Path used to get a list of `activity`
-    description: REST endpoint/path to get a list of `activity`. This path contains
-      a `GET` operation
+    description: |+
+      REST endpoint/path to get a list of `activity`. This path contains a `GET` operation
+
     get:
       parameters:
       - name: userId
@@ -167,6 +113,39 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/user-activity'
+              examples:
+                Response example:
+                  value:
+                  - user:
+                      userId: 80
+                      firstName: some text
+                      lastName: some text
+                      isManager: true
+                      workgroup:
+                        workgroupId: 95
+                        workgroupName: some text
+                      userManager: {}
+                      employeeNumber: 13
+                    activities:
+                    - activityId: 12
+                      activityName: some text
+                    - activityId: 95
+                      activityName: some text
+                  - user:
+                      userId: 97
+                      firstName: some text
+                      lastName: some text
+                      isManager: true
+                      workgroup:
+                        workgroupId: 17
+                        workgroupName: some text
+                      userManager: {}
+                      employeeNumber: 12
+                    activities:
+                    - activityId: 16
+                      activityName: some text
+                    - activityId: 30
+                      activityName: some text
           description: Successful response - Returns a list of `activity`
         "400":
           content:
@@ -179,7 +158,258 @@ paths:
       security:
       - HTTP-Basic: []
       summary: Returns a list of all `activity` in TimeWise
-      description: Returns a list of all `activity` in TimeWise.
+      description: |-
+        Requirement : getAllActivities
+
+        Returns a list of all `activity` in TimeWise.
+  /workgroups/{workgroupName}:
+    summary: Path used to get a workgroup by its name
+    description: The REST endpoint/path used to get a workgroup.  This path constains
+      a `GET` operation
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/workgroup'
+              examples:
+                workgroup-response:
+                  value:
+                    workgroupId: 10
+                    workgroupName: OCE - OFFICE OF CHIEF EXECUTIVE
+          description: Successful response - Returns a workgroup
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns a workgroup that matches the name
+      description: |+
+        Requirement : getWorkGroupID
+
+        Gets the details of a single workgroup
+
+    parameters:
+    - name: workgroupName
+      description: Name of a workgroup
+      schema:
+        type: string
+      in: path
+      required: true
+  /users/{userId}:
+    summary: Path used to get an `User`
+    description: |
+      The REST endpoint/path used to get an `user`.  This path contains a `GET` operation
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+          description: Successful response - Returns an user
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns details about a `user`
+      description: |
+        Requirement : getUserByID
+
+        Requirement : isManager
+
+        Requirement : getManager
+    parameters:
+    - name: userId
+      in: path
+      required: true
+  /activitytime:
+    summary: Path used to get a summary of user activity time
+    description: |+
+      REST endpoint/API to get a summary of user activity time. The path contains a `GET` operation
+
+    get:
+      parameters:
+      - name: userId
+        description: ""
+        schema:
+          type: integer
+        in: query
+        required: true
+      - name: activityId
+        description: ""
+        schema:
+          type: integer
+        in: query
+        required: true
+      - name: fromDate
+        description: Date must be in ISO8601 format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+      - name: toDate
+        description: Date must in ISO8601 format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/summary-data'
+          description: Successful response - Returns `summary-data`
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns information about user activity time
+      description: |-
+        Requirement : getAllActivityTime
+
+        Returns `summary-data`
+  /hoursworked:
+    summary: Path used to get hours worked by an user between given dates
+    description: |
+      REST endpoint/API to get hours worked by an user between given dates.
+    get:
+      parameters:
+      - name: userId
+        description: ""
+        schema:
+          type: integer
+        in: query
+        required: true
+      - name: fromDate
+        description: Date set must be in ISO8601 format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+        required: true
+      - name: toDate
+        description: Date set must be in ISO8601 format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-hours'
+          description: Successful response - returns `user-hours`
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns information about hours worked by an user between given dates
+      description: |-
+        Requirement : getHoursPossible
+
+        Requirement : wasActive (if the hours is more than zero then it means the user was active during that time)
+
+        Returns `user-hours`
+  /calculatedactivity:
+    summary: Path used to get a summary of calculated information based on activity
+      in CHRIS and TimeWise
+    description: |+
+      REST endpoint/API to get a summary of calculated information based on activity in CHRIS and TimeWise.  The path contains a `POST` operation
+
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/calculateactivity-request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/activity-data'
+              examples:
+                Response example:
+                  value:
+                  - activity:
+                      activityId: 15
+                      activityName: some text
+                    totalHours: 78.43
+                    totalCost: 53.3
+                  - activity:
+                      activityId: 50
+                      activityName: some text
+                    totalHours: 90.58
+                    totalCost: 37.33
+          description: 'Successful response - Returns an array `activity-data` '
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns an array of `activity-data`
+      description: 'Requirement : calcActivities'
+  /activities/{activityId}:
+    summary: Path used to get an `activity`
+    description: |+
+      REST endpoint/API to get an `activity`.  This path contains a `GET` operation
+
+    get:
+      responses:
+        "200":
+          description: Successful response - Returns an `activity`
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns details of an `activity`
+      description: 'Requirement : getActivityByID'
+    parameters:
+    - name: activityId
+      schema:
+        type: integer
+      in: path
+      required: true
 components:
   schemas:
     workgroup:
@@ -234,6 +464,9 @@ components:
         userManager:
           $ref: '#/components/schemas/user'
           description: ""
+        employeeNumber:
+          description: ""
+          type: integer
     activity:
       description: Data type that represents an activity in TimeWise
       required: []
@@ -262,19 +495,168 @@ components:
             $ref: '#/components/schemas/activity'
       example:
         user:
-          userId: 38
+          userId: 85
           firstName: some text
           lastName: some text
           isManager: true
           workgroup:
-            workgroupId: 17
+            workgroupId: 41
             workgroupName: some text
           userManager: {}
+          employeeNumber: 53
         activities:
         - activityId: 82
           activityName: some text
-        - activityId: 48
+        - activityId: 79
           activityName: some text
+    summary-data:
+      description: Data type to hold a summary of user/activity and hours worked
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/user'
+          description: ""
+        activity:
+          $ref: '#/components/schemas/activity'
+          description: ""
+        hours:
+          format: double
+          description: ""
+          type: number
+        rate:
+          format: double
+          description: ""
+          type: number
+        cost:
+          format: double
+          description: ""
+          type: number
+      example:
+        user:
+          userId: 79
+          firstName: some text
+          lastName: some text
+          isManager: true
+          workgroup:
+            workgroupId: 80
+            workgroupName: some text
+          userManager: {}
+          employeeNumber: 44
+        activity:
+          activityId: 58
+          activityName: some text
+        hours: 94.09
+        rate: 96.98
+        cost: 28.46
+    user-hours:
+      description: Data type that contains `user` and the number of hours they worked
+        in a given period
+      required:
+      - user
+      - hoursWorked
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/user'
+          description: ""
+        hoursWorked:
+          format: double
+          description: ""
+          type: number
+      example:
+        user:
+          userId: 96
+          firstName: some text
+          lastName: some text
+          isManager: true
+          workgroup:
+            workgroupId: 0
+            workgroupName: some text
+          userManager: {}
+          employeeNumber: 79
+        hoursWorked: 71.91
+    activity-data:
+      description: Data type to hold details of an activity and the total number of
+        hours spent and the total cost involved
+      required:
+      - activity
+      - totalHours
+      - totalCost
+      type: object
+      properties:
+        activity:
+          $ref: '#/components/schemas/activity'
+          description: ""
+        totalHours:
+          format: double
+          description: ""
+          type: number
+        totalCost:
+          format: double
+          description: ""
+          type: number
+      example:
+        activity:
+          activityId: 91
+          activityName: some text
+        totalHours: 16.44
+        totalCost: 13.41
+    calculateactivity-request:
+      description: ""
+      required:
+      - activity
+      - summarydata
+      type: object
+      properties:
+        activity:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/activity'
+        summarydata:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/summary-data'
+      example:
+        activity:
+        - activityId: 15
+          activityName: some text
+        - activityId: 19
+          activityName: some text
+        summarydata:
+        - user:
+            userId: 74
+            firstName: some text
+            lastName: some text
+            isManager: true
+            workgroup:
+              workgroupId: 27
+              workgroupName: some text
+            userManager: {}
+            employeeNumber: 25
+          activity:
+            activityId: 17
+            activityName: some text
+          hours: 29.65
+          rate: 13.58
+          cost: 66.39
+        - user:
+            userId: 63
+            firstName: some text
+            lastName: some text
+            isManager: true
+            workgroup:
+              workgroupId: 20
+              workgroupName: some text
+            userManager: {}
+            employeeNumber: 0
+          activity:
+            activityId: 69
+            activityName: some text
+          hours: 27.18
+          rate: 8.65
+          cost: 92.16
   securitySchemes:
     HTTP-Basic:
       scheme: basic
