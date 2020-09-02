@@ -681,6 +681,38 @@ paths:
                     DIG\",\r\n    \"Value\": \"Digitised\"\r\n  }\r\n]"
           description: Successful operation
       summary: List all survey methods
+  /api/v1.0/obswells/{id}/notes/:
+    summary: Endpoint to interact with the list of notes for a single obswell.
+    description: ""
+    get:
+      tags:
+      - obswell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only notes that have been modified more recently
+          than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-page'
+          description: Successful operation
+      operationId: GetNotes
+      summary: List all notes
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which obswell to retrieve notes for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
 components:
   schemas:
     address:
@@ -1921,56 +1953,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/obswell'
-    waterlevelmeasurement:
-      title: Root Type for waterlevelmeasurement
-      description: Data type representing a water level measurement recorded during
-        a field visit to an obswell.
-      type: object
-      properties:
-        measurementDate:
-          format: date-time
-          description: Date the measurement was taken.
-          type: string
-        depthToWater:
-          format: double
-          description: The actual Depth to Water measurment value.
-          type: number
-        comments:
-          description: Comments
-          type: string
-        agencyResponsible:
-          description: Agency responsible for the measurement.
-          type: string
-        conductedBy:
-          description: The username of the field officer(s) who conducted the field
-            visit.
-          type: string
-        createdDate:
-          format: date-time
-          description: Date the measurement was added to SAGeoData.
-          type: string
-        modifiedDate:
-          format: date-time
-          description: Datetime of the most recent modification to the measurement
-            in SAGeoData.
-          type: string
-        measurementNumber:
-          format: int32
-          description: Unique identifier of the measurement specified by SAGeoData.
-          type: integer
-        drillholeNumber:
-          format: int32
-          description: Unique identifier of drillhole specified by SAGeoData.
-          type: integer
-      example:
-        drillholeNumber: 4
-        measurementNumber: 1
-        measurementDate: 1990-12-06T00:00:00.000Z
-        depthToWater: 71.6
-        agencyResponsible: DEWNR
-        conductedBy: DHDB
-        createdDate: 1997-07-02T18:23:52.000Z
-        modifiedDate: 2012-09-20T15:56:31.000Z
     waterlevelmeasurement-page:
       description: Data type that represents a collection/page of water level measurements.
       required:
@@ -2184,129 +2166,6 @@ components:
         Code:
           description: Code for the associated value.
           type: string
-    obswell:
-      title: Root Type for obswell
-      description: A monitored waterwell.
-      type: object
-      properties:
-        unitNumber:
-          format: int32
-          description: A combination of the map100000Number and sequence number.
-          type: integer
-        nrmRegionCode:
-          description: "NRM region code. Possible values:\n\n`OUT` Out of NRM regions\n\
-            \n`AMLR`\tAdelaide & Mt Lofty Ranges\n\n`ATJWIL`Alinytjara Wilurara\n\n\
-            `EYRPEN`Eyre Peninsula\n\n`KI` Kangaroo Island\n\n`NTHYK`\tNorthern &\
-            \ Yorke\n\n`SAARDL` South Australian Arid Lands\n\n`STHEAST` South East\n\
-            \n`SAMDB`\tSouth Australian Murray-Darling Basin\n"
-          enum:
-          - ANGBRM
-          - CTRADL
-          - FRNTH
-          - LWRLC
-          - MAL
-          - MCLVAL
-          - MGRV
-          - NOO
-          - NTHADLPL
-          - PAD
-          - PKRBSHR
-          - STHBAS
-          - TAT
-          - TINCNP
-          - DRYCK
-          type: string
-        sequenceNumber:
-          format: int32
-          description: A unique number identifying the obswell on the 1:100000 map
-            sheet for which the obswell is located.
-          type: integer
-        latitude:
-          format: double
-          description: Latitude of the obswell.
-          type: number
-        longitude:
-          format: double
-          description: Longitude of the obswell.
-          type: number
-        obsWellPlan:
-          description: A unique code for the plan (hundred) on which an obswell is
-            located.
-          type: string
-        obsWellSequenceNumber:
-          description: A unique number identifying the obswell on the obsWellPlan.
-          type: string
-        aquiferIntersected:
-          description: Code identifying the aquifer that the well intersects.
-          type: string
-        comments:
-          description: Comments
-          type: string
-        createdDate:
-          format: date-time
-          description: Date the obswell was added to SAGeoData.
-          type: string
-        modifiedDate:
-          format: date-time
-          description: Datetime of the most recent modification to the obswell in
-            SAGeoData.
-          type: string
-        name:
-          description: Name of the obswell.
-          type: string
-        elevationMeasurementsURL:
-          description: URL to API endpoint to retrieve elevation measurements for
-            the obswell.
-          type: string
-        waterLevelMeasurementsURL:
-          description: URL to API endpoint to retrieve water level measurements for
-            the obswell.
-          type: string
-        map100kNumber:
-          format: int32
-          description: The 1:100000 map sheet number on which an obswell is located.
-            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
-            into SAGeoData.
-          type: integer
-        drillholeNumber:
-          format: int32
-          description: Unique identifier specified by SAGeoData.
-          type: integer
-        nrmRegion:
-          description: NRM region
-          type: string
-        status:
-          description: "Status of the drillhole. Possible values are:\r\n\r\n\r\n\
-            Abandoned\t\r\nBackfilled\t\r\nBlocked\t\r\nCapped\t\r\nCare and Maintenance\t\
-            \r\nCased\t\r\nCollapsed\t\r\nCompleted\t\r\nControlled - shut in\t\r\n\
-            Controlled Flowing\t\r\nConverted to WW\t\r\nDamaged\t\r\nDamp\t\r\nDecommissioned\t\
-            \r\nDry\t\r\nDual Completion\t\r\nEquipped (pump, windmill, etc)\t\r\n\
-            Extinct Spring\t\r\nFlowing\t\r\nFree water and tail\t\r\nGeotechnically\
-            \ Equiped\t\r\nInjector\t\r\nMined (removed by mining)\t\r\nNot Equipped\t\
-            \r\nNot In Use\t\r\nNot Located\t\r\nNot Operational\t\r\nOperational\t\
-            \r\nOperational as required\t\r\nPlugged\t\r\nPond, free water\t\r\nRehabilitated\t\
-            \r\nSaturated\t\r\nShut In\t\r\nSingle Completion\t\r\nStorage\t\r\nSuspended\t\
-            \r\nUncontrolled Flowing\t\r\nUnequipped\t\r\nUnknown\t\r\nUnworked"
-          type: string
-        prescribedWellAreaName:
-          description: Prescribed well area
-          type: string
-        prescribedWaterResourceAreaName:
-          description: Prescribed water resource area
-          type: string
-      example:
-        drillholeNumber: 230
-        drillholeName: A-29 (MT DAVIES)
-        unitNumber: 474500070
-        nrmRegionCode: Alinytjara Wilurara
-        waterWellClass: "N"
-        map100000Number: 4745
-        sequenceNumber: 70
-        latitude: -26.1130886
-        longitude: 129.02301
-        comments: South Western Mining Company
-        createdDate: 1992-12-10T18:04:24.000Z
-        modifiedDate: 2019-08-30T09:32:00.000Z
     wcr-constructiondata:
       description: Well Completion Report - Construction Data
       required:
@@ -2349,6 +2208,270 @@ components:
         permitHolderName:
           description: Permit Holder Name
           type: string
+    waterlevelmeasurement:
+      title: Root Type for waterlevelmeasurement
+      description: Data type representing a water level measurement recorded during
+        a field visit to an obswell.
+      type: object
+      properties:
+        measurementDate:
+          format: date-time
+          description: Date the measurement was taken.
+          type: string
+        depthToWater:
+          format: double
+          description: The  Depth to Water measurment value.
+          type: number
+        artesianPressure:
+          format: double
+          description: The Artesian Pressure measurment value.
+          type: number
+        comments:
+          description: Comments
+          type: string
+        agencyResponsible:
+          description: Agency responsible for the measurement.
+          type: string
+        conductedBy:
+          description: The username of the field officer(s) who conducted the field
+            visit.
+          type: string
+        createdDate:
+          format: date-time
+          description: Date the measurement was added to SAGeoData.
+          type: string
+        modifiedDate:
+          format: date-time
+          description: Datetime of the most recent modification to the measurement
+            in SAGeoData.
+          type: string
+        measurementNumber:
+          format: int32
+          description: Unique identifier of the measurement specified by SAGeoData.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier of drillhole specified by SAGeoData.
+          type: integer
+      example:
+        drillholeNumber: 4
+        measurementNumber: 1
+        measurementDate: 1990-12-06T00:00:00.000Z
+        depthToWater: 71.6
+        artesianPressure: 10
+        agencyResponsible: DEWNR
+        conductedBy: DHDB
+        createdDate: 1997-07-02T18:23:52.000Z
+        modifiedDate: 2012-09-20T15:56:31.000Z
+    note:
+      title: Root Type for note
+      description: A note, for example a note for an obswell.
+      type: object
+      properties:
+        createdBy:
+          description: SAGeoData username of the user who created the note.
+          type: string
+        note:
+          description: The note text.
+          type: string
+        noteDate:
+          format: date-time
+          description: The date of the note.
+          type: string
+        noteId:
+          format: int32
+          description: Unique identifier of the note.
+          type: integer
+      example:
+        noteId: 10000
+        note: note text here
+        noteDate: 2020-09-02 00:00
+        createdBy: KINVERARITY
+    note-page:
+      description: Data type that represents a collection/page of notes
+      required:
+      - results
+      type: object
+      properties:
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+        results:
+          description: Collection of notes.
+          type: array
+          items:
+            $ref: '#/components/schemas/note'
+    obswell:
+      title: Root Type for obswell
+      description: A monitored waterwell.
+      type: object
+      properties:
+        unitNumber:
+          format: int32
+          description: A combination of the map100000Number and sequence number.
+          type: integer
+        landscapeSARegionCode:
+          description: "Landscape SA Region Code. Possible values:\n\n`ALTJWIL` Alinytjara\
+            \ Wilurara \n`EYRPEN` Eyre Peninsula \n`GRNADL` Green Adelaide \n`HILFLE`\
+            \ Hills and Fleurieu \n`KI` Kangaroo Island \n`LC` Limestone Coast \n\
+            `MURRIV` Murraylands and Riverland \n`NTHYK` Northern and Yorke\n`SAARDL`\
+            \ South Australian Arid Lands "
+          enum:
+          - ALTJWIL
+          - EYRPEN
+          - GRNADL
+          - HILFLE
+          - KI
+          - LC
+          - MURRIV
+          - NTHYK
+          - SAARDL
+          type: string
+        sequenceNumber:
+          format: int32
+          description: A unique number identifying the obswell on the 1:100000 map
+            sheet for which the obswell is located.
+          type: integer
+        latitude:
+          format: double
+          description: Latitude of the obswell.
+          type: number
+        longitude:
+          format: double
+          description: Longitude of the obswell.
+          type: number
+        easting:
+          format: double
+          description: Easting of the obswell.
+          type: number
+        northing:
+          format: double
+          description: Norting of the obswell.
+          type: number
+        obsWellPlan:
+          description: A unique code for the plan (hundred) on which an obswell is
+            located.
+          type: string
+        obsWellSequenceNumber:
+          description: A unique number identifying the obswell on the obsWellPlan.
+          type: string
+        zone:
+          description: Zone of the obswell.
+          type: string
+        aquiferIntersected:
+          description: Code identifying the aquifer that the well intersects.
+          type: string
+        hundreds:
+          description: Hundreds of the obswell.
+          type: string
+        comments:
+          description: Comments
+          type: string
+        createdDate:
+          format: date-time
+          description: Date the obswell was added to SAGeoData.
+          type: string
+        modifiedDate:
+          format: date-time
+          description: Datetime of the most recent modification to the obswell in
+            SAGeoData.
+          type: string
+        name:
+          description: Name of the obswell.
+          type: string
+        elevationMeasurementsURL:
+          description: URL to API endpoint to retrieve elevation measurements for
+            the obswell.
+          type: string
+        notesURL:
+          description: URL to API endpoint to retrieve notes for the obswell.
+          type: string
+        waterLevelMeasurementsURL:
+          description: URL to API endpoint to retrieve water level measurements for
+            the obswell.
+          type: string
+        map100kNumber:
+          format: int32
+          description: The 1:100000 map sheet number on which an obswell is located.
+            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
+            into SAGeoData.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
+        status:
+          description: "Status of the drillhole. Possible values are:\r\n\r\n\r\n\
+            Abandoned\t\r\nBackfilled\t\r\nBlocked\t\r\nCapped\t\r\nCare and Maintenance\t\
+            \r\nCased\t\r\nCollapsed\t\r\nCompleted\t\r\nControlled - shut in\t\r\n\
+            Controlled Flowing\t\r\nConverted to WW\t\r\nDamaged\t\r\nDamp\t\r\nDecommissioned\t\
+            \r\nDry\t\r\nDual Completion\t\r\nEquipped (pump, windmill, etc)\t\r\n\
+            Extinct Spring\t\r\nFlowing\t\r\nFree water and tail\t\r\nGeotechnically\
+            \ Equiped\t\r\nInjector\t\r\nMined (removed by mining)\t\r\nNot Equipped\t\
+            \r\nNot In Use\t\r\nNot Located\t\r\nNot Operational\t\r\nOperational\t\
+            \r\nOperational as required\t\r\nPlugged\t\r\nPond, free water\t\r\nRehabilitated\t\
+            \r\nSaturated\t\r\nShut In\t\r\nSingle Completion\t\r\nStorage\t\r\nSuspended\t\
+            \r\nUncontrolled Flowing\t\r\nUnequipped\t\r\nUnknown\t\r\nUnworked"
+          type: string
+        prescribedWellAreaName:
+          description: Prescribed well area
+          type: string
+        prescribedWaterResourceAreaName:
+          description: Prescribed water resource area
+          type: string
+        monitoringNetworks:
+          description: Monitoring networks to which the obswell is assigned.
+          type: array
+          items:
+            type: string
+        nrmRegion:
+          description: "NRM region code. Possible values:\n\n`OUT` Out of NRM regions\n\
+            \n`AMLR`\tAdelaide & Mt Lofty Ranges\n\n`ATJWIL`Alinytjara Wilurara\n\n\
+            `EYRPEN`Eyre Peninsula\n\n`KI` Kangaroo Island\n\n`NTHYK`\tNorthern &\
+            \ Yorke\n\n`SAARDL` South Australian Arid Lands\n\n`STHEAST` South East\n\
+            \n`SAMDB`\tSouth Australian Murray-Darling Basin\n"
+          enum:
+          - ANGBRM
+          - CTRADL
+          - FRNTH
+          - LWRLC
+          - MAL
+          - MCLVAL
+          - MGRV
+          - NOO
+          - NTHADLPL
+          - PAD
+          - PKRBSHR
+          - STHBAS
+          - TAT
+          - TINCNP
+          - DRYCK
+          type: string
+      example:
+        drillholeNumber: 230
+        drillholeName: A-29 (MT DAVIES)
+        unitNumber: 474500070
+        nrmRegionCode: Alinytjara Wilurara
+        waterWellClass: "N"
+        map100000Number: 4745
+        sequenceNumber: 70
+        latitude: -26.1130886
+        longitude: 129.02301
+        comments: South Western Mining Company
+        createdDate: 1992-12-10T18:04:24.000Z
+        modifiedDate: 2019-08-30T09:32:00.000Z
   responses:
     UnauthorizedError:
       headers:
