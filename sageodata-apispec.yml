@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: SA Geodata API
+  title: SA Geodata API - SWIMS Phase 1 changes
   version: "1.0"
   description: SA Geodata - Webservice API specification
   contact:
@@ -201,7 +201,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/welldriller-page'
-          description: Successful response - returns an array of `welldrillers` entities.
+          description: Successful response - returns a page of `welldrillers` entities.
       operationId: getwelldrillers
       summary: List All welldrillers
       description: Gets a list of all `welldrillers` entities.
@@ -951,116 +951,6 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
-    wcr-coordinatedata:
-      description: Well Completion Report - Coordinate Data
-      required:
-      - datum
-      - easting
-      - northing
-      - zone
-      type: object
-      properties:
-        datum:
-          description: "The coordinate system of the datum. \nPossible values: `WGS84`,\
-            \ `GDA94`, `GDA2020`"
-          enum:
-          - GDA94
-          - GDA2020
-          - WGS84
-          type: string
-        easting:
-          format: int32
-          description: Easting
-          type: integer
-        northing:
-          format: int32
-          description: Northing
-          type: integer
-        zone:
-          format: int32
-          description: Zone
-          type: integer
-        lat:
-          format: double
-          description: Latitude
-          type: number
-        long:
-          format: double
-          description: Longitude
-          type: number
-        surveyAccuracyInMetres:
-          format: double
-          description: Survey Accuracy in meters
-          type: number
-        surveyMethod:
-          description: "Survey Method. Possible values: \n\n`AMGRD` - Controlled AMG/MGA\
-            \ map\t\n`CAL` - (DISUSED) Calculated\t\n`CLGRD` - Controlled CLARKE map\t\
-            \n`COCH` - (DISUSED) Compass and Chain\t\n`COOD` - (DISUSED) Compass and\
-            \ Odometer\t\n`DEM` - Digital Elevation Model\t\n`DIG` - Digitised\t\n\
-            `DOCM` - Sourced from documents (PLANS, ENV, RB,etc)\t\n`EDM` - (DISUSED)\
-            \ EDM\t\n`GCN` - (DISUSED) MESA Geog conversion from Clarke coords\t\n\
-            `GISP` - GIS software on PDA or similar mobile device\t\n`GISW` - GIS\
-            \ software on full Windows OS PC\t\n`GOEAR` - Google Earth image\t\n`GOMAP`\
-            \ - Google Maps image\t\n`GPS` - (DISUSED, use GPSUN) Global Positioning\
-            \ System\t\n`GPSAP` - GPS Averaged Position\t\n`GPSAU` - GPS Post Processed\
-            \ Using AUSPOS Service\t\n`GPSDG` - GPS Differential Generic\t\n`GPSDM`\
-            \ - GPS Multi Base Wide Area Differential (was GPSPD)\t\n`GPSDS` - GPS\
-            \ Single Base Wide Area Differential (was GPSRD)\t\n`GPSPD` - GPS Post\
-            \ Processed Differential (nav level)\t\n`GPSRD` - GPS Real-time Differential\
-            \ (nav level)\t\n`GPSSK` - GPS Svy Grade- Real Time Kinematic (RTK)/Kinematic\t\
-            \n`GPSSL` - GPS Survey Grade (kinematic/static)\t\n`GPSSN` - GPS Standalone\
-            \ Navigational\t\n`GPSSS` - GPS Survey Grade - Static\t\n`GPSUN` - GPS\
-            \ type unknown\t\n`GTRAV` - Interpolated traverse site between GPS endpoints\t\
-            \n`IMGD` - Digital Image\t\n`INFER` - (DISUSED) Inferred\t\n`LOCAL` -\
-            \ (DISUSED) Approximate local methods\t\n`MAP` - (DISUSED) Map Plot\t\n\
-            `ODOM` - (DISUSED) Odometer\t\n`PHOTO` - Air Photo\t\n`PRO` - (DISUSED)\
-            \ Provisional (Estimated)\t\n`SAN` - (DISUSED) Santos conversion from\
-            \ Clarke coords\t\n`SUR` - Surveying\t\n`TRX` - GDA94 Transformed\t\n\
-            `UCMAP` - Uncontrolled map\t\n`UKN` - (DISUSED) Unknown\t\n`VERBL` - (DISUSED)\
-            \ Verbal"
-          enum:
-          - AMGRD
-          - CAL
-          - CLGRD
-          - COCH
-          - COOD
-          - DEM
-          - DIG
-          - DOCM
-          - EDM
-          - GCN
-          - GISP
-          - GISW
-          - GOEAR
-          - GOMAP
-          - GPS
-          - GPSAP
-          - GPSAU
-          - GPSDG
-          - GPSDM
-          - GPSDS
-          - GPSPD
-          - GPSRD
-          - GPSSK
-          - GPSSL
-          - GPSSN
-          - GPSSS
-          - GPSUN
-          - GTRAV
-          - IMGD
-          - INFER
-          - LOCAL
-          - MAP
-          - ODOM
-          - PHOTO
-          - PRO
-          - SAN
-          - SUR
-          - TRX
-          - UCMAP
-          - UKN
-          - VERBL
-          type: string
     wcr-drillingdata:
       description: Well Completion Report - Drilling Data
       required:
@@ -2472,6 +2362,125 @@ components:
         comments: South Western Mining Company
         createdDate: 1992-12-10T18:04:24.000Z
         modifiedDate: 2019-08-30T09:32:00.000Z
+    coordinatedata:
+      description: Coordinate Data
+      required:
+      - datum
+      - easting
+      - northing
+      - zone
+      type: object
+      properties:
+        datum:
+          description: "The coordinate system of the datum. \nPossible values: `WGS84`,\
+            \ `GDA94`, `GDA2020`"
+          enum:
+          - GDA94
+          - GDA2020
+          - WGS84
+          type: string
+        easting:
+          format: int32
+          description: Easting
+          type: integer
+        northing:
+          format: int32
+          description: Northing
+          type: integer
+        zone:
+          format: int32
+          description: Zone
+          type: integer
+        lat:
+          format: double
+          description: Latitude
+          type: number
+        long:
+          format: double
+          description: Longitude
+          type: number
+    wcr-coordinatedata:
+      description: Well Completion Report - Coordinate Data
+      required:
+      - coordinateData
+      type: object
+      properties:
+        coordinateData:
+          $ref: '#/components/schemas/coordinatedata'
+          description: Coordinate-data
+        surveyAccuracyInMetres:
+          format: double
+          description: Survey Accuracy in meters
+          type: number
+        surveyMethod:
+          description: "Survey Method. Possible values: \n\n`AMGRD` - Controlled AMG/MGA\
+            \ map\t\n`CAL` - (DISUSED) Calculated\t\n`CLGRD` - Controlled CLARKE map\t\
+            \n`COCH` - (DISUSED) Compass and Chain\t\n`COOD` - (DISUSED) Compass and\
+            \ Odometer\t\n`DEM` - Digital Elevation Model\t\n`DIG` - Digitised\t\n\
+            `DOCM` - Sourced from documents (PLANS, ENV, RB,etc)\t\n`EDM` - (DISUSED)\
+            \ EDM\t\n`GCN` - (DISUSED) MESA Geog conversion from Clarke coords\t\n\
+            `GISP` - GIS software on PDA or similar mobile device\t\n`GISW` - GIS\
+            \ software on full Windows OS PC\t\n`GOEAR` - Google Earth image\t\n`GOMAP`\
+            \ - Google Maps image\t\n`GPS` - (DISUSED, use GPSUN) Global Positioning\
+            \ System\t\n`GPSAP` - GPS Averaged Position\t\n`GPSAU` - GPS Post Processed\
+            \ Using AUSPOS Service\t\n`GPSDG` - GPS Differential Generic\t\n`GPSDM`\
+            \ - GPS Multi Base Wide Area Differential (was GPSPD)\t\n`GPSDS` - GPS\
+            \ Single Base Wide Area Differential (was GPSRD)\t\n`GPSPD` - GPS Post\
+            \ Processed Differential (nav level)\t\n`GPSRD` - GPS Real-time Differential\
+            \ (nav level)\t\n`GPSSK` - GPS Svy Grade- Real Time Kinematic (RTK)/Kinematic\t\
+            \n`GPSSL` - GPS Survey Grade (kinematic/static)\t\n`GPSSN` - GPS Standalone\
+            \ Navigational\t\n`GPSSS` - GPS Survey Grade - Static\t\n`GPSUN` - GPS\
+            \ type unknown\t\n`GTRAV` - Interpolated traverse site between GPS endpoints\t\
+            \n`IMGD` - Digital Image\t\n`INFER` - (DISUSED) Inferred\t\n`LOCAL` -\
+            \ (DISUSED) Approximate local methods\t\n`MAP` - (DISUSED) Map Plot\t\n\
+            `ODOM` - (DISUSED) Odometer\t\n`PHOTO` - Air Photo\t\n`PRO` - (DISUSED)\
+            \ Provisional (Estimated)\t\n`SAN` - (DISUSED) Santos conversion from\
+            \ Clarke coords\t\n`SUR` - Surveying\t\n`TRX` - GDA94 Transformed\t\n\
+            `UCMAP` - Uncontrolled map\t\n`UKN` - (DISUSED) Unknown\t\n`VERBL` - (DISUSED)\
+            \ Verbal"
+          enum:
+          - AMGRD
+          - CAL
+          - CLGRD
+          - COCH
+          - COOD
+          - DEM
+          - DIG
+          - DOCM
+          - EDM
+          - GCN
+          - GISP
+          - GISW
+          - GOEAR
+          - GOMAP
+          - GPS
+          - GPSAP
+          - GPSAU
+          - GPSDG
+          - GPSDM
+          - GPSDS
+          - GPSPD
+          - GPSRD
+          - GPSSK
+          - GPSSL
+          - GPSSN
+          - GPSSS
+          - GPSUN
+          - GTRAV
+          - IMGD
+          - INFER
+          - LOCAL
+          - MAP
+          - ODOM
+          - PHOTO
+          - PRO
+          - SAN
+          - SUR
+          - TRX
+          - UCMAP
+          - UKN
+          - VERBL
+          type: string
   responses:
     UnauthorizedError:
       headers:
