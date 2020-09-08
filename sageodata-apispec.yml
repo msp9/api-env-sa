@@ -2206,6 +2206,7 @@ components:
     obswell:
       title: Root Type for obswell
       description: A monitored waterwell.
+      required: []
       type: object
       properties:
         unitNumber:
@@ -2234,31 +2235,12 @@ components:
           description: A unique number identifying the obswell on the 1:100000 map
             sheet for which the obswell is located.
           type: integer
-        latitude:
-          format: double
-          description: Latitude of the obswell.
-          type: number
-        longitude:
-          format: double
-          description: Longitude of the obswell.
-          type: number
-        easting:
-          format: double
-          description: Easting of the obswell.
-          type: number
-        northing:
-          format: double
-          description: Norting of the obswell.
-          type: number
         obsWellPlan:
           description: A unique code for the plan (hundred) on which an obswell is
             located.
           type: string
         obsWellSequenceNumber:
           description: A unique number identifying the obswell on the obsWellPlan.
-          type: string
-        zone:
-          description: Zone of the obswell.
           type: string
         aquiferIntersected:
           description: Code identifying the aquifer that the well intersects.
@@ -2322,7 +2304,114 @@ components:
           description: Prescribed water resource area
           type: string
         monitoringNetworks:
-          description: Monitoring networks to which the obswell is assigned.
+          description: |-
+            Monitoring networks to which the obswell is assigned. Possible values:
+
+            Angas Bremer PWA
+
+            Barossa PWRA
+
+            Clare PWRA
+
+            Leigh Creek
+
+            Loxton - Bookpurnong Irrigation Areas
+
+            Mallee PWA
+
+            Marla Township
+
+            Marne River and Saunders Creek PWRA
+
+            Tatiara PWA
+
+            Chowilla Floodplain
+
+            Padthaway PWA
+
+            Northern Adelaide Plains PWA
+
+            Katarapko Floodplain Injection
+
+            EPNRM Groundwater Dependent Ecosystem wells
+
+            SA Water Waikerie SIS
+
+            Baroota PWRA
+
+            Pike and Murtho Irrigation Areas
+
+            Lower Limestone Coast PWA_South
+
+            Western Mount Lofty Ranges PWRA
+
+            Northern Adelaide Plains PWA irrigation wells salinity monitoring
+
+            Peake, Roby and Sherlock PWA
+
+            Kangaroo Flat irrigation wells salinity monitoring
+
+            Lower Limestone Coast PWA_North
+
+            Golden Grove extractive indust zone
+
+            Barossa irrigation wells salinity monitoring
+
+            McLaren Vale  PWA irrigation wells salinity monitoring
+
+            SA Water Town Water Supplies salinity monitoring
+
+            Botanic Gardens wetlands
+
+            Tintinara Coonalpyn PWA
+
+            South East Non-Prescribed Area
+
+            SA Murray Darling Basin Non-Prescribed Area
+
+            Kangaroo Island Non-Prescribed Area
+
+            Musgrave PWA
+
+            Southern Basins PWA
+
+            Eyre Peninsula Non-Prescribed Area
+
+            SA Arid Lands Non-Prescribed Area
+
+            Alinytjara Wilurara Non-Prescribed Area
+
+            Far North PWA
+
+            Northern & Yorke Non-Prescribed Area - NORTH
+
+            Northern & Yorke Non-Prescribed Area - SOUTH
+
+            Central Adelaide PWA
+
+            McLaren Vale PWA
+
+            Streaky Bay Non-Prescribed Area
+
+            Berri and Renmark Irrigation Areas
+
+            Northern Adelaide Plains Perched Aquifers
+
+            Katarapko Floodplain
+
+            Pike Floodplain
+
+            Eastern Mount Lofty Ranges PWRA
+
+            Noora Disposal Basin
+
+            Waikerie Moorook Irrigation Areas
+
+            SA Murray Darling Basin - SA Water
+
+            SE Flows Restoration Project
+
+            SA Water Murtho SIS
           type: array
           items:
             type: string
@@ -2349,6 +2438,9 @@ components:
           - TINCNP
           - DRYCK
           type: string
+        coordinates:
+          $ref: '#/components/schemas/coordinatedata'
+          description: Coordinate date for the obswell.
       example:
         drillholeNumber: 230
         drillholeName: A-29 (MT DAVIES)
