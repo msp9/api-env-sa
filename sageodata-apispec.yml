@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: SA Geodata API - SWIMS Phase 1 changes
+  title: SA Geodata API
   version: "1.0"
   description: SA Geodata - Webservice API specification
   contact:
