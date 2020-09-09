@@ -713,6 +713,25 @@ paths:
         type: integer
       in: path
       required: true
+  /api/v1.0/monitoringNetworks:
+    summary: Endpoint to return a list of available monitoring networks
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/monitoringNetwork'
+              examples:
+                Angus Bremer Example:
+                  value:
+                    monitoringNetworkCode: ANGBRM
+                    monitoringNetworkName: Angas Bremer PWA
+          description: Success
+      operationId: GetMonitoringNetworks
+      summary: Get available Monitoring Networks
 components:
   schemas:
     address:
@@ -2573,6 +2592,55 @@ components:
           - UKN
           - VERBL
           type: string
+    monitoringNetwork:
+      title: Root Type for monitoringNetwork
+      description: A monitoring network that an obswell may belong to
+      type: object
+      properties:
+        monitoringNetworkCode:
+          description: "Code of monitoring network. Possible values:\n\nANGBRM \n\n\
+            BAROSSA\n\nCLARE\n\nLEIGHCK\n\nLOXTON\n\nMALLEE\n\nMARLA\n\nMARNE\n\n\
+            TATIARA\n\nCHOWILLA\n\nPADTH\n\nNAP\n\nKAT_FP_INJ\n\nEP_GDE\n\nSAW_WAIK\n\
+            \nBAROOTA\n\nPIKEMURTHO\n\nLLC_STH\n\nWMLR\n\nNAP_LIC\n\nPEAKE\n\nKANGFLAT\n\
+            \nLLC_NTH\n\nGG_EIZ\n\nBAROSS_IRR\n\nMV_IRR_TDS\n\nSA_TWS\n\nBOT_GDNS\n\
+            \nTINT_COON\n\nSE_NP\n\nSAMDB_NP\n\nKI_NP\n\nMUSGRAVE\n\nSTHNBASINS\n\n\
+            EP_NP\n\nSAAL_NP\n\nAW_NP\n\nFAR NORTH\n\nNY_NP_NTH\n\nNY_NP_STH\n\nCENT_ADEL\n\
+            \nMCL_VALE\n\nEP_STREAKY\n\nBERI_REN\n\nNAP_PERCH\n\nKAT_FP\n\nPIKE_FP\n\
+            \nEMLR\n\nNOORA_SAW\n\nWAK_MRK\n\nSAMDB_SAW\n\nSEFRP\n\nSAW_MURTHO"
+          type: string
+        monitoringNetworkName:
+          description: "Name of monitoring network. Possible values: \r\n\r\nAngas\
+            \ Bremer PWA\r\n\r\nBarossa PWRA\r\n\r\nClare PWRA\r\n\r\nLeigh Creek\r\
+            \n\r\nLoxton - Bookpurnong Irrigation Areas\r\n\r\nWestern Mount Lofty\
+            \ Ranges PWRA\r\n\r\nLower Limestone Coast PWA_North\r\n\r\nBotanic Gardens\
+            \ wetlands\r\n\r\nSA Arid Lands Non-Prescribed Area\r\n\r\nNorthern Adelaide\
+            \ Plains Perched Aquifers\r\n\r\nPike Floodplain\r\n\r\nMallee PWA\r\n\
+            \r\nKatarapko Floodplain Injection\r\n\r\nBarossa irrigation wells salinity\
+            \ monitoring\r\n\r\nSA Murray Darling Basin Non-Prescribed Area\r\n\r\n\
+            Eastern Mount Lofty Ranges PWRA\r\n\r\nTatiara PWA\r\n\r\nPadthaway PWA\r\
+            \n\r\nPike and Murtho Irrigation Areas\r\n\r\nNorthern Adelaide Plains\
+            \ PWA irrigation wells salinity monitoring\r\n\r\nMcLaren Vale  PWA irrigation\
+            \ wells salinity monitoring\r\n\r\nAlinytjara Wilurara Non-Prescribed\
+            \ Area\r\n\r\nCentral Adelaide PWA\r\n\r\nMcLaren Vale PWA\r\n\r\nLower\
+            \ Limestone Coast PWA_South\r\n\r\nPeake, Roby and Sherlock PWA\r\n\r\n\
+            Golden Grove extractive indust zone\r\n\r\nSA Water Town Water Supplies\
+            \ salinity monitoring\r\n\r\nKangaroo Island Non-Prescribed Area\r\n\r\
+            \nNorthern & Yorke Non-Prescribed Area - SOUTH\r\n\r\nBerri and Renmark\
+            \ Irrigation Areas\r\n\r\nNorthern Adelaide Plains PWA\r\n\r\nSouthern\
+            \ Basins PWA\r\n\r\nKatarapko Floodplain\r\n\r\nWaikerie Moorook Irrigation\
+            \ Areas\r\n\r\nSA Water Murtho SIS\r\n\r\nSA Water Waikerie SIS\r\n\r\n\
+            Baroota PWRA\r\n\r\nKangaroo Flat irrigation wells salinity monitoring\r\
+            \n\r\nMusgrave PWA\r\n\r\nNorthern & Yorke Non-Prescribed Area - NORTH\r\
+            \n\r\nStreaky Bay Non-Prescribed Area\r\n\r\nSA Murray Darling Basin -\
+            \ SA Water\r\n\r\nEPNRM Groundwater Dependent Ecosystem wells\r\n\r\n\
+            Far North PWA\r\n\r\nSE Flows Restoration Project\r\n\r\nMarla Township\r\
+            \n\r\nMarne River and Saunders Creek PWRA\r\n\r\nChowilla Floodplain\r\
+            \n\r\nTintinara Coonalpyn PWA\r\n\r\nSouth East Non-Prescribed Area\r\n\
+            \r\nEyre Peninsula Non-Prescribed Area\r\n\r\nNoora Disposal Basin"
+          type: string
+      example:
+        monitoringNetworkCode: STHNBASINS
+        monitoringNetworkName: Southern Basins PWA
   responses:
     UnauthorizedError:
       headers:
