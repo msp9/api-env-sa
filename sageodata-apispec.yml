@@ -27,11 +27,6 @@ paths:
       tags:
       - wcr
       parameters:
-      - name: id
-        description: Well Completion Report ID
-        schema:
-          type: string
-        in: query
       - name: permitNumber
         description: Well Permit Number
         schema:
@@ -942,7 +937,7 @@ components:
           description: Unit Sequence Number of the well.
           type: integer
     wellcompletionreport-page:
-      description: Page of Well Completion Reports
+      description: Page of Well Completion Report Summary
       required:
       - wellcompletionreports
       - totalRecords
@@ -951,10 +946,10 @@ components:
       type: object
       properties:
         wellcompletionreports:
-          description: A collection of `wellcompletionreport`
+          description: A collection of `wcr-summary`
           type: array
           items:
-            $ref: '#/components/schemas/wellcompletionreport'
+            $ref: '#/components/schemas/wcr-summary'
         nextPage:
           description: URI to next page of the collection
           type: string
@@ -2641,6 +2636,53 @@ components:
       example:
         monitoringNetworkCode: STHNBASINS
         monitoringNetworkName: Southern Basins PWA
+    wcr-summary:
+      description: Summary of Well Completion Report with minimal infomration
+      required:
+      - id
+      - drillholeNumber
+      - reportDetails
+      - eventType
+      - unitNumber
+      - unitSequenceNumber
+      - completionDate
+      - drillholeNumber
+      - permitNumber
+      type: object
+      properties:
+        id:
+          description: Well Completion Report ID
+          type: string
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+        unitNumber:
+          format: int32
+          description: Unit Number of the well.
+          type: integer
+        eventType:
+          description: "Event type of the well work. \n\nPossible values are: `New`,\
+            \ `Alter`, `Replace`, and `Decommission`"
+          enum:
+          - NEW
+          - ALTER
+          - REPLACE
+          - DECOMM
+          type: string
+        reportDetails:
+          description: URL to WCR detail
+          type: string
+        completionDate:
+          format: date
+          description: Completion date
+          type: string
+        drillholeNumber:
+          description: Drillhole Number
+          type: integer
+        permitNumber:
+          description: Well Construction Permit Number
+          type: string
   responses:
     UnauthorizedError:
       headers:
