@@ -564,7 +564,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/elevationmeasurement-page'
           description: Successful operation
-      operationId: GetElevationMeasurements
+      operationId: GetElevationMeasurementsByDrillhole
       summary: List all elevation measurements
       description: ""
     parameters:
@@ -576,8 +576,8 @@ paths:
       in: path
       required: true
   /api/v1.0/obswells/{id}/waterlevelmeasurements/:
-    summary: Endpoint to interact with the list of elevation measurements for a single
-      obswell.
+    summary: Endpoint to interact with the list of water level measurements for a
+      single obswell.
     description: ""
     get:
       tags:
@@ -597,7 +597,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/waterlevelmeasurement-page'
           description: Successful operation
-      operationId: GetWaterLevelMeasurements
+      operationId: GetWaterLevelMeasurementsByDrillhole
       summary: List all water level measurements
       description: ""
     parameters:
@@ -708,9 +708,11 @@ paths:
         type: integer
       in: path
       required: true
-  /api/v1.0/monitoringNetworks:
+  /api/v1.0/obswells/monitoringnetworks:
     summary: Endpoint to return a list of available monitoring networks
     get:
+      tags:
+      - obswell
       responses:
         "200":
           content:
@@ -727,6 +729,76 @@ paths:
           description: Success
       operationId: GetMonitoringNetworks
       summary: Get available Monitoring Networks
+  /api/v1.0/obswells/waterlevelmeasurements/:
+    summary: Endpoint to interact with water level measurements.
+    description: ""
+    get:
+      tags:
+      - obswell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned. Must be less than
+          1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: If specified, only measurements recorded for drillholes with
+          the matching group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetWaterLevelMeasurements
+      summary: List all water level measurements
+      description: ""
+  /api/v1.0/obswells/elevationmeasurements/:
+    summary: Endpoint to interact with elevation measurements.
+    description: ""
+    get:
+      tags:
+      - obswell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned. Must be less than
+          1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: If specified, only measurements recorded for drillholes with
+          the matching group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elevationmeasurement-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetElevationMeasurements
+      summary: List all elevation measurements
+      description: ""
 components:
   schemas:
     address:
