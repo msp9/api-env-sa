@@ -2187,6 +2187,7 @@ components:
       title: Root Type for waterlevelmeasurement
       description: Data type representing a water level measurement recorded during
         a field visit to an obswell.
+      required: []
       type: object
       properties:
         measurementDate:
@@ -2228,6 +2229,9 @@ components:
           format: int32
           description: Unique identifier of drillhole specified by SAGeoData.
           type: integer
+        anomalous:
+          description: If true, indicates that the reading was an anomaly.
+          type: boolean
       example:
         drillholeNumber: 4
         measurementNumber: 1
