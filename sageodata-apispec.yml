@@ -1799,7 +1799,6 @@ components:
       - drillerFirstName
       - drillerLastName
       - drillerNumber
-      - addressDetails
       - drillerClass
       type: object
       properties:
@@ -2188,7 +2187,6 @@ components:
       title: Root Type for waterlevelmeasurement
       description: Data type representing a water level measurement recorded during
         a field visit to an obswell.
-      required: []
       type: object
       properties:
         measurementDate:
@@ -2296,7 +2294,6 @@ components:
     obswell:
       title: Root Type for obswell
       description: A monitored waterwell.
-      required: []
       type: object
       properties:
         unitNumber:
@@ -2716,7 +2713,6 @@ components:
       description: Summary of Well Completion Report with minimal infomration
       required:
       - id
-      - drillholeNumber
       - reportDetails
       - eventType
       - unitNumber
@@ -2788,3 +2784,4 @@ tags:
 externalDocs:
   description: Find out more about SA Geodata API - iShare location
   url: http://swagger.io
+ 
