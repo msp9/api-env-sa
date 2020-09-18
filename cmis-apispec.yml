@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.2
 info:
-  title: CMIS API Specification - WHS Risk
+  title: CMIS API Specification
   version: "1.0"
   description: Case Management and Intelligence System (CMIS) - Webservice API specification
   contact:
