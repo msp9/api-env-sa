@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.2
 info:
-  title: CMIS API Specification
+  title: CMIS API Specification - WHS Risk
   version: "1.0"
   description: Case Management and Intelligence System (CMIS) - Webservice API specification
   contact:
@@ -533,6 +533,173 @@ paths:
       operationId: CreateCase
       summary: Create a case
       description: Creates a new instance of a `case`.
+  /crm-apis/v1/clients/{id}/whsrisks:
+    summary: End-point for interacting with WHS Risks associated with a client
+    description: End-point for interacting with WHS Risks associated with a client
+    get:
+      tags:
+      - whs-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk-page'
+          description: Success
+      operationId: GetClientRisks
+      summary: Get all WHS Risks associated with the client
+      description: Get all WHS Risks associated with the client
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/whsrisk'
+        required: true
+      tags:
+      - whs-apis
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk'
+          description: Created successfully
+      operationId: CreateClientRisk
+      summary: Create a new WHS Risk associated with the client
+      description: Create a new WHS Risk associated with the client
+    parameters:
+    - name: id
+      description: Unique (system generated) ID of the client
+      schema:
+        type: string
+      in: path
+      required: true
+  /whs-apis/v1/risklocations/:
+    get:
+      tags:
+      - whs-apis
+      parameters:
+      - examples:
+          singleLineAddress:
+            value: 33 QUEEN STREET, NORWOOD, SOUTH AUSTRALIA, 5067
+        name: singleLine
+        description: Specifies the location to be searched for. The input address
+          components are formatted as a single string. This string is expected to
+          match the `address` attribute in the `findAddressCandidate` LocationSA ALVS
+          (http://sdsi.sa.gov.au/ArcGIS/rest/services/Locators/SAGAF_PLUS/GeocodeServer/findAddressCandidates?Street=&City=&State=&ZIP=&Single+Line+Input=&outFields=&outSR=&f=html)
+        schema:
+          type: string
+        in: query
+      - name: location
+        description: |-
+          The location can be represented with a simple comma-separated syntax (x,y), or as a JSON point object. If the spatial reference of the location coordinates is different than that of the geocode service, then it must be defined in the JSON object. If the comma-separated syntax is used, or if the spatial reference is not included in the JSON object, then the spatial reference of the location is assumed to be the same as that of the geocode service.
+
+          Example using simple syntax (WGS84): location=-117.196,34.056
+
+          JSON example with a spatial reference: location= { "x": -13046165.572, "y": 4036389.847, "spatialReference": { "wkid": 102100 } }
+        schema:
+          type: string
+        in: query
+      - name: distance
+        description: "Description: Specifies the radius of an area around a point\
+          \ location so that candidates intersecting the location are returned. The\
+          \ distance value is in meters.\r\n\r\nIf the distance parameter is specified,\
+          \ the location parameter must be specified as well.\r\n\r\nExample: distance=3218.69"
+        schema:
+          type: number
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk-page'
+          description: Success
+      operationId: GetRiskLocations
+      summary: Get Locations with WHS Risk
+      description: Get Locations with WHS Risk
+    post:
+      requestBody:
+        description: Details of the the WHS Risk and the associated location
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/whsrisk'
+        required: true
+      tags:
+      - whs-apis
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk'
+          description: WHS Risk Created
+      operationId: CreateRiskLocation
+      summary: Create WHS Risk associated with a location
+      description: Create WHS Risk associated with a location
+  /whs-apis/v1/whsrisks:
+    summary: End-point for querying and creating WHS Risks
+    description: The REST endpoint/path used to list and create zero or more `WHS
+      Risk` entities.  This path contains a `GET` operation to perform the list task.
+    get:
+      parameters:
+      - name: changessince
+        description: Changes since date and time in ISO-8601 format `yyyy-MM-ddTHH:mm:ssZ`
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk-page'
+          description: Success
+      operationId: GetWHSRisks
+      summary: Get applicable `WHS Risks`
+      description: Get applicable `WHS Risks`
+  /whs-apis/v1/whsrisks/{id}:
+    summary: End-point for interacting with a single WHS Risk
+    description: End-point for interacting with a single WHS Risk
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/whsrisk'
+        required: true
+      tags:
+      - whs-apis
+      responses:
+        "204":
+          description: Success
+      operationId: UpdateWHSRisk
+      summary: Update details of a WHS Risk
+      description: "Update details of a WHS Risk. \nNote: Does not allow updating\
+        \ or changing the existing association of this risk to a client/location.\n\
+        The WHS Risk has to be deleted and added to the new client/location if the\
+        \ association has to be changed."
+    delete:
+      tags:
+      - whs-apis
+      responses:
+        "204":
+          description: Success
+      operationId: removeWHSRisk
+      summary: Remove a WHS Risk
+      description: |-
+        Remove a WHS Risk.
+        Note: The risk association with its client/location will be removed too
+    parameters:
+    - name: id
+      description: riskId
+      schema:
+        type: string
+      in: path
+      required: true
 components:
   schemas:
     client:
@@ -749,6 +916,7 @@ components:
       description: Location details of a case
       required:
       - address
+      - locationType
       type: object
       properties:
         address:
@@ -768,6 +936,26 @@ components:
           type: string
         detailDescription:
           description: Detailed description of the location
+          type: string
+        locationType:
+          description: |
+            Location type - address or boundary.
+            Possible values are `ADDR`, `BNDRY`
+          enum:
+          - ADDR
+          - BNDRY
+          type: string
+        polygonData:
+          description: |-
+            2D Polygon data representation in JSON format.
+
+            Syntax: `{
+              "hasZ" : true | false,
+              "hasM" : true | false,
+              "rings" : [[[<x11>, <y11>, <z11>, <m11>],...,[<x1N>, <y1N>, <z1N>, <m1N>]],
+                         ,...,[[<xk1>, <yk1>, <zk1>, <mk1>],...,[<xkM>, <ykM>, <zkM>, <mkM>]]],
+              "spatialReference" : {<spatialReference>}
+            }`
           type: string
       example:
         address:
@@ -1017,6 +1205,7 @@ components:
       required:
       - whsSafetyRiskCategory
       - creationDate
+      - riskId
       type: object
       properties:
         whsSafetyRiskCategory:
@@ -1029,6 +1218,17 @@ components:
           format: date
           description: Date when the risk was registered in the system
           type: string
+        riskId:
+          description: Unique (system-generated) identifier for a WHS Risk
+          type: string
+        clientDetails:
+          description: URI of the client associated with this risk. null/empty for
+            a location based risk.
+          type: string
+        locationDetails:
+          $ref: '#/components/schemas/locationdetail'
+          description: Location associated with this WHS Risk. null/emtpy if the risk
+            is associated with a client.
       example:
         whsSafetyRiskCategory: Agressive dog(s)
         description: Owns two agressive dogs that are usually off-leash
@@ -1351,6 +1551,12 @@ components:
           description: ISO 3166-1 alpha-2 country code of the address
           pattern: ^[A-Z]{2}$
           type: string
+        lat:
+          description: Latitude - as retrieved from Location SA services
+          type: string
+        long:
+          description: Longitude - as retrieved from LocationSA services
+          type: string
       example:
         streetLine1: 81-95 Wamyouth Ave
         suburb: ADELAIDE
@@ -1411,6 +1617,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/act'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+    whsrisk-page:
+      title: Page - whsRisk Datatype
+      description: |-
+        A page of `whsRisk` resources.
+
+        The `nextPage` and `prevPage` urls are optional and will be present only when more matching results exists beyond this collection of data.
+      required:
+      - whsRisks
+      type: object
+      properties:
+        whsRisk:
+          description: Collection of whsRisks
+          type: array
+          items:
+            $ref: '#/components/schemas/whsrisk'
         nextPage:
           description: URI to next page of the collection
           type: string
