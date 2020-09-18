@@ -644,6 +644,8 @@ paths:
     description: The REST endpoint/path used to list and create zero or more `WHS
       Risk` entities.  This path contains a `GET` operation to perform the list task.
     get:
+      tags:
+      - whs-apis
       parameters:
       - name: changessince
         description: Changes since date and time in ISO-8601 format `yyyy-MM-ddTHH:mm:ssZ`
@@ -1679,4 +1681,6 @@ tags:
 - name: crm-apis
   description: ""
 - name: auth-apis
+  description: ""
+- name: whs-apis
   description: ""
