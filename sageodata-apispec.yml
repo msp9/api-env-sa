@@ -836,178 +836,6 @@ components:
         suburb: Adelaide
         postCode: 5000
         state: SA
-    wellcompletionreport:
-      description: Well Completion Report data
-      required:
-      - eventType
-      - wellPurposes
-      - coordinateData
-      - constructionDetails
-      type: object
-      properties:
-        id:
-          description: Well Completion Report ID
-          type: string
-        eventType:
-          description: "Event type of the well work. \n\nPossible values are: `New`,\
-            \ `Alter`, `Replace`, and `Decommission`"
-          enum:
-          - NEW
-          - ALTER
-          - REPLACE
-          - DECOMM
-          type: string
-        unitNumber:
-          format: int32
-          description: Unit Number of the well.
-          type: integer
-        drillholeName:
-          description: Drillhole name
-          type: string
-        drillholeOtherName:
-          description: Drillhole othere name
-          type: string
-        surveyDate:
-          format: date
-          description: Survey Date
-          type: string
-        waterPointType:
-          description: "Water Point Type. If left blank the well is marked as NOT\
-            \ a Water Point Type. \n\nPossible values:  \n`DAM` - Dam\t\n`HOL` - Water\
-            \ Hole\t\n`LAK` - Lake\t\n`RIV` - River\t\n`SEA` - Sea Water\t\n`SOK`\
-            \ - Soak\t\n`SPR` - Spring\t\n`MDS` - Mound Spring\t\n`MWS` - Mine Water\
-            \ Supply\t\n`UKN` - Water Point type not known\t\n`SMP` - Swamp\t\n`DRN`\
-            \ - drain; Bore drain\t\n`CRK` - Creek\t\n`SNK` - Sink hole\t\n`GSP` -\
-            \ GAB Spring (incl previous mound springs)\t\n`RES` - Reservoir\t\n`VWP`\
-            \ - Vibrating Wire Piezometer\t\n`MIN` - Mine"
-          maxLength: 3
-          minLength: 3
-          type: string
-        isWaterWellClass:
-          description: Is the well a Waterwell Class
-          type: boolean
-        isWaterWellLicenced:
-          description: Is Water Well Licenced
-          type: boolean
-        isTradeWell:
-          description: Is Trade Well
-          type: boolean
-        isBackFill:
-          description: Is back-fill
-          type: boolean
-        isDeepened:
-          description: Is Deepened
-          type: boolean
-        isEnlarged:
-          description: Is Enlarged
-          type: boolean
-        isRehabilitate:
-          description: Is rehabilitate
-          type: boolean
-        isInspected:
-          description: Is Inspected
-          type: boolean
-        isAbandoned:
-          description: Is Abandoned
-          type: boolean
-        isFlowing:
-          description: Is Flowing
-          type: boolean
-        isDry:
-          description: Is Dry
-          type: boolean
-        isReplacement:
-          description: Is Replacement
-          type: boolean
-        finalSWLInMeters:
-          format: double
-          description: Final Standing Water Level in meters
-          type: number
-        finalYieldInMeters:
-          format: double
-          description: Final Yield in meters
-          type: number
-        plantOperator:
-          description: Plant Operator
-          type: string
-        wellPurposes:
-          description: "Well Purposes.\n\nArray of one or more purpose from the list\
-            \ below:   \n`DEP` - Deepening\t\n`DOM` - Domestic\t\n`DRN` - Drainage\t\
-            \n`DWT` - Dewatering\t\n`ENV` - Environmental\t\n`ETH` - Earthing\t\n\
-            `EXP` - Exploration\t\n`FIR` - Fire Fighting\t\n`GEN` - General Usage\t\
-            \n`GHP` - Ground source heat pump exchange\t\n`GTH` - Geothermal Energy\t\
-            \n`HOL` - Water Hole\t\n`IND` - Industrial\t\n`INV` - Investigation\t\n\
-            `IRR` - Irrigation\t\n`ISR` - In-situ recovery\t\n`LAK` - Lake\t\n`LWD`\
-            \ - Liquid Waste Disposal\t\n`MAR` - Managed Aquifer Recharge (incl ASR)\t\
-            \n`MON` - Monitoring\t\n`MWS` - Mine Water Supply\t\n`OBS` - Observation\t\
-            \n`RCL` - Recreational\t\n`RDC` - Road Construction / Maintenance\t\n\
-            `REC` - Recharge\t\n`RHL` - Rock Hole\t\n`RIV` - River\t\n`SEA` - Sea\
-            \ Water\t\n`SIS` - Interception scheme production well\t\n`SOK` - Soak\t\
-            \n`SPR` - Spring\t\n`STK` - Stock\t\n`TNK` - Tank\t\n`TWS` - Town Water\
-            \ Supply (Public/Muncipal)\t\n`WAS` - Waste Disposal"
-          type: array
-          items:
-            type: string
-        coordinateData:
-          $ref: '#/components/schemas/wcr-coordinatedata'
-          description: Coordinate information
-        constructionDetails:
-          description: Array of Construction details
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-constructiondata'
-        drillingDetails:
-          description: Array of Drilling data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-drillingdata'
-        casingDetails:
-          description: Array of Casing data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-casingdata'
-        productionDetails:
-          description: Array of Production Data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-productiondata'
-        constructionComment:
-          description: Construction comment
-          type: string
-        linearSealDetails:
-          description: Array of Linear Seal Data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-linearsealdata'
-        gravelPackingDetails:
-          description: Array of Gravel Packing data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-gravelpackingdata'
-        wellDevelopmentDetails:
-          description: Array of Well Development data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-welldevelopmentdata'
-        waterCutDetails:
-          description: Array of Water Cut data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-watercutdata'
-        pumpTestDetails:
-          description: Array of Pump Test data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-pumptestdata'
-        formationLogDetails:
-          description: Array of Formation Log data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-formationlogdata'
-        unitSequenceNumber:
-          format: int32
-          description: Unit Sequence Number of the well.
-          type: integer
     wellcompletionreport-page:
       description: Page of Well Completion Report Summary
       required:
@@ -1642,131 +1470,6 @@ components:
         description:
           description: Description
           type: string
-    wellpermit:
-      description: Well Permit data
-      required:
-      - issueDate
-      - purpose
-      - permitHolderName
-      - wellUse
-      - expiryDate
-      - address
-      - areaDescription
-      type: object
-      properties:
-        permitNumber:
-          description: Well Construction Permit Number
-          type: number
-        issueDate:
-          format: date
-          description: Permit Issue Date
-          type: string
-        purpose:
-          description: "Permit purpose. Possible values: \n\n`0` - (Not Specified)\
-            \   \n`1034941140` - Well Backfill\t\n`1034941150` - Well Construction\t\
-            \n`1034941151` - Well Construction and Backfill\t\n`1034941160` - Well\
-            \ Deepen\t\n`1034941170` - Well Enlarge\t\n`1034941240` - Well Line\t\n\
-            `1034941280` - Well Plug/Seal\t\n`1034941300` - Well Recase\t\n`1034941301`\
-            \ - Well Rehabilitation"
-          enum:
-          - "0"
-          - "1034941140"
-          - "1034941150"
-          - "1034941151"
-          - "1034941160"
-          - "1034941170"
-          - "1034941240"
-          - "1034941280"
-          - "1034941300"
-          - "1034941301"
-          type: string
-        permitHolderName:
-          description: Permit Holder Name
-          type: string
-        wellUse:
-          description: "Well Use. Possible values: \n\n`0` - (Not Specified)\t\n`135724070`\
-            \ - Cathodic Protection\t\n`196644160` - Drainage\t\n`237652240` - Engineering\t\
-            \n`417066090` - Investigation\t\n`596970260` - Monitoring\t\n`1031213920`\
-            \ - Water Supply"
-          enum:
-          - "0"
-          - "135724070"
-          - "196644160"
-          - "237652240"
-          - "417066090"
-          - "596970260"
-          - "1031213920"
-          type: string
-        expiryDate:
-          format: date
-          description: Permit Expiry Date
-          type: string
-        address:
-          $ref: '#/components/schemas/address'
-          description: Permit Holder Address
-        areaDescription:
-          description: Area Description
-          type: string
-        notes:
-          description: List of Notes against the permit
-          type: array
-          items:
-            type: string
-        conditions:
-          description: List of conditions against the permit
-          type: array
-          items:
-            type: string
-        specialConditions:
-          description: List of special conditions against the permit
-          type: array
-          items:
-            type: string
-        propertyTitle:
-          description: "Property Title details in the format `<prefix>-<volume>-<folio>`\
-            \   \n\nSupported format: `^(\\w{2})?[-](\\w{1,4})?[-](\\w{1,2})?$`  \
-            \ \n`prefix` - alphanumeric of max size 2 (can be blank)   \n`volume`\
-            \ - alphanumeric of max size 4 (can be blank)  \n`folio`  - alphanumeric\
-            \ of max size 2 (can be blank)  \n\nPossible values for `prefix` are:\
-            \   \n`44` - 44\t\n`CL` - CL\t\n`CR` - CR\t\n`CT` - CT\t\n`D3` - D3\t\n\
-            `GM` - GM\t\n`LT` - LT\t\n`R2` - R2\t\n`R3` - R3\t\n`R4` - R4\t\n`R5`\
-            \ - R5\t\n`R6` - R6\t\n`R7` - R7\t\n`R8` - R8\t\n`D1` - D1\t\n`D2` - D2\t\
-            \n`F4` - F4\t\n`R1` - R1\t\n`F1` - F1"
-          type: string
-        propertyParcel:
-          description: "Property Parcel details in the format `<type>-<number>`  \n\
-            \nSupported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
-            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
-            \ 6 (can be blank)  \n\nPossible values for `type` are: \n`*` - *\t\n\
-            `9` - 9\t\n`A` - Allotment\t\n`B` - Block\t\n`C` - Closed Road\t\n`M`\
-            \ - Mineral Section\t\n`P` - Pastoral Run\t\n`Q` - Pieces\t\n`S` - Section\t\
-            \n`X` - Site "
-          type: string
-        propertyPlan:
-          description: "Property Plan details in the format `<type>-<number>`  \n\n\
-            Supported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
-            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
-            \ 6 (can be blank)  \n\nPossible values for `type` are:     \n`C` - Cluster\
-            \ Plan\t\n`D` - Deposited Plan\t\n`F` - Filed Plan\t\n`G` - G.R.O. Deposited\
-            \ Plan\t\n`E` - G.R.O. Enrolled Plan\t\n`H` - Hundred Plan\t\n`N` - N\t\
-            \n`P` - Parish (Outside SA)\t\n`R` - Road Plan\t\n`S` - Strata Plan\t\n\
-            `T` - Township Plan"
-          type: string
-        propertyHunderdName:
-          description: Hundred Name of the property
-          type: string
-        sectionLotDetail:
-          description: "Section No and Lot No of the property in the format `<section_no>-<lot_no>`\
-            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`section_no`\
-            \   - alphanumeric of max size 7 (can be blank)   \n`lot_no` - alphanumeric\
-            \ of max size 7 (can be blank)  "
-          type: string
-        pastoralDetails:
-          description: "Pastoral details of the property in the format `<block_no>-<lease_no>`\
-            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`block_no`\
-            \   - alphanumeric of max size 7 (can be blank)   \n`lease_no` - alphanumeric\
-            \ of max size 7 (can be blank)  "
-          type: string
     wellpermit-page:
       description: Page of Well Permits
       required:
@@ -2183,65 +1886,6 @@ components:
         permitHolderName:
           description: Permit Holder Name
           type: string
-    waterlevelmeasurement:
-      title: Root Type for waterlevelmeasurement
-      description: Data type representing a water level measurement recorded during
-        a field visit to an obswell.
-      required: []
-      type: object
-      properties:
-        measurementDate:
-          format: date-time
-          description: Date the measurement was taken.
-          type: string
-        depthToWater:
-          format: double
-          description: The  Depth to Water measurment value.
-          type: number
-        artesianPressure:
-          format: double
-          description: The Artesian Pressure measurment value.
-          type: number
-        comments:
-          description: Comments
-          type: string
-        agencyResponsible:
-          description: Agency responsible for the measurement.
-          type: string
-        conductedBy:
-          description: The username of the field officer(s) who conducted the field
-            visit.
-          type: string
-        createdDate:
-          format: date-time
-          description: Date the measurement was added to SAGeoData.
-          type: string
-        modifiedDate:
-          format: date-time
-          description: Datetime of the most recent modification to the measurement
-            in SAGeoData.
-          type: string
-        measurementNumber:
-          format: int32
-          description: Unique identifier of the measurement specified by SAGeoData.
-          type: integer
-        drillholeNumber:
-          format: int32
-          description: Unique identifier of drillhole specified by SAGeoData.
-          type: integer
-        anomalous:
-          description: If true, indicates that the reading was an anomaly.
-          type: boolean
-      example:
-        drillholeNumber: 4
-        measurementNumber: 1
-        measurementDate: 1990-12-06T00:00:00.000Z
-        depthToWater: 71.6
-        artesianPressure: 10
-        agencyResponsible: DEWNR
-        conductedBy: DHDB
-        createdDate: 1997-07-02T18:23:52.000Z
-        modifiedDate: 2012-09-20T15:56:31.000Z
     note:
       title: Root Type for note
       description: A note, for example a note for an obswell.
@@ -2756,6 +2400,377 @@ components:
         permitNumber:
           description: Well Construction Permit Number
           type: string
+    waterlevelmeasurement:
+      title: Root Type for waterlevelmeasurement
+      description: Data type representing a water level measurement recorded during
+        a field visit to an obswell.
+      type: object
+      properties:
+        measurementDate:
+          format: date-time
+          description: Date the measurement was taken.
+          type: string
+        depthToWater:
+          format: double
+          description: The  Depth to Water measurment value.
+          type: number
+        artesianPressure:
+          format: double
+          description: The Artesian Pressure measurment value.
+          type: number
+        comments:
+          description: Comments
+          type: string
+        agencyResponsible:
+          description: Agency responsible for the measurement.
+          type: string
+        conductedBy:
+          description: The username of the field officer(s) who conducted the field
+            visit.
+          type: string
+        createdDate:
+          format: date-time
+          description: Date the measurement was added to SAGeoData.
+          type: string
+        modifiedDate:
+          format: date-time
+          description: Datetime of the most recent modification to the measurement
+            in SAGeoData.
+          type: string
+        measurementNumber:
+          format: int32
+          description: Unique identifier of the measurement specified by SAGeoData.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier of drillhole specified by SAGeoData.
+          type: integer
+        anomalous:
+          description: If true, indicates that the reading was an anomaly.
+          type: boolean
+      example:
+        drillholeNumber: 4
+        measurementNumber: 1
+        measurementDate: 1990-12-06T00:00:00.000Z
+        depthToWater: 71.6
+        artesianPressure: 10
+        agencyResponsible: DEWNR
+        conductedBy: DHDB
+        createdDate: 1997-07-02T18:23:52.000Z
+        modifiedDate: 2012-09-20T15:56:31.000Z
+    wellpermit:
+      description: Well Permit data
+      required:
+      - issueDate
+      - purpose
+      - permitHolderName
+      - wellUse
+      - expiryDate
+      - address
+      - areaDescription
+      type: object
+      properties:
+        permitNumber:
+          description: Well Construction Permit Number
+          type: number
+        issueDate:
+          format: date
+          description: Permit Issue Date
+          type: string
+        purpose:
+          description: "Permit purpose. Possible values: \n\n`0` - (Not Specified)\
+            \   \n`1034941140` - Well Backfill\t\n`1034941150` - Well Construction\t\
+            \n`1034941151` - Well Construction and Backfill\t\n`1034941160` - Well\
+            \ Deepen\t\n`1034941170` - Well Enlarge\t\n`1034941240` - Well Line\t\n\
+            `1034941280` - Well Plug/Seal\t\n`1034941300` - Well Recase\t\n`1034941301`\
+            \ - Well Rehabilitation"
+          enum:
+          - "0"
+          - "1034941140"
+          - "1034941150"
+          - "1034941151"
+          - "1034941160"
+          - "1034941170"
+          - "1034941240"
+          - "1034941280"
+          - "1034941300"
+          - "1034941301"
+          type: string
+        permitHolderName:
+          description: Permit Holder Name
+          type: string
+        wellUse:
+          description: "Well Use. Possible values: \n\n`0` - (Not Specified)\t\n`135724070`\
+            \ - Cathodic Protection\t\n`196644160` - Drainage\t\n`237652240` - Engineering\t\
+            \n`417066090` - Investigation\t\n`596970260` - Monitoring\t\n`1031213920`\
+            \ - Water Supply"
+          enum:
+          - "0"
+          - "135724070"
+          - "196644160"
+          - "237652240"
+          - "417066090"
+          - "596970260"
+          - "1031213920"
+          type: string
+        expiryDate:
+          format: date
+          description: Permit Expiry Date
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
+          description: Permit Holder Address
+        areaDescription:
+          description: Area Description
+          type: string
+        notes:
+          description: List of Notes against the permit
+          type: array
+          items:
+            type: string
+        conditions:
+          description: List of conditions against the permit
+          type: array
+          items:
+            type: string
+        specialConditions:
+          description: List of special conditions against the permit
+          type: array
+          items:
+            type: string
+        propertyTitle:
+          description: "Property Title details in the format `<prefix>-<volume>-<folio>`\
+            \   \n\nSupported format: `^(\\w{2})?[-](\\w{1,4})?[-](\\w{1,2})?$`  \
+            \ \n`prefix` - alphanumeric of max size 2 (can be blank)   \n`volume`\
+            \ - alphanumeric of max size 4 (can be blank)  \n`folio`  - alphanumeric\
+            \ of max size 2 (can be blank)  \n\nPossible values for `prefix` are:\
+            \   \n`44` - 44\t\n`CL` - CL\t\n`CR` - CR\t\n`CT` - CT\t\n`D3` - D3\t\n\
+            `GM` - GM\t\n`LT` - LT\t\n`R2` - R2\t\n`R3` - R3\t\n`R4` - R4\t\n`R5`\
+            \ - R5\t\n`R6` - R6\t\n`R7` - R7\t\n`R8` - R8\t\n`D1` - D1\t\n`D2` - D2\t\
+            \n`F4` - F4\t\n`R1` - R1\t\n`F1` - F1"
+          type: string
+        propertyParcel:
+          description: "Property Parcel details in the format `<type>-<number>`  \n\
+            \nSupported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
+            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
+            \ 6 (can be blank)  \n\nPossible values for `type` are: \n`*` - *\t\n\
+            `9` - 9\t\n`A` - Allotment\t\n`B` - Block\t\n`C` - Closed Road\t\n`M`\
+            \ - Mineral Section\t\n`P` - Pastoral Run\t\n`Q` - Pieces\t\n`S` - Section\t\
+            \n`X` - Site "
+          type: string
+        propertyPlan:
+          description: "Property Plan details in the format `<type>-<number>`  \n\n\
+            Supported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
+            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
+            \ 6 (can be blank)  \n\nPossible values for `type` are:     \n`C` - Cluster\
+            \ Plan\t\n`D` - Deposited Plan\t\n`F` - Filed Plan\t\n`G` - G.R.O. Deposited\
+            \ Plan\t\n`E` - G.R.O. Enrolled Plan\t\n`H` - Hundred Plan\t\n`N` - N\t\
+            \n`P` - Parish (Outside SA)\t\n`R` - Road Plan\t\n`S` - Strata Plan\t\n\
+            `T` - Township Plan"
+          type: string
+        propertyHunderdName:
+          description: Hundred Name of the property
+          type: string
+        sectionLotDetail:
+          description: "Section No and Lot No of the property in the format `<section_no>-<lot_no>`\
+            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`section_no`\
+            \   - alphanumeric of max size 7 (can be blank)   \n`lot_no` - alphanumeric\
+            \ of max size 7 (can be blank)  "
+          type: string
+        pastoralDetails:
+          description: "Pastoral details of the property in the format `<block_no>-<lease_no>`\
+            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`block_no`\
+            \   - alphanumeric of max size 7 (can be blank)   \n`lease_no` - alphanumeric\
+            \ of max size 7 (can be blank)  "
+          type: string
+        unitNumber:
+          format: int32
+          description: Unit Number of the well.
+          type: integer
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
+    wellcompletionreport:
+      description: Well Completion Report data
+      required:
+      - eventType
+      - wellPurposes
+      - coordinateData
+      - constructionDetails
+      type: object
+      properties:
+        id:
+          description: Well Completion Report ID
+          type: string
+        eventType:
+          description: "Event type of the well work. \n\nPossible values are: `New`,\
+            \ `Alter`, `Replace`, and `Decommission`"
+          enum:
+          - NEW
+          - ALTER
+          - REPLACE
+          - DECOMM
+          type: string
+        unitNumber:
+          format: int32
+          description: Unit Number of the well.
+          type: integer
+        drillholeName:
+          description: Drillhole name
+          type: string
+        drillholeOtherName:
+          description: Drillhole othere name
+          type: string
+        surveyDate:
+          format: date
+          description: Survey Date
+          type: string
+        waterPointType:
+          description: "Water Point Type. If left blank the well is marked as NOT\
+            \ a Water Point Type. \n\nPossible values:  \n`DAM` - Dam\t\n`HOL` - Water\
+            \ Hole\t\n`LAK` - Lake\t\n`RIV` - River\t\n`SEA` - Sea Water\t\n`SOK`\
+            \ - Soak\t\n`SPR` - Spring\t\n`MDS` - Mound Spring\t\n`MWS` - Mine Water\
+            \ Supply\t\n`UKN` - Water Point type not known\t\n`SMP` - Swamp\t\n`DRN`\
+            \ - drain; Bore drain\t\n`CRK` - Creek\t\n`SNK` - Sink hole\t\n`GSP` -\
+            \ GAB Spring (incl previous mound springs)\t\n`RES` - Reservoir\t\n`VWP`\
+            \ - Vibrating Wire Piezometer\t\n`MIN` - Mine"
+          maxLength: 3
+          minLength: 3
+          type: string
+        isWaterWellClass:
+          description: Is the well a Waterwell Class
+          type: boolean
+        isWaterWellLicenced:
+          description: Is Water Well Licenced
+          type: boolean
+        isTradeWell:
+          description: Is Trade Well
+          type: boolean
+        isBackFill:
+          description: Is back-fill
+          type: boolean
+        isDeepened:
+          description: Is Deepened
+          type: boolean
+        isEnlarged:
+          description: Is Enlarged
+          type: boolean
+        isRehabilitate:
+          description: Is rehabilitate
+          type: boolean
+        isInspected:
+          description: Is Inspected
+          type: boolean
+        isAbandoned:
+          description: Is Abandoned
+          type: boolean
+        isFlowing:
+          description: Is Flowing
+          type: boolean
+        isDry:
+          description: Is Dry
+          type: boolean
+        isReplacement:
+          description: Is Replacement
+          type: boolean
+        finalSWLInMeters:
+          format: double
+          description: Final Standing Water Level in meters
+          type: number
+        finalYieldInMeters:
+          format: double
+          description: Final Yield in meters
+          type: number
+        plantOperator:
+          description: Plant Operator
+          type: string
+        wellPurposes:
+          description: "Well Purposes.\n\nArray of one or more purpose from the list\
+            \ below:   \n`DEP` - Deepening\t\n`DOM` - Domestic\t\n`DRN` - Drainage\t\
+            \n`DWT` - Dewatering\t\n`ENV` - Environmental\t\n`ETH` - Earthing\t\n\
+            `EXP` - Exploration\t\n`FIR` - Fire Fighting\t\n`GEN` - General Usage\t\
+            \n`GHP` - Ground source heat pump exchange\t\n`GTH` - Geothermal Energy\t\
+            \n`HOL` - Water Hole\t\n`IND` - Industrial\t\n`INV` - Investigation\t\n\
+            `IRR` - Irrigation\t\n`ISR` - In-situ recovery\t\n`LAK` - Lake\t\n`LWD`\
+            \ - Liquid Waste Disposal\t\n`MAR` - Managed Aquifer Recharge (incl ASR)\t\
+            \n`MON` - Monitoring\t\n`MWS` - Mine Water Supply\t\n`OBS` - Observation\t\
+            \n`RCL` - Recreational\t\n`RDC` - Road Construction / Maintenance\t\n\
+            `REC` - Recharge\t\n`RHL` - Rock Hole\t\n`RIV` - River\t\n`SEA` - Sea\
+            \ Water\t\n`SIS` - Interception scheme production well\t\n`SOK` - Soak\t\
+            \n`SPR` - Spring\t\n`STK` - Stock\t\n`TNK` - Tank\t\n`TWS` - Town Water\
+            \ Supply (Public/Muncipal)\t\n`WAS` - Waste Disposal"
+          type: array
+          items:
+            type: string
+        coordinateData:
+          $ref: '#/components/schemas/wcr-coordinatedata'
+          description: Coordinate information
+        constructionDetails:
+          description: Array of Construction details
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-constructiondata'
+        drillingDetails:
+          description: Array of Drilling data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-drillingdata'
+        casingDetails:
+          description: Array of Casing data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-casingdata'
+        productionDetails:
+          description: Array of Production Data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-productiondata'
+        constructionComment:
+          description: Construction comment
+          type: string
+        linearSealDetails:
+          description: Array of Linear Seal Data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-linearsealdata'
+        gravelPackingDetails:
+          description: Array of Gravel Packing data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-gravelpackingdata'
+        wellDevelopmentDetails:
+          description: Array of Well Development data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-welldevelopmentdata'
+        waterCutDetails:
+          description: Array of Water Cut data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-watercutdata'
+        pumpTestDetails:
+          description: Array of Pump Test data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-pumptestdata'
+        formationLogDetails:
+          description: Array of Formation Log data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-formationlogdata'
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
   responses:
     UnauthorizedError:
       headers:
@@ -2785,4 +2800,3 @@ tags:
 externalDocs:
   description: Find out more about SA Geodata API - iShare location
   url: http://swagger.io
- 
