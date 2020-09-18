@@ -644,6 +644,8 @@ paths:
     description: The REST endpoint/path used to list and create zero or more `WHS
       Risk` entities.  This path contains a `GET` operation to perform the list task.
     get:
+      tags:
+      - whs-apis
       parameters:
       - name: changessince
         description: Changes since date and time in ISO-8601 format `yyyy-MM-ddTHH:mm:ssZ`
@@ -776,7 +778,7 @@ components:
         emailaddress: joe.bloggs@blooger.com
         mobilePhone: "0123456789"
         workPhone: 987-654-3210
-        dateofbirth: 1960-01-17T00:00:00.000Z
+        dateofbirth: 1960-01-17
         occupation: Serial Blogger
         clientId: some text
         whsRisks:
@@ -856,7 +858,7 @@ components:
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
-            dateofbirth: 1960-01-17T00:00:00.000Z
+            dateofbirth: 1960-01-17
             occupation: Serial Blogger
             clientId: some text
             whsRisks:
@@ -987,8 +989,8 @@ components:
           $ref: '#/components/schemas/offencetype'
           description: Offence Type
       example:
-        occuranceDate: 2018-01-17T00:00:00.000Z
-        statutoryLimitDate: 2018-06-17T00:00:00.000Z
+        occuranceDate: 2018-01-17
+        statutoryLimitDate: 2018-06-17
         offencetype:
           section: 127(6)(AB)
           act: Natural Resource Mangaement Act 2004
@@ -1074,7 +1076,7 @@ components:
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
-            dateofbirth: 1960-01-17T00:00:00.000Z
+            dateofbirth: 1960-01-17
             occupation: Serial Blogger
             clientId: some text
             whsRisks:
@@ -1100,7 +1102,7 @@ components:
           emailaddress: joe.bloggs@blooger.com
           mobilePhone: "0123456789"
           workPhone: 987-654-3210
-          dateofbirth: 1961-01-17T00:00:00.000Z
+          dateofbirth: 1961-01-17
           occupation: Serial Clogger
           clientId: da801abe-91a7-e911-a2cc-005056a719a2
           allegedCasesCount: 0
@@ -1232,7 +1234,7 @@ components:
       example:
         whsSafetyRiskCategory: Agressive dog(s)
         description: Owns two agressive dogs that are usually off-leash
-        creationDate: 2018-01-17T00:00:00.000Z
+        creationDate: 2018-01-17
     case-page:
       title: Page - case-basicinfo Datatype
       description: |-
@@ -1329,7 +1331,7 @@ components:
           emailaddress: joe.bloggs@blooger.com
           mobilePhone: "0123456789"
           workPhone: 987-654-3210
-          dateofbirth: 1960-01-17T00:00:00.000Z
+          dateofbirth: 1960-01-17
           occupation: Serial Blogger
           clientId: some text
           whsRisks:
@@ -1431,11 +1433,11 @@ components:
         investigationNotes:
         - noteTitle: Enquiry 2018-10-10
           notesText: Attempted Phone call to witness, but failed
-          createdOn: 2019-01-17T00:00:00.000Z
+          createdOn: 2019-01-17
           createdBy: John Citizen
         offenceDetails:
-        - occuranceDate: 2018-01-17T00:00:00.000Z
-          statutoryLimitDate: 2018-06-17T00:00:00.000Z
+        - occuranceDate: 2018-01-17
+          statutoryLimitDate: 2018-06-17
           offencetype:
             section: 127(6)(AB)
             act: Natural Resource Mangaement Act 2004
@@ -1460,7 +1462,7 @@ components:
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
-            dateofbirth: 1960-01-17T00:00:00.000Z
+            dateofbirth: 1960-01-17
             occupation: Serial Blogger
             clientId: da801abe-91a7-e911-a2cc-005056a719a0
             whsRisks:
@@ -1487,7 +1489,7 @@ components:
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
-            dateofbirth: 1961-01-17T00:00:00.000Z
+            dateofbirth: 1961-01-17
             occupation: Serial Clogger
             clientId: da801abe-91a7-e911-a2cc-005056a719a2
             allegedCasesCount: 0
@@ -1508,7 +1510,7 @@ components:
           emailaddress: joe.bloggs@blooger.com
           mobilePhone: "0123456789"
           workPhone: 987-654-3210
-          dateofbirth: 1962-01-17T00:00:00.000Z
+          dateofbirth: 1962-01-17
           occupation: Serial Glogger
           clientId: da801abe-91a7-e911-a2cc-005056a719a3
           allegedCasesCount: 0
@@ -1679,4 +1681,6 @@ tags:
 - name: crm-apis
   description: ""
 - name: auth-apis
+  description: ""
+- name: whs-apis
   description: ""
