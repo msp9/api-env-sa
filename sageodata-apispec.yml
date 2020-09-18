@@ -2595,6 +2595,14 @@ components:
           format: int32
           description: Unique identifier specified by SAGeoData.
           type: integer
+        legacyPurpose:
+          description: |-
+            Text description of permit purpose for pre-WILMA well-permits.
+
+            This field had data only for WLS issued well-permits.
+
+            Note: Any value supplied in this field for POST queries are ignored.
+          type: string
     wellcompletionreport:
       description: Well Completion Report data
       required:
