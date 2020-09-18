@@ -644,8 +644,6 @@ paths:
     description: The REST endpoint/path used to list and create zero or more `WHS
       Risk` entities.  This path contains a `GET` operation to perform the list task.
     get:
-      tags:
-      - whs-apis
       parameters:
       - name: changessince
         description: Changes since date and time in ISO-8601 format `yyyy-MM-ddTHH:mm:ssZ`
@@ -774,7 +772,7 @@ components:
         driversLicenseDetails:
           licenseNumber: XX1000
           licenseState: SA
-          licenseExpiry: 2022-10-10T00:00:00.000Z
+          licenseExpiry: 2022-10-10
         emailaddress: joe.bloggs@blooger.com
         mobilePhone: "0123456789"
         workPhone: 987-654-3210
@@ -835,7 +833,7 @@ components:
         caseNumber: ENV-01486-B2T0
         caseTitle: Test Case
         casePriority: "1"
-        offenceOccuredDate: 2018-02-10T00:00:00.000Z
+        offenceOccuredDate: 2018-02-10
         caseJurisdiction: "1"
         caseStatus: "756340000"
         caseDistrict: AMLR
@@ -854,7 +852,7 @@ components:
             driversLicenseDetails:
               licenseNumber: XX1000
               licenseState: SA
-              licenseExpiry: 2022-10-10T00:00:00.000Z
+              licenseExpiry: 2022-10-10
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
@@ -885,7 +883,7 @@ components:
       example:
         licenseNumber: XX1000
         licenseState: SA
-        licenseExpiry: 2022-10-10T00:00:00.000Z
+        licenseExpiry: 2022-10-10
     investigationnote:
       title: Nested Datatype - investigationnote
       description: Note or comments recorded as part of investigation
@@ -911,7 +909,7 @@ components:
       example:
         noteTitle: Equiry 12.Dec.2011
         notesText: Unable to contact client
-        createdOn: 2012-01-05T00:00:00.000Z
+        createdOn: 2012-01-05
         createdBy: Dick Tracy (DEW)
     locationdetail:
       title: Nested Datatype - locationdetail
@@ -1072,7 +1070,7 @@ components:
             driversLicenseDetails:
               licenseNumber: XX1000
               licenseState: SA
-              licenseExpiry: 2022-10-10T00:00:00.000Z
+              licenseExpiry: 2022-10-10
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
@@ -1098,7 +1096,7 @@ components:
           driversLicenseDetails:
             licenseNumber: XX1000
             licenseState: SA
-            licenseExpiry: 2022-10-10T00:00:00.000Z
+            licenseExpiry: 2022-10-10
           emailaddress: joe.bloggs@blooger.com
           mobilePhone: "0123456789"
           workPhone: 987-654-3210
@@ -1327,7 +1325,7 @@ components:
           driversLicenseDetails:
             licenseNumber: XX1000
             licenseState: SA
-            licenseExpiry: 2022-10-10T00:00:00.000Z
+            licenseExpiry: 2022-10-10
           emailaddress: joe.bloggs@blooger.com
           mobilePhone: "0123456789"
           workPhone: 987-654-3210
@@ -1458,7 +1456,7 @@ components:
             driversLicenseDetails:
               licenseNumber: XX1000
               licenseState: SA
-              licenseExpiry: 2022-10-10T00:00:00.000Z
+              licenseExpiry: 2022-10-10
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
@@ -1485,7 +1483,7 @@ components:
             driversLicenseDetails:
               licenseNumber: XX1000
               licenseState: SA
-              licenseExpiry: 2022-10-10T00:00:00.000Z
+              licenseExpiry: 2022-10-10
             emailaddress: joe.bloggs@blooger.com
             mobilePhone: "0123456789"
             workPhone: 987-654-3210
@@ -1506,7 +1504,7 @@ components:
           driversLicenseDetails:
             licenseNumber: XX1000
             licenseState: SA
-            licenseExpiry: 2022-10-10T00:00:00.000Z
+            licenseExpiry: 2022-10-10
           emailaddress: joe.bloggs@blooger.com
           mobilePhone: "0123456789"
           workPhone: 987-654-3210
@@ -1681,6 +1679,4 @@ tags:
 - name: crm-apis
   description: ""
 - name: auth-apis
-  description: ""
-- name: whs-apis
   description: ""
