@@ -575,7 +575,101 @@ paths:
         type: string
       in: path
       required: true
-  /whs-apis/v1/risklocations/:
+  /whs-apis/v1/whsrisks:
+    summary: End-point for querying and creating WHS Risks
+    description: The REST endpoint/path used to list and create zero or more `WHS
+      Risk` entities.  This path contains a `GET` operation to perform the list task.
+    get:
+      tags:
+      - whs-apis
+      parameters:
+      - name: changessince
+        description: Changes since date and time in ISO-8601 format `yyyy-MM-ddTHH:mm:ssZ`
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk-page'
+          description: Success
+      operationId: GetWHSRisks
+      summary: Get applicable `WHS Risks`
+      description: Get applicable `WHS Risks`
+  /whs-apis/v1/whsrisks/{id}:
+    summary: End-point for interacting with a single WHS Risk
+    description: End-point for interacting with a single WHS Risk
+    get:
+      tags:
+      - whs-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk'
+          description: Success
+      operationId: GetWHSRiskDetails
+      summary: Get WHS Risk details
+      description: Get details of the WHS Risk
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/whsrisk'
+        required: true
+      tags:
+      - whs-apis
+      responses:
+        "204":
+          description: Success
+      operationId: UpdateWHSRisk
+      summary: Update details of a WHS Risk
+      description: "Update details of a WHS Risk. \nNote: Does not allow updating\
+        \ or changing the existing association of this risk to a client/location.\n\
+        The WHS Risk has to be deleted and added to the new client/location if the\
+        \ association has to be changed."
+    delete:
+      tags:
+      - whs-apis
+      responses:
+        "204":
+          description: Success
+      operationId: removeWHSRisk
+      summary: Remove a WHS Risk
+      description: |-
+        Remove a WHS Risk.
+        Note: The risk association with its client/location will be removed too
+    parameters:
+    - name: id
+      description: riskId
+      schema:
+        type: string
+      in: path
+      required: true
+  /whs-apis/v1/whsriskcategories:
+    summary: Endpoint to look up risk categories registered in CMIS
+    description: Endpoint to look up risk categories registered in CMIS
+    get:
+      tags:
+      - whs-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+          description: Success
+      operationId: GetRiskCategories
+      summary: Get list of risk categories
+      description: Get list of risk categories
+  /whs-apis/v1/risklocations:
     get:
       tags:
       - whs-apis
@@ -639,69 +733,6 @@ paths:
       operationId: CreateRiskLocation
       summary: Create WHS Risk associated with a location
       description: Create WHS Risk associated with a location
-  /whs-apis/v1/whsrisks:
-    summary: End-point for querying and creating WHS Risks
-    description: The REST endpoint/path used to list and create zero or more `WHS
-      Risk` entities.  This path contains a `GET` operation to perform the list task.
-    get:
-      tags:
-      - whs-apis
-      parameters:
-      - name: changessince
-        description: Changes since date and time in ISO-8601 format `yyyy-MM-ddTHH:mm:ssZ`
-        schema:
-          type: string
-        in: query
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/whsrisk-page'
-          description: Success
-      operationId: GetWHSRisks
-      summary: Get applicable `WHS Risks`
-      description: Get applicable `WHS Risks`
-  /whs-apis/v1/whsrisks/{id}:
-    summary: End-point for interacting with a single WHS Risk
-    description: End-point for interacting with a single WHS Risk
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/whsrisk'
-        required: true
-      tags:
-      - whs-apis
-      responses:
-        "204":
-          description: Success
-      operationId: UpdateWHSRisk
-      summary: Update details of a WHS Risk
-      description: "Update details of a WHS Risk. \nNote: Does not allow updating\
-        \ or changing the existing association of this risk to a client/location.\n\
-        The WHS Risk has to be deleted and added to the new client/location if the\
-        \ association has to be changed."
-    delete:
-      tags:
-      - whs-apis
-      responses:
-        "204":
-          description: Success
-      operationId: removeWHSRisk
-      summary: Remove a WHS Risk
-      description: |-
-        Remove a WHS Risk.
-        Note: The risk association with its client/location will be removed too
-    parameters:
-    - name: id
-      description: riskId
-      schema:
-        type: string
-      in: path
-      required: true
 components:
   schemas:
     client:
