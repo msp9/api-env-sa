@@ -63,13 +63,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/wellcompletionreport-page'
-          description: Successful response - returns an array of `wellcompletionreport`
-            entities.
+          description: Successful response - returns an array of `wcr-summary` entities.
         "404":
           description: No matching results
       operationId: getwellcompletionreports
       summary: List All wellcompletionreports
-      description: Gets a list of all `wellcompletionreport` entities.
+      description: Gets a list of all Well Completion Reports as summaries.
     post:
       requestBody:
         description: A new `wellcompletionreport` to be created.
@@ -836,35 +835,6 @@ components:
         suburb: Adelaide
         postCode: 5000
         state: SA
-    wellcompletionreport-page:
-      description: Page of Well Completion Report Summary
-      required:
-      - wellcompletionreports
-      - totalRecords
-      - pageSize
-      - pageNumber
-      type: object
-      properties:
-        wellcompletionreports:
-          description: A collection of `wcr-summary`
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-summary'
-        nextPage:
-          description: URI to next page of the collection
-          type: string
-        prevPage:
-          description: URI to previous page of the collection
-          type: string
-        totalRecords:
-          description: Indicates the total number of records (including all pages)
-          type: integer
-        pageSize:
-          description: Number of records displayed per page
-          type: integer
-        pageNumber:
-          description: Index (1-based) respresenting current page number
-          type: integer
     wcr-drillingdata:
       description: Well Completion Report - Drilling Data
       required:
@@ -2778,6 +2748,49 @@ components:
         drillholeNumber:
           format: int32
           description: Unique identifier specified by SAGeoData.
+          type: integer
+        replacementUnitNo:
+          format: int32
+          description: |-
+            Unit Number of the well that is being replaced.
+
+            Applicable only for `REPLACE` events
+          type: integer
+        replacementUnitSeqNo:
+          format: int32
+          description: |-
+            Unit Sequence Number of the well that is being replaced.
+
+            Applicable only for `REPLACE` events
+          type: integer
+    wellcompletionreport-page:
+      description: Page of Well Completion Report Summary
+      required:
+      - wcrSummaries
+      - totalRecords
+      - pageSize
+      - pageNumber
+      type: object
+      properties:
+        wcrSummaries:
+          description: A collection of `wcr-summary`
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-summary'
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
           type: integer
   responses:
     UnauthorizedError:
