@@ -2143,6 +2143,14 @@ components:
         coordinates:
           $ref: '#/components/schemas/coordinatedata'
           description: Coordinate date for the obswell.
+        groups:
+          description: |
+            List of groups that this obswell is currently part of.
+
+            The drillhole is part of a group if it has `standing waterlevel status` or `salinity status` marked as `current` for the group by SAGeodata Administrators.
+          type: array
+          items:
+            $ref: '#/components/schemas/codevaluepair'
       example:
         drillholeNumber: 230
         drillholeName: A-29 (MT DAVIES)
