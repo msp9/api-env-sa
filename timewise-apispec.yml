@@ -286,56 +286,6 @@ paths:
         Requirement : getAllActivityTime
 
         Returns `summary-data`
-  /hoursworked:
-    summary: Path used to get hours worked by an user between given dates
-    description: |
-      REST endpoint/API to get hours worked by an user between given dates.
-    get:
-      parameters:
-      - name: userId
-        description: ""
-        schema:
-          type: integer
-        in: query
-        required: true
-      - name: fromDate
-        description: Date set must be in ISO8601 format "YYYY-MM-DD"
-        schema:
-          format: date
-          type: string
-        in: query
-        required: true
-      - name: toDate
-        description: Date set must be in ISO8601 format "YYYY-MM-DD"
-        schema:
-          format: date
-          type: string
-        in: query
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user-hours'
-          description: Successful response - returns `user-hours`
-        "400":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/response-message'
-          description: Unable to process request successfully
-        "500":
-          description: Unexpected error occurred when processing the request
-      security:
-      - HTTP-Basic: []
-      summary: Returns information about hours worked by an user between given dates
-      description: |-
-        Requirement : getHoursPossible
-
-        Requirement : wasActive (if the hours is more than zero then it means the user was active during that time)
-
-        Returns `user-hours`
   /calculatedactivity:
     summary: Path used to get a summary of calculated information based on activity
       in CHRIS and TimeWise
@@ -391,6 +341,10 @@ paths:
     get:
       responses:
         "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/activity'
           description: Successful response - Returns an `activity`
         "400":
           content:
@@ -410,6 +364,56 @@ paths:
         type: integer
       in: path
       required: true
+  /hourspossible:
+    summary: Path used to get hours worked by an user between given dates
+    description: |
+      REST endpoint/API to get hours worked by an user between given dates.
+    get:
+      parameters:
+      - name: userId
+        description: ""
+        schema:
+          type: integer
+        in: query
+        required: true
+      - name: fromDate
+        description: Date set must be in ISO8601 format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+        required: true
+      - name: toDate
+        description: Date set must be in ISO8601 format "YYYY-MM-DD"
+        schema:
+          format: date
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-hours'
+          description: Successful response - returns `user-hours`
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response-message'
+          description: Unable to process request successfully
+        "500":
+          description: Unexpected error occurred when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Returns information about hours possible by an user between given dates
+      description: |-
+        Requirement : getHoursPossible
+
+        Requirement : wasActive (if the hours is more than zero then it means the user was active during that time)
+
+        Returns `user-hours`
 components:
   schemas:
     workgroup:
@@ -466,7 +470,7 @@ components:
           description: ""
         employeeNumber:
           description: ""
-          type: integer
+          type: string
     activity:
       description: Data type that represents an activity in TimeWise
       required: []
@@ -549,32 +553,32 @@ components:
         rate: 96.98
         cost: 28.46
     user-hours:
-      description: Data type that contains `user` and the number of hours they worked
-        in a given period
+      description: Data type that contains `user` and the number of possible hours
+        they worked in a given period
       required:
       - user
-      - hoursWorked
+      - hoursPossible
       type: object
       properties:
         user:
           $ref: '#/components/schemas/user'
           description: ""
-        hoursWorked:
+        hoursPossible:
           format: double
           description: ""
           type: number
       example:
         user:
-          userId: 96
+          userId: 44
           firstName: some text
           lastName: some text
           isManager: true
           workgroup:
-            workgroupId: 0
+            workgroupId: 6
             workgroupName: some text
           userManager: {}
-          employeeNumber: 79
-        hoursWorked: 71.91
+          employeeNumber: some text
+        hoursPossible: 3.23
     activity-data:
       description: Data type to hold details of an activity and the total number of
         hours spent and the total cost involved
