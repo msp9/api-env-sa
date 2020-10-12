@@ -610,6 +610,8 @@ components:
       required:
       - activity
       - summarydata
+      - fromDate
+      - toDate
       type: object
       properties:
         activity:
@@ -622,6 +624,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/summary-data'
+        fromDate:
+          format: date
+          description: Date set must be in ISO8601 format "YYYY-MM-DD"
+          type: string
+        toDate:
+          format: date
+          description: Date set must be in ISO8601 format "YYYY-MM-DD"
+          type: string
       example:
         activity:
         - activityId: 15
