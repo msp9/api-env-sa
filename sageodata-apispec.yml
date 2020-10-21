@@ -316,7 +316,7 @@ paths:
       tags:
       - wcr
       responses:
-        "200":
+        "201":
           description: Created
       operationId: CreateDrillerLicence
       summary: Create a Driller Licence
