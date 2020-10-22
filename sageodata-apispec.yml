@@ -2447,6 +2447,7 @@ components:
       - expiryDate
       - address
       - areaDescription
+      - permitNumber
       type: object
       properties:
         permitNumber:
