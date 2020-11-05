@@ -140,11 +140,6 @@ paths:
       tags:
       - wcr
       parameters:
-      - name: licenceNumber
-        description: License Number
-        schema:
-          type: integer
-        in: query
       - name: firstNameContains
         description: First name contains
         schema:
@@ -164,18 +159,6 @@ paths:
         description: Driller Number
         schema:
           type: integer
-        in: query
-      - name: expiryDateFrom
-        description: Licence Expiry Date To
-        schema:
-          format: date
-          type: string
-        in: query
-      - name: expiryDateTo
-        description: Licence Expiry Date From
-        schema:
-          format: date
-          type: string
         in: query
       - name: limit
         description: Maximum number of results in the response
