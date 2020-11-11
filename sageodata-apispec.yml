@@ -2531,9 +2531,6 @@ components:
             \n`P` - Parish (Outside SA)\t\n`R` - Road Plan\t\n`S` - Strata Plan\t\n\
             `T` - Township Plan"
           type: string
-        propertyHunderdName:
-          description: Hundred Name of the property
-          type: string
         sectionLotDetail:
           description: "Section No and Lot No of the property in the format `<section_no>-<lot_no>`\
             \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`section_no`\
@@ -2566,6 +2563,9 @@ components:
 
             Note: Any value supplied in this field for POST queries are ignored.
           type: string
+        propertyHundredName:
+          description: Hundred Name of the property
+          type: string
     wellcompletionreport:
       description: Well Completion Report data
       required:
@@ -2573,6 +2573,7 @@ components:
       - wellPurposes
       - coordinateData
       - constructionDetails
+      - id
       type: object
       properties:
         id:
