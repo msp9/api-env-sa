@@ -1,0 +1,1021 @@
+---
+openapi: 3.0.2
+info:
+  title: Parks
+  version: 1.0.0
+  description: Parks APIs for Business Intelligence Dashboard
+paths:
+  /parks:
+    summary: Get details about regions, parks and campsites
+    get:
+      responses:
+        "500":
+          description: Unexpected error occurred when processing the request
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/parks-info'
+              examples:
+                Success:
+                  value:
+                    financialYears:
+                    - value: 2013-2014
+                      text: 2013-2014
+                    - value: 2014-2015
+                      text: 2014-2015
+                    regions:
+                    - value: Adelaide and Mount Lofty Ranges
+                      text: Adelaide and Mount Lofty Ranges
+                    - value: Yorke and Mid North
+                      text: Yorke and Mid North
+                    parks:
+                    - value: Mount Remarkable National Park
+                      text: Mount Remarkable National Park
+                    - value: Chadinga Conservation Park
+                      text: Chadinga Conservation Park
+                    campsites:
+                    - value: Trailer Site 14
+                      text: Trailer Site 14
+                    - value: Campsite 22
+                      text: Campsite 22
+                    campgroundVisitors:
+                    - campGround: Woodcutters Beach Campground (4WD)
+                      visitors: 369
+                    - campGround: Northern Flinders Staff Accomm
+                      visitors: 2471
+                    nightsByMonth:
+                    - month: Apr
+                      nights: 37178
+                    - month: Aug
+                      nights: 21090
+          description: Successful response - Returns a `parks-info`
+      security:
+      - HTTP-Basic: []
+      summary: Get details about regions, parks and campsites
+  /parks/filter:
+    summary: Get details about parks, no. of visitors in campsites and no. of nights
+      stayed
+    get:
+      parameters:
+      - examples:
+          financialYear:
+            value: 2013-2014
+        name: financialYear
+        description: Financial Year
+        schema:
+          type: string
+        in: query
+      - examples:
+          quarter:
+            value: "1"
+        name: quarter
+        description: Financial Year Quarter (e.g. 1, 2, 3 or 4)
+        schema:
+          type: integer
+        in: query
+      - examples:
+          region:
+            value: Limestone Coast
+        name: region
+        description: Name of the region
+        schema:
+          type: string
+        in: query
+      - examples:
+          park:
+            value: Coorong National Park
+        name: park
+        description: Name of the park
+        schema:
+          type: string
+        in: query
+      - examples:
+          campsite:
+            value: Campsite 01
+        name: campsite
+        description: Name of campground
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/parks-info'
+              examples:
+                Success:
+                  value:
+                    financialYears: []
+                    regions: []
+                    parks:
+                    - value: Mount Remarkable National Park
+                      text: Mount Remarkable National Park
+                    - value: Chadinga Conservation Park
+                      text: Chadinga Conservation Park
+                    campsites:
+                    - value: Trailer Site 14
+                      text: Trailer Site 14
+                    - value: Campsite 22
+                      text: Campsite 22
+                    campgroundVisitors:
+                    - campGround: Woodcutters Beach Campground (4WD)
+                      visitors: 369
+                    - campGround: Northern Flinders Staff Accomm
+                      visitors: 2471
+                    nightsByMonth:
+                    - month: Apr
+                      nights: 37178
+                    - month: Aug
+                      nights: 21090
+          description: Successful response - Returns a `parks-info`
+        "500":
+          description: Unexpected error occurred when processing the request
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response-message'
+          description: Unable to process the request successfully
+      security:
+      - HTTP-Basic: []
+      summary: Get details about parks, no. of visitors in campsites and no. of nights
+        stayed
+  /parks/data:
+    summary: Get details about campground bookings
+    get:
+      parameters:
+      - examples:
+          offset:
+            value: "500"
+        name: offset
+        description: Set this value to indicate the starting row of the result set
+          being returned.  The API will return rows starting from the offset value
+          to a limit of 500 rows.  If this value is not set the results returned will
+          be from row 1 to a limit of 500
+        schema:
+          type: integer
+        in: query
+      - examples:
+          financialYear:
+            value: 2013-2014
+        name: financialYear
+        description: Financial Year
+        schema:
+          type: string
+        in: query
+      - examples:
+          quarter:
+            value: "1"
+        name: quarter
+        description: Financial Year quarter (e.g. 1,2,3 or 4)
+        schema:
+          type: integer
+        in: query
+      - examples:
+          region:
+            value: '"Limestone Coast"'
+        name: region
+        description: Region name
+        schema:
+          type: string
+        in: query
+      - examples:
+          campsite:
+            value: Campsite 01
+        name: campsite
+        description: Campsite name
+        schema:
+          type: string
+        in: query
+      - examples:
+          park:
+            value: Coorong National Park
+        name: park
+        description: Park name
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/parks-data'
+              examples:
+                Success:
+                  value:
+                  - facility: Camping
+                    region: Kangaroo Island
+                    park: Flinders Chase National Park
+                    campGround: Rocky River Campground
+                    itineraryNumber: 3409259
+                    bookingNumber: 3195790
+                    bookingDate: 2013-07-03T09:30:00+9:30
+                    status: some text
+                    arrivalDate: 2013-07-05T09:30:00+9:30
+                    nights: 2
+                    visitors: 2
+                    cost: 54
+                    postcode: UNKNOWN
+                    campSite: Campsite 03
+                    totalNights: 4
+                    systemDescription: BookEasy
+                    totalRs: 562225
+                  - facility: Camping
+                    region: Kangaroo Island
+                    park: Flinders Chase National Park
+                    campGround: Rocky River Campground
+                    itineraryNumber: 3409259
+                    bookingNumber: 3195790
+                    bookingDate: 2013-07-03T09:30:00+9:30
+                    status: some text
+                    arrivalDate: 2013-07-05T09:30:00+9:30
+                    nights: 2
+                    visitors: 2
+                    cost: 54
+                    postcode: UNKNOWN
+                    campSite: Campsite 04
+                    totalNights: 4
+                    systemDescription: BookEasy
+                    totalRs: 562225
+          description: Success response - Return a list of `parks-data`
+        "500":
+          description: Unexpected error occurred when processing the request
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response-message'
+          description: Unable to process the request successfully
+      security:
+      - HTTP-Basic: []
+      summary: Get details about campground bookings
+  /parks/revenue:
+    summary: Get revenue information of parks
+    get:
+      responses:
+        "500":
+          description: Unexpected error occurred when processing the request
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/parks-revenue'
+              examples:
+                Success:
+                  value:
+                  - branch: TOURISM & ECONOMIC DEVELOPMENT
+                    region: Adelaide and Mount Lofty Ranges
+                    park: CLELAND VIS PRECINCT
+                    period: July 2019 - December 2019
+                    budget: 0
+                    ytdActual: 711.82
+                    priorYearYtdActual: 0
+                    ytdVariance: -711.82
+                    ytdBudget: 0
+                    subItemDescription: COMMERCIAL FILMING FEES
+                    lat: -34.9687039
+                    long: 138.67
+                    isPark: true
+                    quarter: 20192
+                  - branch: TOURISM & ECONOMIC DEVELOPMENT
+                    region: Adelaide and Mount Lofty Ranges
+                    park: CLELAND VIS PRECINCT
+                    period: July 2019 - December 2019
+                    budget: 0
+                    ytdActual: 711.82
+                    priorYearYtdActual: 0
+                    ytdVariance: -711.82
+                    ytdBudget: 0
+                    subItemDescription: COMMERCIAL FILMING FEES
+                    lat: -34.9687039
+                    long: 138.67
+                    isPark: true
+                    quarter: 20192
+          description: Successful response - List of `parks-revenue`
+      security:
+      - HTTP-Basic: []
+      summary: Get revenue information of parks
+  /parks/prediction:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/parks-prediction'
+              examples:
+                Success:
+                  value:
+                    regions:
+                    - value: Adelaide and Mount Lofty Ranges
+                      text: Adelaide and Mount Lofty Ranges
+                    - value: Limestone Coast
+                      text: Limestone Coast
+                    parks:
+                    - value: Mount Remarkable National Park
+                      text: Mount Remarkable National Park
+                    - value: Chadinga Conservation Park
+                      text: Chadinga Conservation Park
+                    visitors:
+                    - park: Mount Remarkable National Park
+                      year: 2019
+                      month: 12
+                      monthName: Dec
+                      type: Predict
+                      visitors: 14
+                      monthNameYear: Dec/2019
+                      yearMonth: 2019.12
+                    revenue:
+                    - park: Mount Remarkable National Park
+                      year: 2019
+                      month: 12
+                      monthName: Dec
+                      type: Predict
+                      revenue: 32925
+                      monthNameYear: Dec/2019
+                      yearMonth: 2019.12
+          description: Success response - Returns a `parks-prediction`
+        "500":
+          description: Unable to process the request successfully
+      security:
+      - HTTP-Basic: []
+  /parks/visitoruse:
+    summary: Get visitor use information of parks
+    get:
+      parameters:
+      - examples:
+          financialYear:
+            value: '"2013-2014"'
+        name: financialYear
+        description: Financial Year
+        schema:
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/parks-visitors-use'
+              examples:
+                Success:
+                  value:
+                  - financialYear: 2013-2014
+                    qtr: 3
+                    month: "2"
+                    monthName: Feb
+                    region: Yorke and Mid North
+                    park: Innes National Park
+                    campGround: Innes Heritage Accommodation
+                    campAbbr: IHA
+                    campSite: Innes Heritage Accommodation<br> Norfolk Lodge
+                    state: OTHER
+                    facility: Accommodation
+                    season: Summer
+                    visitors: 2
+                    revenue: 350
+                    bookings: 1
+                    bookingsCount: 1
+                    nights: 2
+                    totalNights: 4
+                    passNight: 1
+                    systemDesc: BookEasy
+                  - financialYear: 2013-2014
+                    qtr: 1
+                    month: "8"
+                    monthName: Aug
+                    region: Kangaroo Island
+                    park: Flinders Chase National Park
+                    campGround: Cape Borda Lighthouse Keepers Heritage Accomm
+                    campAbbr: CBLKHA
+                    campSite: Cape Borda Lighthouse Keepers Heritage Accomm<br> Woodward
+                      Hut
+                    state: UNKNOWN
+                    facility: Accommodation
+                    season: Winter
+                    visitors: 2
+                    revenue: 92
+                    bookings: 1
+                    bookingsCount: 1
+                    nights: 2
+                    totalNights: 4
+                    passNight: 1
+                    systemDesc: BookEasy
+          description: Success response - Returns a list of `parks-visitors-use`
+        "500":
+          description: Unexpected error occurred when processing the request
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response-message'
+          description: Unable to process the request successfully
+      security:
+      - HTTP-Basic: []
+      summary: Get visitor use information of parks
+  /parks/occupancy:
+    summary: Get park occupancy info
+    get:
+      parameters:
+      - examples:
+          park:
+            value: '"Belair National Park"'
+        name: park
+        description: Park name
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/parks-occupancy'
+              examples:
+                Success:
+                  value:
+                    parks:
+                    - value: Flinders Chase National Park
+                      text: Flinders Chase National Park
+                    - value: Belair National Park
+                      text: Belair National Park
+                    campGrounds:
+                    - value: West Bay Campground (4WD)
+                      text: West Bay Campground (4WD)
+                    - value: Harveys Return Campground
+                      text: Harveys Return Campground
+                    heatMap:
+                    - region: Kangaroo Island
+                      park: Flinders Chase National Park
+                      campGround: ALL
+                      occupiedDate: 2018-01-17
+                      sitesOccupied: 54
+                      maxBookings: 45
+                      occupancyRate: 0.02
+          description: Success response - Returns a `parks-occupancy`
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error-response-message'
+          description: Unable to process the request successfully
+        "500":
+          description: Unexpected error when processing the request
+      security:
+      - HTTP-Basic: []
+      summary: Get park occupancy info
+components:
+  schemas:
+    generic-key-value-info:
+      description: Data type to store generic key value info.  e.g. Info. about Parks,
+        campsites, etc.
+      type: object
+      properties:
+        value:
+          description: ""
+          type: string
+        text:
+          description: ""
+          type: string
+      example:
+        value: Adelaide and Mount Lofty Ranges
+        text: Adelaide and Mount Lofty Ranges
+    camp-ground-visitors:
+      description: Number of visitors in a campground
+      type: object
+      properties:
+        campGround:
+          description: ""
+          type: string
+        visitors:
+          description: ""
+          type: integer
+      example:
+        campGround: Cambrian Campground
+        visitors: 1076
+    nights-by-month:
+      description: Number of nights by month
+      type: object
+      properties:
+        month:
+          description: ""
+          type: string
+        nights:
+          description: ""
+          type: integer
+      example:
+        month: Apr
+        nights: 37178
+    parks-info:
+      description: ""
+      type: object
+      properties:
+        financialYears:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        regions:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        parks:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        campsites:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        campgroundVisitors:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/camp-ground-visitors'
+        nightsByMonth:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/nights-by-month'
+      example:
+        financialYears:
+        - value: 2013-2014
+          text: 2013-2014
+        - value: 2014-2015
+          text: 2014-2015
+        regions:
+        - value: Adelaide and Mount Lofty Ranges
+          text: Adelaide and Mount Lofty Ranges
+        - value: Yorke and Mid North
+          text: Yorke and Mid North
+        parks:
+        - value: Mount Remarkable National Park
+          text: Mount Remarkable National Park
+        - value: Chadinga Conservation Park
+          text: Chadinga Conservation Park
+        campsites:
+        - value: Trailer Site 14
+          text: Trailer Site 14
+        - value: Campsite 22
+          text: Campsite 22
+        campgroundVisitors:
+        - campGround: Woodcutters Beach Campground (4WD)
+          visitors: 369
+        - campGround: Northern Flinders Staff Accomm
+          visitors: 2471
+        nightsByMonth:
+        - month: Apr
+          nights: 37178
+        - month: Aug
+          nights: 21090
+    parks-data:
+      description: Parks data
+      type: object
+      properties:
+        facility:
+          description: ""
+          type: string
+        region:
+          description: ""
+          type: string
+        park:
+          description: ""
+          type: string
+        campGround:
+          description: ""
+          type: string
+        itineraryNumber:
+          description: ""
+          type: integer
+        bookingNumber:
+          description: ""
+          type: integer
+        bookingDate:
+          format: date-time
+          description: The datetime string must follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
+          type: string
+        status:
+          description: ""
+          type: string
+        arrivalDate:
+          format: date-time
+          description: The datetime string must follow the ISO8601 format "yyyy-MM-dd'T'HH:mm:ss±hh:mm"
+          type: string
+        nights:
+          description: ""
+          type: integer
+        visitors:
+          description: ""
+          type: integer
+        cost:
+          description: ""
+          type: integer
+        postcode:
+          description: ""
+          type: string
+        campSite:
+          description: ""
+          type: string
+        totalNights:
+          description: ""
+          type: integer
+        systemDescription:
+          description: ""
+          type: string
+        totalRs:
+          description: ""
+          type: integer
+      example:
+        facility: Camping
+        region: Kangaroo Island
+        park: Flinders Chase National Park
+        campGround: Rocky River Campground
+        itineraryNumber: 3409259
+        bookingNumber: 3195790
+        bookingDate: 2013-07-03T09:30:00+9:30
+        status: some text
+        arrivalDate: 2013-07-05T09:30:00+9:30
+        nights: 2
+        visitors: 2
+        cost: 54
+        postcode: UNKNOWN
+        campSite: Campsite 03
+        totalNights: 4
+        systemDescription: BookEasy
+        totalRs: 562225
+    parks-revenue:
+      description: ""
+      type: object
+      properties:
+        branch:
+          description: Branch name
+          type: string
+        region:
+          description: Region name
+          type: string
+        park:
+          description: Park name
+          type: string
+        period:
+          description: Time period
+          type: string
+        budget:
+          description: Financial Year budget
+          type: number
+        ytdActual:
+          description: Year to Date actual
+          type: number
+        priorYearYtdActual:
+          description: Previous year Year To Date actual
+          type: number
+        ytdVariance:
+          description: Year to Date variance
+          type: number
+        ytdBudget:
+          description: Year to Date budget
+          type: number
+        subItemDescription:
+          description: ""
+          type: string
+        lat:
+          description: Latitude
+          type: number
+        long:
+          description: Longitude
+          type: number
+        isPark:
+          description: ""
+          type: boolean
+        quarter:
+          description: ""
+          type: integer
+      example:
+        branch: TOURISM & ECONOMIC DEVELOPMENT
+        region: Adelaide and Mount Lofty Ranges
+        park: CLELAND VIS PRECINCT
+        period: July 2019 - December 2019
+        budget: 0
+        ytdActual: 711.82
+        priorYearYtdActual: 0
+        ytdVariance: -711.82
+        ytdBudget: 0
+        subItemDescription: COMMERCIAL FILMING FEES
+        lat: -34.9687039
+        long: 138.67
+        isPark: true
+        quarter: 20192
+    parks-visitors-use:
+      description: ""
+      type: object
+      properties:
+        financialYear:
+          description: Financial Year
+          type: string
+        qtr:
+          description: Financial Year quarter
+          type: integer
+        month:
+          description: Month as number
+          type: integer
+        monthName:
+          description: Name of the month
+          type: string
+        region:
+          description: Region name
+          type: string
+        park:
+          description: Park name
+          type: string
+        campGround:
+          description: Campground name
+          type: string
+        campAbbr:
+          description: Campground name abbreviation
+          type: string
+        campSite:
+          description: Campsite name
+          type: string
+        state:
+          description: ""
+          type: string
+        facility:
+          description: Facility type
+          type: string
+        season:
+          description: Season name
+          type: string
+        visitors:
+          description: Number of visitors
+          type: integer
+        revenue:
+          description: ""
+          type: number
+        bookings:
+          description: ""
+          type: integer
+        bookingsCount:
+          description: ""
+          type: integer
+        nights:
+          description: ""
+          type: integer
+        totalNights:
+          description: ""
+          type: integer
+        passNight:
+          description: ""
+          type: integer
+        systemDesc:
+          description: System description
+          type: string
+      example:
+        financialYear: 2013-2014
+        qtr: 3
+        month: "2"
+        monthName: Feb
+        region: Yorke and Mid North
+        park: Innes National Park
+        campGround: Innes Heritage Accommodation
+        campAbbr: IHA
+        campSite: Innes Heritage Accommodation<br> Norfolk Lodge
+        state: OTHER
+        facility: Accommodation
+        season: Summer
+        visitors: 2
+        revenue: 350
+        bookings: 1
+        bookingsCount: 1
+        nights: 2
+        totalNights: 4
+        passNight: 1
+        systemDesc: BookEasy
+    parks-visitors-prediction:
+      description: ""
+      type: object
+      properties:
+        park:
+          description: Park name
+          type: string
+        year:
+          description: Year
+          type: integer
+        month:
+          description: Month e.g. 1,2,etc.
+          type: integer
+        monthName:
+          description: Month name e.g. Jan, Feb, etc.
+          type: string
+        type:
+          description: ""
+          type: string
+        visitors:
+          description: Number of visitors
+          type: integer
+        monthNameYear:
+          description: Month name and year e.g. Dec 2020
+          type: string
+        yearMonth:
+          description: Year and month e.g. 2020.12
+          type: number
+      example:
+        park: Mount Remarkable National Park
+        year: 2019
+        month: 12
+        monthName: Dec
+        type: Predict
+        visitors: 14
+        monthNameYear: Dec/2019
+        yearMonth: 2019.12
+    parks-revenue-prediction:
+      description: ""
+      type: object
+      properties:
+        park:
+          description: Park name
+          type: string
+        year:
+          description: Year
+          type: integer
+        month:
+          description: Month e.g. 1,2,etc.
+          type: integer
+        monthName:
+          description: Month name e.g. Jan, Feb, etc.
+          type: string
+        type:
+          description: ""
+          type: string
+        revenue:
+          description: Revenue
+          type: number
+        monthNameYear:
+          description: Month name and year e.g. Dec 2020
+          type: string
+        yearMonth:
+          description: Year and month e.g. 2020.12
+          type: number
+      example:
+        park: Mount Remarkable National Park
+        year: 2019
+        month: 12
+        monthName: Dec
+        type: Predict
+        revenue: 32925
+        monthNameYear: Dec/2019
+        yearMonth: 2019.12
+    parks-prediction:
+      description: ""
+      type: object
+      properties:
+        regions:
+          description: List of Regions
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        parks:
+          description: List of Parks
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        visitors:
+          description: List of `parks-visitors-prediction`
+          type: array
+          items:
+            $ref: '#/components/schemas/parks-visitors-prediction'
+        revenue:
+          description: List of `parks-revenue-prediction`
+          type: array
+          items:
+            $ref: '#/components/schemas/parks-revenue-prediction'
+      example:
+        regions:
+        - value: Adelaide and Mount Lofty Ranges
+          text: Adelaide and Mount Lofty Ranges
+        - value: Limestone Coast
+          text: Limestone Coast
+        parks:
+        - value: Mount Remarkable National Park
+          text: Mount Remarkable National Park
+        - value: Chadinga Conservation Park
+          text: Chadinga Conservation Park
+        visitors:
+        - park: Mount Remarkable National Park
+          year: 2019
+          month: 12
+          monthName: Dec
+          type: Predict
+          visitors: 14
+          monthNameYear: Dec/2019
+          yearMonth: 2019.12
+        revenue:
+        - park: Mount Remarkable National Park
+          year: 2019
+          month: 12
+          monthName: Dec
+          type: Predict
+          revenue: 32925
+          monthNameYear: Dec/2019
+          yearMonth: 2019.12
+    parks-occupancy-heatmap:
+      description: ""
+      type: object
+      properties:
+        region:
+          description: Region name
+          type: string
+        park:
+          description: Park name
+          type: string
+        campGround:
+          description: Campground name
+          type: string
+        occupiedDate:
+          format: date
+          description: Date occupied, date in ISO 8601 format 'yyyy-MM-dd'
+          type: string
+        sitesOccupied:
+          description: Number of sites occupied
+          type: integer
+        maxBookings:
+          description: Maximum number of bookings
+          type: integer
+        occupancyRate:
+          description: Occupancy rate
+          type: number
+      example:
+        region: Kangaroo Island
+        park: Flinders Chase National Park
+        campGround: ALL
+        occupiedDate: 2018-01-17
+        sitesOccupied: 2
+        maxBookings: 48
+        occupancyRate: 0.02
+    parks-occupancy:
+      description: ""
+      type: object
+      properties:
+        parks:
+          description: List of parks
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        campGrounds:
+          description: List of campgrounds
+          type: array
+          items:
+            $ref: '#/components/schemas/generic-key-value-info'
+        heatMap:
+          description: ""
+          type: array
+          items:
+            $ref: '#/components/schemas/parks-occupancy-heatmap'
+      example:
+        parks:
+        - value: Flinders Chase National Park
+          text: Flinders Chase National Park
+        - value: Belair National Park
+          text: Belair National Park
+        campGrounds:
+        - value: West Bay Campground (4WD)
+          text: West Bay Campground (4WD)
+        - value: Harveys Return Campground
+          text: Harveys Return Campground
+        heatMap:
+        - region: Kangaroo Island
+          park: Flinders Chase National Park
+          campGround: ALL
+          occupiedDate: 2018-01-17
+          sitesOccupied: 54
+          maxBookings: 45
+          occupancyRate: 0.02
+    error-response-message:
+      description: Message when a request cannot be processed successfully
+      type: object
+      properties:
+        messages:
+          description: ""
+          type: array
+          items:
+            type: string
+      example:
+        messages:
+        - Some message will be displayed here explaining the reason for failure
+  securitySchemes:
+    HTTP-Basic:
+      scheme: basic
+      type: http
+security:
+- HTTP-Basic: []
