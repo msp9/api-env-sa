@@ -16,3 +16,5 @@ The API Catalogue (master) has the following definitions
 6. [Enterprise CRM (eCRM) System](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/ecrm-apispec.yml)
 
 7. [TimeWise](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/timewise-apispec.yml)
+
+8. [Parks](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/n8-coder/api-env-sa/master/parks-apispec.yaml)
