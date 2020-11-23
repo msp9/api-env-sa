@@ -492,16 +492,15 @@ paths:
       operationId: GetToken()
       summary: Generate bearer token
       description: Request to generate and return a bearer token.
-  /api/v1.0/obswells:
-    summary: Endpoint to interact with the list of obswells.
-    description: Obswells are a subset of waterwells - they are waterwells that are
-      monitored and have measurement data.
+  /api/v1.0/monitoringnetworkwells:
+    summary: Endpoint to interact with the list of monitoring network wells.
+    description: Wells that are part of a monitoring network.
     get:
       tags:
-      - obswell
+      - omnwell
       parameters:
       - name: modifiedSince
-        description: If specified, only obswells that have been modified more recently
+        description: If specified, only wells that have been modified more recently
           than the supplied value will be returned.
         schema:
           format: date-time
@@ -509,8 +508,8 @@ paths:
         in: query
         required: false
       - name: groupCode
-        description: If specified, only obswells that belong to the specified group
-          code will be returned.
+        description: If specified, only wells that belong to the specified group code
+          will be returned.
         schema:
           type: string
         in: query
@@ -519,18 +518,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/obswell-page'
+                $ref: '#/components/schemas/monitoringnetworkwells-page'
           description: Successful operation
-      operationId: GetObswells
+      operationId: GetMonitoringNetworkWells
       summary: List all obwells
       description: ""
-  /api/v1.0/obswells/{id}/elevationmeasurements/:
+  /api/v1.0/monitoringnetworkwells/{id}/elevationmeasurements/:
     summary: Endpoint to interact with the list of elevation measurements for a single
-      obswell.
+      well.
     description: ""
     get:
       tags:
-      - obswell
+      - omnwell
       parameters:
       - name: modifiedSince
         description: If specified, only elevation measurements that have been modified
@@ -551,19 +550,19 @@ paths:
       description: ""
     parameters:
     - name: id
-      description: DrillholeId specifying which obswell to retrieve measurements for.
+      description: DrillholeId specifying which well to retrieve measurements for.
       schema:
         format: int64
         type: integer
       in: path
       required: true
-  /api/v1.0/obswells/{id}/waterlevelmeasurements/:
+  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements/:
     summary: Endpoint to interact with the list of water level measurements for a
-      single obswell.
+      single well.
     description: ""
     get:
       tags:
-      - obswell
+      - omnwell
       parameters:
       - name: modifiedSince
         description: If specified, only water level measurements that have been modified
@@ -584,27 +583,27 @@ paths:
       description: ""
     parameters:
     - name: id
-      description: DrillholeId specifying which obswell to retrieve measurements for.
+      description: DrillholeId specifying which well to retrieve measurements for.
       schema:
         format: int64
         type: integer
       in: path
       required: true
-  /api/v1.0/obswells/{id}:
-    summary: Endpoint to interact with a single obswell.
+  /api/v1.0/monitoringnetworkwells/{id}:
+    summary: Endpoint to interact with a single well.
     description: ""
     get:
       tags:
-      - obswell
+      - omnwell
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/obswell'
+                $ref: '#/components/schemas/monitoringnetworkwell'
           description: Successful operation
-      operationId: GetObswell
-      summary: Return a specific obswell
+      operationId: GetMonitoringNetworkWell
+      summary: Return a specific well
       description: ""
     parameters:
     - name: id
@@ -614,12 +613,12 @@ paths:
         type: integer
       in: path
       required: true
-  /api/v1.0/obswells/referencepointtypes:
+  /api/v1.0/monitoringnetworkwells/referencepointtypes:
     summary: Endpoint to retrieve the list of possible reference point types and their
       code values
     get:
       tags:
-      - obswell
+      - omnwell
       responses:
         "200":
           content:
@@ -637,12 +636,12 @@ paths:
                     Value: Reference
           description: Successful operation
       summary: List all reference point types
-  /api/v1.0/obswells/surveymethods/:
+  /api/v1.0/monitoringnetworkwells/surveymethods/:
     summary: Endpoint to retrieve the list of possible survey methods and their code
       values
     get:
       tags:
-      - obswell
+      - omnwell
       responses:
         "200":
           content:
@@ -658,12 +657,12 @@ paths:
                     DIG\",\r\n    \"Value\": \"Digitised\"\r\n  }\r\n]"
           description: Successful operation
       summary: List all survey methods
-  /api/v1.0/obswells/{id}/notes/:
-    summary: Endpoint to interact with the list of notes for a single obswell.
+  /api/v1.0/monitoringnetworkwells/{id}/notes/:
+    summary: Endpoint to interact with the list of notes for a single well.
     description: ""
     get:
       tags:
-      - obswell
+      - omnwell
       parameters:
       - name: modifiedSince
         description: If specified, only notes that have been modified more recently
@@ -684,39 +683,18 @@ paths:
       description: ""
     parameters:
     - name: id
-      description: DrillholeId specifying which obswell to retrieve notes for.
+      description: DrillholeId specifying which well to retrieve notes for.
       schema:
         format: int64
         type: integer
       in: path
       required: true
-  /api/v1.0/obswells/monitoringnetworks:
-    summary: Endpoint to return a list of available monitoring networks
-    get:
-      tags:
-      - obswell
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/monitoringNetwork'
-              examples:
-                Angus Bremer Example:
-                  value:
-                    monitoringNetworkCode: ANGBRM
-                    monitoringNetworkName: Angas Bremer PWA
-          description: Success
-      operationId: GetMonitoringNetworks
-      summary: Get available Monitoring Networks
-  /api/v1.0/obswells/waterlevelmeasurements/:
+  /api/v1.0/monitoringnetworkwells/waterlevelmeasurements/:
     summary: Endpoint to interact with water level measurements.
     description: ""
     get:
       tags:
-      - obswell
+      - omnwell
       parameters:
       - name: modifiedSince
         description: If specified, only elevation measurements that have been modified
@@ -746,12 +724,12 @@ paths:
       operationId: GetWaterLevelMeasurements
       summary: List all water level measurements
       description: ""
-  /api/v1.0/obswells/elevationmeasurements/:
+  /api/v1.0/monitoringnetworkwells/elevationmeasurements/:
     summary: Endpoint to interact with elevation measurements.
     description: ""
     get:
       tags:
-      - obswell
+      - omnwell
       parameters:
       - name: modifiedSince
         description: If specified, only elevation measurements that have been modified
@@ -781,6 +759,27 @@ paths:
       operationId: GetElevationMeasurements
       summary: List all elevation measurements
       description: ""
+  /api/v1.0/monitoringnetworks:
+    summary: Endpoint to return a list of available monitoring networks
+    get:
+      tags:
+      - omnwell
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/monitoringnetwork'
+              examples:
+                Angus Bremer Example:
+                  value:
+                    monitoringNetworkCode: ANGBRM
+                    monitoringNetworkName: Angas Bremer PWA
+          description: Success
+      operationId: GetMonitoringNetworks
+      summary: Get available Monitoring Networks
 components:
   schemas:
     address:
@@ -1559,7 +1558,7 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
-    obswell-page:
+    monitoringnetworkwells-page:
       description: Data type that represents a collection/page of water level measurements
       required:
       - results
@@ -1581,10 +1580,10 @@ components:
           description: Index (1-based) respresenting current page number
           type: integer
         results:
-          description: Collection of obswells.
+          description: Collection of monitored wells.
           type: array
           items:
-            $ref: '#/components/schemas/obswell'
+            $ref: '#/components/schemas/monitoringnetworkwell'
     waterlevelmeasurement-page:
       description: Data type that represents a collection/page of water level measurements.
       required:
@@ -1614,7 +1613,7 @@ components:
     elevationmeasurement:
       title: Root Type for elevationmeasurement
       description: Data type representing an elevation measurement recorded during
-        a field visit to an obswell.
+        a field visit to an well.
       type: object
       properties:
         measurementDate:
@@ -1642,8 +1641,7 @@ components:
           type: string
         modifiedDate:
           format: date-time
-          description: Datetime of the most recent modification to the obswell in
-            SAGeoData.
+          description: Datetime of the most recent modification to the well in SAGeoData.
           type: string
         drillholeNumber:
           format: int32
@@ -1842,7 +1840,7 @@ components:
           type: string
     note:
       title: Root Type for note
-      description: A note, for example a note for an obswell.
+      description: A note, for example a note for an well.
       type: object
       properties:
         createdBy:
@@ -1890,8 +1888,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/note'
-    obswell:
-      title: Root Type for obswell
+    monitoringnetworkwell:
+      title: Root Type for monitored well
       description: A monitored waterwell.
       type: object
       properties:
@@ -1918,8 +1916,8 @@ components:
           type: string
         sequenceNumber:
           format: int32
-          description: A unique number identifying the obswell on the 1:100000 map
-            sheet for which the obswell is located.
+          description: A unique number identifying the well on the 1:100000 map sheet
+            for which the well is located.
           type: integer
         obsWellPlan:
           description: A unique code for the plan (hundred) on which an obswell is
@@ -1932,37 +1930,36 @@ components:
           description: Code identifying the aquifer that the well intersects.
           type: string
         hundreds:
-          description: Hundreds of the obswell.
+          description: Hundreds of the well.
           type: string
         comments:
           description: Comments
           type: string
         createdDate:
           format: date-time
-          description: Date the obswell was added to SAGeoData.
+          description: Date the well was added to SAGeoData.
           type: string
         modifiedDate:
           format: date-time
-          description: Datetime of the most recent modification to the obswell in
-            SAGeoData.
+          description: Datetime of the most recent modification to the well in SAGeoData.
           type: string
         name:
-          description: Name of the obswell.
+          description: Name of the well.
           type: string
         elevationMeasurementsURL:
           description: URL to API endpoint to retrieve elevation measurements for
-            the obswell.
+            the well.
           type: string
         notesURL:
-          description: URL to API endpoint to retrieve notes for the obswell.
+          description: URL to API endpoint to retrieve notes for the well.
           type: string
         waterLevelMeasurementsURL:
           description: URL to API endpoint to retrieve water level measurements for
-            the obswell.
+            the well.
           type: string
         map100kNumber:
           format: int32
-          description: The 1:100000 map sheet number on which an obswell is located.
+          description: The 1:100000 map sheet number on which the well is located.
             Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
             into SAGeoData.
           type: integer
@@ -1991,7 +1988,7 @@ components:
           type: string
         monitoringNetworks:
           description: |-
-            Monitoring networks to which the obswell is assigned. Possible values:
+            Monitoring networks to which the well is assigned. Possible values:
 
             Angas Bremer PWA
 
@@ -2126,10 +2123,10 @@ components:
           type: string
         coordinates:
           $ref: '#/components/schemas/coordinatedata'
-          description: Coordinate date for the obswell.
+          description: Coordinate date for the well.
         groups:
           description: |
-            List of groups that this obswell is currently part of.
+            List of groups that this well is currently part of.
 
             The drillhole is part of a group if it has `standing waterlevel status` or `salinity status` marked as `current` for the group by SAGeodata Administrators.
           type: array
@@ -2267,55 +2264,6 @@ components:
           - UKN
           - VERBL
           type: string
-    monitoringNetwork:
-      title: Root Type for monitoringNetwork
-      description: A monitoring network that an obswell may belong to
-      type: object
-      properties:
-        monitoringNetworkCode:
-          description: "Code of monitoring network. Possible values:\n\nANGBRM \n\n\
-            BAROSSA\n\nCLARE\n\nLEIGHCK\n\nLOXTON\n\nMALLEE\n\nMARLA\n\nMARNE\n\n\
-            TATIARA\n\nCHOWILLA\n\nPADTH\n\nNAP\n\nKAT_FP_INJ\n\nEP_GDE\n\nSAW_WAIK\n\
-            \nBAROOTA\n\nPIKEMURTHO\n\nLLC_STH\n\nWMLR\n\nNAP_LIC\n\nPEAKE\n\nKANGFLAT\n\
-            \nLLC_NTH\n\nGG_EIZ\n\nBAROSS_IRR\n\nMV_IRR_TDS\n\nSA_TWS\n\nBOT_GDNS\n\
-            \nTINT_COON\n\nSE_NP\n\nSAMDB_NP\n\nKI_NP\n\nMUSGRAVE\n\nSTHNBASINS\n\n\
-            EP_NP\n\nSAAL_NP\n\nAW_NP\n\nFAR NORTH\n\nNY_NP_NTH\n\nNY_NP_STH\n\nCENT_ADEL\n\
-            \nMCL_VALE\n\nEP_STREAKY\n\nBERI_REN\n\nNAP_PERCH\n\nKAT_FP\n\nPIKE_FP\n\
-            \nEMLR\n\nNOORA_SAW\n\nWAK_MRK\n\nSAMDB_SAW\n\nSEFRP\n\nSAW_MURTHO"
-          type: string
-        monitoringNetworkName:
-          description: "Name of monitoring network. Possible values: \r\n\r\nAngas\
-            \ Bremer PWA\r\n\r\nBarossa PWRA\r\n\r\nClare PWRA\r\n\r\nLeigh Creek\r\
-            \n\r\nLoxton - Bookpurnong Irrigation Areas\r\n\r\nWestern Mount Lofty\
-            \ Ranges PWRA\r\n\r\nLower Limestone Coast PWA_North\r\n\r\nBotanic Gardens\
-            \ wetlands\r\n\r\nSA Arid Lands Non-Prescribed Area\r\n\r\nNorthern Adelaide\
-            \ Plains Perched Aquifers\r\n\r\nPike Floodplain\r\n\r\nMallee PWA\r\n\
-            \r\nKatarapko Floodplain Injection\r\n\r\nBarossa irrigation wells salinity\
-            \ monitoring\r\n\r\nSA Murray Darling Basin Non-Prescribed Area\r\n\r\n\
-            Eastern Mount Lofty Ranges PWRA\r\n\r\nTatiara PWA\r\n\r\nPadthaway PWA\r\
-            \n\r\nPike and Murtho Irrigation Areas\r\n\r\nNorthern Adelaide Plains\
-            \ PWA irrigation wells salinity monitoring\r\n\r\nMcLaren Vale  PWA irrigation\
-            \ wells salinity monitoring\r\n\r\nAlinytjara Wilurara Non-Prescribed\
-            \ Area\r\n\r\nCentral Adelaide PWA\r\n\r\nMcLaren Vale PWA\r\n\r\nLower\
-            \ Limestone Coast PWA_South\r\n\r\nPeake, Roby and Sherlock PWA\r\n\r\n\
-            Golden Grove extractive indust zone\r\n\r\nSA Water Town Water Supplies\
-            \ salinity monitoring\r\n\r\nKangaroo Island Non-Prescribed Area\r\n\r\
-            \nNorthern & Yorke Non-Prescribed Area - SOUTH\r\n\r\nBerri and Renmark\
-            \ Irrigation Areas\r\n\r\nNorthern Adelaide Plains PWA\r\n\r\nSouthern\
-            \ Basins PWA\r\n\r\nKatarapko Floodplain\r\n\r\nWaikerie Moorook Irrigation\
-            \ Areas\r\n\r\nSA Water Murtho SIS\r\n\r\nSA Water Waikerie SIS\r\n\r\n\
-            Baroota PWRA\r\n\r\nKangaroo Flat irrigation wells salinity monitoring\r\
-            \n\r\nMusgrave PWA\r\n\r\nNorthern & Yorke Non-Prescribed Area - NORTH\r\
-            \n\r\nStreaky Bay Non-Prescribed Area\r\n\r\nSA Murray Darling Basin -\
-            \ SA Water\r\n\r\nEPNRM Groundwater Dependent Ecosystem wells\r\n\r\n\
-            Far North PWA\r\n\r\nSE Flows Restoration Project\r\n\r\nMarla Township\r\
-            \n\r\nMarne River and Saunders Creek PWRA\r\n\r\nChowilla Floodplain\r\
-            \n\r\nTintinara Coonalpyn PWA\r\n\r\nSouth East Non-Prescribed Area\r\n\
-            \r\nEyre Peninsula Non-Prescribed Area\r\n\r\nNoora Disposal Basin"
-          type: string
-      example:
-        monitoringNetworkCode: STHNBASINS
-        monitoringNetworkName: Southern Basins PWA
     wcr-summary:
       description: Summary of Well Completion Report with minimal infomration
       required:
@@ -2365,7 +2313,7 @@ components:
     waterlevelmeasurement:
       title: Root Type for waterlevelmeasurement
       description: Data type representing a water level measurement recorded during
-        a field visit to an obswell.
+        a field visit to the well.
       type: object
       properties:
         measurementDate:
@@ -2786,6 +2734,55 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
+    monitoringnetwork:
+      title: Root Type for monitoringNetwork
+      description: A monitoring network that an well may belong to
+      type: object
+      properties:
+        monitoringNetworkCode:
+          description: "Code of monitoring network. Possible values:\n\nANGBRM \n\n\
+            BAROSSA\n\nCLARE\n\nLEIGHCK\n\nLOXTON\n\nMALLEE\n\nMARLA\n\nMARNE\n\n\
+            TATIARA\n\nCHOWILLA\n\nPADTH\n\nNAP\n\nKAT_FP_INJ\n\nEP_GDE\n\nSAW_WAIK\n\
+            \nBAROOTA\n\nPIKEMURTHO\n\nLLC_STH\n\nWMLR\n\nNAP_LIC\n\nPEAKE\n\nKANGFLAT\n\
+            \nLLC_NTH\n\nGG_EIZ\n\nBAROSS_IRR\n\nMV_IRR_TDS\n\nSA_TWS\n\nBOT_GDNS\n\
+            \nTINT_COON\n\nSE_NP\n\nSAMDB_NP\n\nKI_NP\n\nMUSGRAVE\n\nSTHNBASINS\n\n\
+            EP_NP\n\nSAAL_NP\n\nAW_NP\n\nFAR NORTH\n\nNY_NP_NTH\n\nNY_NP_STH\n\nCENT_ADEL\n\
+            \nMCL_VALE\n\nEP_STREAKY\n\nBERI_REN\n\nNAP_PERCH\n\nKAT_FP\n\nPIKE_FP\n\
+            \nEMLR\n\nNOORA_SAW\n\nWAK_MRK\n\nSAMDB_SAW\n\nSEFRP\n\nSAW_MURTHO"
+          type: string
+        monitoringNetworkName:
+          description: "Name of monitoring network. Possible values: \r\n\r\nAngas\
+            \ Bremer PWA\r\n\r\nBarossa PWRA\r\n\r\nClare PWRA\r\n\r\nLeigh Creek\r\
+            \n\r\nLoxton - Bookpurnong Irrigation Areas\r\n\r\nWestern Mount Lofty\
+            \ Ranges PWRA\r\n\r\nLower Limestone Coast PWA_North\r\n\r\nBotanic Gardens\
+            \ wetlands\r\n\r\nSA Arid Lands Non-Prescribed Area\r\n\r\nNorthern Adelaide\
+            \ Plains Perched Aquifers\r\n\r\nPike Floodplain\r\n\r\nMallee PWA\r\n\
+            \r\nKatarapko Floodplain Injection\r\n\r\nBarossa irrigation wells salinity\
+            \ monitoring\r\n\r\nSA Murray Darling Basin Non-Prescribed Area\r\n\r\n\
+            Eastern Mount Lofty Ranges PWRA\r\n\r\nTatiara PWA\r\n\r\nPadthaway PWA\r\
+            \n\r\nPike and Murtho Irrigation Areas\r\n\r\nNorthern Adelaide Plains\
+            \ PWA irrigation wells salinity monitoring\r\n\r\nMcLaren Vale  PWA irrigation\
+            \ wells salinity monitoring\r\n\r\nAlinytjara Wilurara Non-Prescribed\
+            \ Area\r\n\r\nCentral Adelaide PWA\r\n\r\nMcLaren Vale PWA\r\n\r\nLower\
+            \ Limestone Coast PWA_South\r\n\r\nPeake, Roby and Sherlock PWA\r\n\r\n\
+            Golden Grove extractive indust zone\r\n\r\nSA Water Town Water Supplies\
+            \ salinity monitoring\r\n\r\nKangaroo Island Non-Prescribed Area\r\n\r\
+            \nNorthern & Yorke Non-Prescribed Area - SOUTH\r\n\r\nBerri and Renmark\
+            \ Irrigation Areas\r\n\r\nNorthern Adelaide Plains PWA\r\n\r\nSouthern\
+            \ Basins PWA\r\n\r\nKatarapko Floodplain\r\n\r\nWaikerie Moorook Irrigation\
+            \ Areas\r\n\r\nSA Water Murtho SIS\r\n\r\nSA Water Waikerie SIS\r\n\r\n\
+            Baroota PWRA\r\n\r\nKangaroo Flat irrigation wells salinity monitoring\r\
+            \n\r\nMusgrave PWA\r\n\r\nNorthern & Yorke Non-Prescribed Area - NORTH\r\
+            \n\r\nStreaky Bay Non-Prescribed Area\r\n\r\nSA Murray Darling Basin -\
+            \ SA Water\r\n\r\nEPNRM Groundwater Dependent Ecosystem wells\r\n\r\n\
+            Far North PWA\r\n\r\nSE Flows Restoration Project\r\n\r\nMarla Township\r\
+            \n\r\nMarne River and Saunders Creek PWRA\r\n\r\nChowilla Floodplain\r\
+            \n\r\nTintinara Coonalpyn PWA\r\n\r\nSouth East Non-Prescribed Area\r\n\
+            \r\nEyre Peninsula Non-Prescribed Area\r\n\r\nNoora Disposal Basin"
+          type: string
+      example:
+        monitoringNetworkCode: STHNBASINS
+        monitoringNetworkName: Southern Basins PWA
   responses:
     UnauthorizedError:
       headers:
@@ -2810,8 +2807,8 @@ tags:
     and Well Construction Permits
 - name: auth
   description: API endpoints related to Authentication
-- name: obswell
-  description: API endpoints that relate to Obswells
+- name: omnwell
+  description: API endpoints that relate to Monitored Wells
 externalDocs:
   description: Find out more about SA Geodata API - iShare location
   url: http://swagger.io
