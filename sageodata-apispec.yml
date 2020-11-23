@@ -2454,7 +2454,7 @@ components:
             \   \n\nSupported format: `^(\\w{2})?[-](\\w{1,4})?[-](\\w{1,2})?$`  \
             \ \n`prefix` - alphanumeric of max size 2 (can be blank)   \n`volume`\
             \ - alphanumeric of max size 4 (can be blank)  \n`folio`  - alphanumeric\
-            \ of max size 2 (can be blank)  \n\nPossible values for `prefix` are:\
+            \ of max size 4 (can be blank)  \n\nPossible values for `prefix` are:\
             \   \n`44` - 44\t\n`CL` - CL\t\n`CR` - CR\t\n`CT` - CT\t\n`D3` - D3\t\n\
             `GM` - GM\t\n`LT` - LT\t\n`R2` - R2\t\n`R3` - R3\t\n`R4` - R4\t\n`R5`\
             \ - R5\t\n`R6` - R6\t\n`R7` - R7\t\n`R8` - R8\t\n`D1` - D1\t\n`D2` - D2\t\
