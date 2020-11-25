@@ -753,6 +753,29 @@ paths:
       operationId: GetWHSRisks
       summary: Get applicable `WHS Risks`
       description: Get applicable `WHS Risks`
+  /crm-apis/v1/clients/{id}:
+    summary: Endpoint to interact with a individual client
+    description: Endpoint to interact with a individual client
+    get:
+      tags:
+      - crm-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client'
+          description: Success
+        "404":
+          description: Client ID not found
+      operationId: GetClient
+      summary: Get details of the client
+      description: Get details of the client
+    parameters:
+    - name: id
+      description: System generated ID of the client
+      in: path
+      required: true
 components:
   schemas:
     client:
