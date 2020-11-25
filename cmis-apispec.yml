@@ -735,6 +735,14 @@ paths:
           type: integer
         in: query
         required: false
+      - name: status
+        description: WHS Risk status
+        schema:
+          enum:
+          - ACTIVE
+          - OBSOLETE
+          type: string
+        in: query
       responses:
         "200":
           content:
@@ -1251,6 +1259,7 @@ components:
       - whsSafetyRiskCategory
       - creationDate
       - riskId
+      - status
       type: object
       properties:
         whsSafetyRiskCategory:
@@ -1274,10 +1283,20 @@ components:
           $ref: '#/components/schemas/locationdetail'
           description: Location associated with this WHS Risk. null/emtpy if the risk
             is associated with a client.
+        status:
+          description: "Indicates if the WHS Risk is Active or Obsolete. \nObsolete\
+            \ WHS Risks are those that have been unassigned from a client or location."
+          enum:
+          - ACTIVE
+          - OBSOLETE
+          type: string
       example:
         whsSafetyRiskCategory: Agressive dog(s)
-        description: Owns two agressive dogs that are usually off-leash
+        description: Owns two agressive dogs
         creationDate: 2018-01-17
+        riskId: dc8c6e61-68b4-e911-a2cd-005056a719a3
+        clientDetails: crm-apis/v1.0/clients/7cc768a5-67b4-e911-a2cd-005056a719a3
+        status: ACTIVE
     case-page:
       title: Page - case-basicinfo Datatype
       description: |-
