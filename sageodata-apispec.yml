@@ -466,24 +466,20 @@ paths:
     summary: Authentication and Authorization
     description: Authentication and authorization end points
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tokenrequest'
+        required: true
       tags:
       - auth
-      parameters:
-      - examples:
-          WWW-Authenticate:
-            value: QWxhZGRpbjpPcGVuU2VzYW1l
-        name: WWW-Authenticate
-        description: username:password Base64-encoded
-        schema:
-          type: string
-        in: header
-        required: true
       responses:
         "201":
           content:
             application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/tokenresponse'
           description: User authorized - Token generated
         "401":
           $ref: '#/components/responses/UnauthorizedError'
@@ -2783,6 +2779,29 @@ components:
       example:
         monitoringNetworkCode: STHNBASINS
         monitoringNetworkName: Southern Basins PWA
+    tokenrequest:
+      title: Root Type for tokenrequest
+      description: Username / password data for token request
+      type: object
+      properties:
+        username:
+          description: Username
+          type: string
+        password:
+          description: Password
+          type: string
+      example:
+        username: apiuser
+        password: pwd
+    tokenresponse:
+      title: Root Type for tokenresponse
+      description: Auth response with JWT token
+      type: object
+      properties:
+        token:
+          type: string
+      example:
+        token: tokenvalue
   responses:
     UnauthorizedError:
       headers:
