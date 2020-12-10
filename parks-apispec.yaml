@@ -303,6 +303,7 @@ paths:
       - HTTP-Basic: []
       summary: Get revenue information of parks
   /parks/prediction:
+    summary: Get parks visitors and revenue prediction
     get:
       responses:
         "200":
@@ -346,6 +347,7 @@ paths:
           description: Unable to process the request successfully
       security:
       - HTTP-Basic: []
+      summary: Get parks visitors and revenue prediction
   /parks/visitoruse:
     summary: Get visitor use information of parks
     get:
@@ -358,59 +360,70 @@ paths:
         schema:
           type: string
         in: query
+      - examples:
+          offset:
+            value: "10000"
+        name: offset
+        description: 'Number of rows to offset in the result. This value will be available
+          in the navigation link of the intial response.  '
+        schema:
+          type: integer
+        in: query
       responses:
         "200":
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/parks-visitors-use'
+                $ref: '#/components/schemas/parks-visitors-use-result'
               examples:
                 Success:
                   value:
-                  - financialYear: 2013-2014
-                    qtr: 3
-                    month: "2"
-                    monthName: Feb
-                    region: Yorke and Mid North
-                    park: Innes National Park
-                    campGround: Innes Heritage Accommodation
-                    campAbbr: IHA
-                    campSite: Innes Heritage Accommodation<br> Norfolk Lodge
-                    state: OTHER
-                    facility: Accommodation
-                    season: Summer
-                    visitors: 2
-                    revenue: 350
-                    bookings: 1
-                    bookingsCount: 1
-                    nights: 2
-                    totalNights: 4
-                    passNight: 1
-                    systemDesc: BookEasy
-                  - financialYear: 2013-2014
-                    qtr: 1
-                    month: "8"
-                    monthName: Aug
-                    region: Kangaroo Island
-                    park: Flinders Chase National Park
-                    campGround: Cape Borda Lighthouse Keepers Heritage Accomm
-                    campAbbr: CBLKHA
-                    campSite: Cape Borda Lighthouse Keepers Heritage Accomm<br> Woodward
-                      Hut
-                    state: UNKNOWN
-                    facility: Accommodation
-                    season: Winter
-                    visitors: 2
-                    revenue: 92
-                    bookings: 1
-                    bookingsCount: 1
-                    nights: 2
-                    totalNights: 4
-                    passNight: 1
-                    systemDesc: BookEasy
-          description: Success response - Returns a list of `parks-visitors-use`
+                    visitorsUse:
+                    - financialYear: 2013-2014
+                      qtr: 3
+                      month: "2"
+                      monthName: Feb
+                      region: Yorke and Mid North
+                      park: Innes National Park
+                      campGround: Innes Heritage Accommodation
+                      campAbbr: IHA
+                      campSite: Innes Heritage Accommodation<br> Norfolk Lodge
+                      state: OTHER
+                      facility: Accommodation
+                      season: Summer
+                      visitors: 2
+                      revenue: 350
+                      bookings: 1
+                      bookingsCount: 1
+                      nights: 2
+                      totalNights: 4
+                      passNight: 1
+                      systemDesc: BookEasy
+                    - financialYear: 2013-2014
+                      qtr: 1
+                      month: "8"
+                      monthName: Aug
+                      region: Kangaroo Island
+                      park: Flinders Chase National Park
+                      campGround: Cape Borda Lighthouse Keepers Heritage Accomm
+                      campAbbr: CBLKHA
+                      campSite: Cape Borda Lighthouse Keepers Heritage Accomm<br>
+                        Woodward Hut
+                      state: UNKNOWN
+                      facility: Accommodation
+                      season: Winter
+                      visitors: 2
+                      revenue: 92
+                      bookings: 1
+                      bookingsCount: 1
+                      nights: 2
+                      totalNights: 4
+                      passNight: 1
+                      systemDesc: BookEasy
+                    navigation:
+                      previous: /parks/visitoruse?financialYear=2014-2015&offset=0
+                      next: /parks/visitoruse?financialYear=2014-2015&offset=20000
+          description: Success response - Returns a `parks-visitors-use-result`
         "500":
           description: Unexpected error occurred when processing the request
         "400":
@@ -1013,6 +1026,79 @@ components:
       example:
         messages:
         - Some message will be displayed here explaining the reason for failure
+    navigation-links:
+      description: Links for navigating to the previous or next set of results
+      type: object
+      properties:
+        previous:
+          description: URL to navigate to the previous set of results
+          type: string
+        next:
+          description: URL to navigate to the next set of results
+          type: string
+      example:
+        previous: /parks/visitoruse?financialYear=2014-2015&offset=0
+        next: /parks/visitoruse?financialYear=2014-2015&offset=20000
+    parks-visitors-use-result:
+      description: Parks visitor use result
+      required:
+      - visitorsUse
+      - navigation
+      type: object
+      properties:
+        visitorsUse:
+          description: Array of `parks-visitors-use`
+          type: array
+          items:
+            $ref: '#/components/schemas/parks-visitors-use'
+        navigation:
+          $ref: '#/components/schemas/navigation-links'
+          description: Navigation link to the previous and next results
+      example:
+        visitorsUse:
+        - financialYear: 2013-2014
+          qtr: 3
+          month: "2"
+          monthName: Feb
+          region: Yorke and Mid North
+          park: Innes National Park
+          campGround: Innes Heritage Accommodation
+          campAbbr: IHA
+          campSite: Innes Heritage Accommodation<br> Norfolk Lodge
+          state: OTHER
+          facility: Accommodation
+          season: Summer
+          visitors: 2
+          revenue: 350
+          bookings: 1
+          bookingsCount: 1
+          nights: 2
+          totalNights: 4
+          passNight: 1
+          systemDesc: BookEasy
+        - financialYear: 2013-2014
+          qtr: 1
+          month: "8"
+          monthName: Aug
+          region: Kangaroo Island
+          park: Flinders Chase National Park
+          campGround: Cape Borda Lighthouse Keepers Heritage Accomm
+          campAbbr: CBLKHA
+          campSite: Cape Borda Lighthouse Keepers Heritage Accomm<br> Woodward Hut
+          state: UNKNOWN
+          facility: Accommodation
+          season: Winter
+          visitors: 2
+          revenue: 92
+          bookings: 1
+          bookingsCount: 1
+          nights: 2
+          totalNights: 4
+          passNight: 1
+          systemDesc: BookEasy
+        navigation:
+          previous: /parks/visitoruse?financialYear=2014-2015&offset=0
+          next: /parks/visitoruse?financialYear=2014-2015&offset=20000
   securitySchemes:
     HTTP-Basic:
       scheme: basic
