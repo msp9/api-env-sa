@@ -2890,10 +2890,6 @@ components:
         drillholeOtherName:
           description: Drillhole othere name
           type: string
-        surveyDate:
-          format: date
-          description: Survey Date
-          type: string
         waterPointType:
           description: "Water Point Type. If left blank the well is marked as NOT\
             \ a Water Point Type. \n\nPossible values:  \n`DAM` - Dam\t\n`HOL` - Water\
