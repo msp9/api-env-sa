@@ -488,103 +488,6 @@ paths:
       operationId: GetToken()
       summary: Generate bearer token
       description: Request to generate and return a bearer token.
-  /api/v1.0/monitoringnetworkwells:
-    summary: Endpoint to interact with the list of monitoring network wells.
-    description: Wells that are part of a monitoring network.
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only wells that have been modified more recently
-          than the supplied value will be returned.
-        schema:
-          format: date-time
-          type: string
-        in: query
-        required: false
-      - name: groupCode
-        description: If specified, only wells that belong to the specified group code
-          will be returned.
-        schema:
-          type: string
-        in: query
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/monitoringnetworkwells-page'
-          description: Successful operation
-      operationId: GetMonitoringNetworkWells
-      summary: List all obwells
-      description: ""
-  /api/v1.0/monitoringnetworkwells/{id}/elevationmeasurements/:
-    summary: Endpoint to interact with the list of elevation measurements for a single
-      well.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only elevation measurements that have been modified
-          more recently than the supplied value will be returned.
-        schema:
-          format: date-time
-          type: string
-        in: query
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/elevationmeasurement-page'
-          description: Successful operation
-      operationId: GetElevationMeasurementsByDrillhole
-      summary: List all elevation measurements
-      description: ""
-    parameters:
-    - name: id
-      description: DrillholeId specifying which well to retrieve measurements for.
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
-  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements/:
-    summary: Endpoint to interact with the list of water level measurements for a
-      single well.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only water level measurements that have been modified
-          more recently than the supplied value will be returned.
-        schema:
-          format: date-time
-          type: string
-        in: query
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterlevelmeasurement-page'
-          description: Successful operation
-      operationId: GetWaterLevelMeasurementsByDrillhole
-      summary: List all water level measurements
-      description: ""
-    parameters:
-    - name: id
-      description: DrillholeId specifying which well to retrieve measurements for.
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
   /api/v1.0/monitoringnetworkwells/{id}:
     summary: Endpoint to interact with a single well.
     description: ""
@@ -653,33 +556,202 @@ paths:
                     DIG\",\r\n    \"Value\": \"Digitised\"\r\n  }\r\n]"
           description: Successful operation
       summary: List all survey methods
-  /api/v1.0/monitoringnetworkwells/{id}/notes/:
-    summary: Endpoint to interact with the list of notes for a single well.
+  /api/v1.0/monitoringnetworks:
+    summary: Endpoint to return a list of available monitoring networks
+    get:
+      tags:
+      - omnwell
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/monitoringnetwork'
+              examples:
+                Angus Bremer Example:
+                  value:
+                    monitoringNetworkCode: ANGBRM
+                    monitoringNetworkName: Angas Bremer PWA
+          description: Success
+      operationId: GetMonitoringNetworks
+      summary: Get available Monitoring Networks
+  /api/v1.0/monitoringnetworkwells:
+    summary: Endpoint to interact with the list of monitoring network wells.
+    description: Wells that are part of a monitoring network.
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only wells that have been modified more recently
+          than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: false
+      - name: groupCode
+        description: If specified, only wells that belong to the specified group code
+          will be returned.
+        schema:
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/monitoringnetworkwells-page'
+          description: Successful operation
+      operationId: GetMonitoringNetworkWells
+      summary: List all obwells
+      description: ""
+  /api/v1.0/monitoringnetworkwells/{id}/elevationmeasurements/:
+    summary: Endpoint to interact with the list of elevation measurements for a single
+      well.
     description: ""
     get:
       tags:
       - omnwell
       parameters:
       - name: modifiedSince
-        description: If specified, only notes that have been modified more recently
-          than the supplied value will be returned.
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned.
         schema:
           format: date-time
           type: string
         in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/note-page'
+                $ref: '#/components/schemas/elevationmeasurement-page'
           description: Successful operation
-      operationId: GetNotes
-      summary: List all notes
+      operationId: GetElevationMeasurementsByDrillhole
+      summary: List all elevation measurements
       description: ""
     parameters:
     - name: id
-      description: DrillholeId specifying which well to retrieve notes for.
+      description: DrillholeId specifying which well to retrieve measurements for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /api/v1.0/monitoringnetworkwells/elevationmeasurements/:
+    summary: Endpoint to interact with elevation measurements.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned. Must be less than
+          1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: If specified, only measurements recorded for drillholes with
+          the matching group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elevationmeasurement-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetElevationMeasurements
+      summary: List all elevation measurements
+      description: ""
+  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements/:
+    summary: Endpoint to interact with the list of water level measurements for a
+      single well.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only water level measurements that have been modified
+          more recently than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+      operationId: GetWaterLevelMeasurementsByDrillhole
+      summary: List all water level measurements
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which well to retrieve measurements for.
       schema:
         format: int64
         type: integer
@@ -708,6 +780,18 @@ paths:
           type: string
         in: query
         required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
       responses:
         "200":
           content:
@@ -720,62 +804,50 @@ paths:
       operationId: GetWaterLevelMeasurements
       summary: List all water level measurements
       description: ""
-  /api/v1.0/monitoringnetworkwells/elevationmeasurements/:
-    summary: Endpoint to interact with elevation measurements.
+  /api/v1.0/monitoringnetworkwells/{id}/notes/:
+    summary: Endpoint to interact with the list of notes for a single well.
     description: ""
     get:
       tags:
       - omnwell
       parameters:
       - name: modifiedSince
-        description: If specified, only elevation measurements that have been modified
-          more recently than the supplied value will be returned. Must be less than
-          1 year prior to current date.
+        description: If specified, only notes that have been modified more recently
+          than the supplied value will be returned.
         schema:
           format: date-time
           type: string
         in: query
-        required: true
-      - name: groupCode
-        description: If specified, only measurements recorded for drillholes with
-          the matching group code will be returned.
+      - name: limit
+        description: Maximum number of results in the response
         schema:
-          type: string
+          type: integer
         in: query
-        required: true
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/elevationmeasurement-page'
+                $ref: '#/components/schemas/note-page'
           description: Successful operation
-        "400":
-          description: Parameters were not supplied or were invalid.
-      operationId: GetElevationMeasurements
-      summary: List all elevation measurements
+      operationId: GetNotes
+      summary: List all notes
       description: ""
-  /api/v1.0/monitoringnetworks:
-    summary: Endpoint to return a list of available monitoring networks
-    get:
-      tags:
-      - omnwell
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/monitoringnetwork'
-              examples:
-                Angus Bremer Example:
-                  value:
-                    monitoringNetworkCode: ANGBRM
-                    monitoringNetworkName: Angas Bremer PWA
-          description: Success
-      operationId: GetMonitoringNetworks
-      summary: Get available Monitoring Networks
+    parameters:
+    - name: id
+      description: DrillholeId specifying which well to retrieve notes for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
 components:
   schemas:
     address:
@@ -1444,6 +1516,35 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
+      example:
+        results:
+        - permitNumber: 999944
+          issueDate: 2020-01-01
+          purpose: notSpecified
+          permitHolderName: JOHN CITIZEN
+          wellUse: not_Specified
+          expiryDate: 2021-01-01
+          address:
+            addressLineOne: Street 1
+            addressLineTwo: Street 2
+            suburb: Adelaide
+            postCode: 5000
+            state: sa
+          notes:
+          - To minimise the risk of contamination, the well should be sited as far
+            as practicable, preferably further than 50 metres from any septic or waste
+            disposal area.
+          conditions:
+          - If the well is considered unsatisfactory, it must be backfilled.
+          specialConditions: []
+          propertyTitle: 44-1111-11
+          propertyParcel: A-111111
+          propertyPlan: G-111111
+          sectionLotDetail: 1111111-1111111
+          pastoralDetails: 1111111-1111111
+        totalRecords: 1
+        pageSize: 100
+        pageNumber: 1
     welldriller:
       description: Well Driller details
       required:
@@ -1528,6 +1629,22 @@ components:
         wellDriller:
           $ref: '#/components/schemas/welldriller'
           description: Well Driller Details
+      example:
+        licenceNumber: 22233311
+        expiryDate: 2021-01-01
+        wellDriller:
+          drillerFirstName: JOHN
+          drillerLastName: CITIZEN
+          drillerNumber: 1453
+          comments: no comment
+          addressDetails:
+            addressLineOne: street 1
+            addressLineTwo: street 2
+            suburb: Adelaide
+            postCode: 5000
+            state: sa
+          drillerClass: class1
+          drillerMiddleName: A
     welldrillerlicence-page:
       description: Page of Well Driller Licences
       required:
@@ -1554,6 +1671,26 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
+      example:
+        results:
+        - licenceNumber: 22233311
+          expiryDate: 2021-01-01
+          wellDriller:
+            drillerFirstName: JOHN
+            drillerLastName: CITIZEN
+            drillerNumber: 1453
+            comments: no comment
+            addressDetails:
+              addressLineOne: street 1
+              addressLineTwo: street 2
+              suburb: Adelaide
+              postCode: 5000
+              state: sa
+            drillerClass: class1
+            drillerMiddleName: A
+        totalRecords: 1
+        pageSize: 100
+        pageNumber: 1
     monitoringnetworkwells-page:
       description: Data type that represents a collection/page of water level measurements
       required:
@@ -1580,6 +1717,83 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/monitoringnetworkwell'
+      example:
+        nextPage: some text
+        prevPage: some text
+        totalRecords: 1
+        pageSize: 60
+        pageNumber: 2
+        results:
+        - unitNumber: 54
+          landscapeSARegionCode: EYRPEN
+          sequenceNumber: 27
+          obsWellPlan: some text
+          obsWellSequenceNumber: some text
+          aquiferIntersected: some text
+          hundreds: some text
+          comments: some text
+          createdDate: 2018-02-10T09:30Z
+          modifiedDate: 2018-02-10T09:30Z
+          name: some text
+          elevationMeasurementsURL: some text
+          notesURL: some text
+          waterLevelMeasurementsURL: some text
+          map100kNumber: 21
+          drillholeNumber: 34
+          status: some text
+          prescribedWellAreaName: some text
+          prescribedWaterResourceAreaName: some text
+          monitoringNetworks:
+          - some text
+          - some text
+          nrmRegion: DRYCK
+          coordinates:
+            datum: GDA2020
+            easting: 16
+            northing: 56
+            zone: 58
+            lat: 79.21
+            long: 92.89
+          groups:
+          - Value: some text
+            Code: some text
+          - Value: some text
+            Code: some text
+        - unitNumber: 66
+          landscapeSARegionCode: EYRPEN
+          sequenceNumber: 57
+          obsWellPlan: some text
+          obsWellSequenceNumber: some text
+          aquiferIntersected: some text
+          hundreds: some text
+          comments: some text
+          createdDate: 2018-02-10T09:30Z
+          modifiedDate: 2018-02-10T09:30Z
+          name: some text
+          elevationMeasurementsURL: some text
+          notesURL: some text
+          waterLevelMeasurementsURL: some text
+          map100kNumber: 76
+          drillholeNumber: 51
+          status: some text
+          prescribedWellAreaName: some text
+          prescribedWaterResourceAreaName: some text
+          monitoringNetworks:
+          - some text
+          - some text
+          nrmRegion: MGRV
+          coordinates:
+            datum: GDA2020
+            easting: 50
+            northing: 83
+            zone: 25
+            lat: 25.4
+            long: 69.41
+          groups:
+          - Value: some text
+            Code: some text
+          - Value: some text
+            Code: some text
     waterlevelmeasurement-page:
       description: Data type that represents a collection/page of water level measurements.
       required:
@@ -1606,6 +1820,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/waterlevelmeasurement'
+      example:
+        nextPage: some text
+        prevPage: some text
+        totalRecords: 0
+        pageSize: 65
+        pageNumber: 53
+        results:
+        - measurementDate: 2018-02-10T09:30Z
+          depthToWater: 3.63
+          artesianPressure: 43.75
+          comments: some text
+          agencyResponsible: some text
+          conductedBy: some text
+          createdDate: 2018-02-10T09:30Z
+          modifiedDate: 2018-02-10T09:30Z
+          measurementNumber: 16
+          drillholeNumber: 34
+          anomalous: true
+        - measurementDate: 2018-02-10T09:30Z
+          depthToWater: 34.88
+          artesianPressure: 96.89
+          comments: some text
+          agencyResponsible: some text
+          conductedBy: some text
+          createdDate: 2018-02-10T09:30Z
+          modifiedDate: 2018-02-10T09:30Z
+          measurementNumber: 82
+          drillholeNumber: 18
+          anomalous: true
     elevationmeasurement:
       title: Root Type for elevationmeasurement
       description: Data type representing an elevation measurement recorded during
@@ -1746,16 +1989,18 @@ components:
           - FLN
           type: string
       example:
-        drillholeNumber: 87308
-        measurementNumber: 422497
-        measurementDate: 2018-08-31T00:00:00.000Z
-        groundElevation: 226.818
-        surveyMethod: DEM
-        comments: Ground elevation has been interpolated from the GA 1 second SRTM
-          level 2 Digital DEM v1_0 (standard, smoothed and hydro corrected). Release
-          date of DEM 2010. Survey Date is date of load into database.
-        conductedBy: GALDS
-        createdDate: 2018-09-14T11:53:09.000Z
+        measurementDate: 2018-02-10T09:30Z
+        groundElevation: 7
+        referenceElevation: 31.2
+        comments: some text
+        conductedBy: some text
+        createdDate: 2018-02-10T09:30Z
+        modifiedDate: 2018-02-10T09:30Z
+        drillholeNumber: 8
+        measurementNumber: 15
+        appliedDate: 2018-02-10T09:30Z
+        surveyMethodCode: AMGRD
+        referencePointTypeCode: PBP
     elevationmeasurement-page:
       description: Data type that represents a collection/page of elevation measurements.
       required:
@@ -1782,6 +2027,37 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/elevationmeasurement'
+      example:
+        nextPage: some text
+        prevPage: some text
+        totalRecords: 48
+        pageSize: 45
+        pageNumber: 60
+        results:
+        - measurementDate: 2018-02-10T09:30Z
+          groundElevation: 37
+          referenceElevation: 30.08
+          comments: some text
+          conductedBy: some text
+          createdDate: 2018-02-10T09:30Z
+          modifiedDate: 2018-02-10T09:30Z
+          drillholeNumber: 20
+          measurementNumber: 0
+          appliedDate: 2018-02-10T09:30Z
+          surveyMethodCode: PHOTO
+          referencePointTypeCode: CAB
+        - measurementDate: 2018-02-10T09:30Z
+          groundElevation: 84
+          referenceElevation: 24.2
+          comments: some text
+          conductedBy: some text
+          createdDate: 2018-02-10T09:30Z
+          modifiedDate: 2018-02-10T09:30Z
+          drillholeNumber: 31
+          measurementNumber: 55
+          appliedDate: 2018-02-10T09:30Z
+          surveyMethodCode: LOCAL
+          referencePointTypeCode: WIN
     codevaluepair:
       description: Key value pair used to display values from lookup tables.
       type: object
@@ -1884,6 +2160,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/note'
+      example:
+        nextPage: some text
+        prevPage: some text
+        totalRecords: 82
+        pageSize: 29
+        pageNumber: 41
+        results:
+        - createdBy: some text
+          note: some text
+          noteDate: 2018-02-10T09:30Z
+          noteId: 30
+        - createdBy: some text
+          note: some text
+          noteDate: 2018-02-10T09:30Z
+          noteId: 92
     monitoringnetworkwell:
       title: Root Type for monitored well
       description: A monitored waterwell.
@@ -2129,18 +2420,41 @@ components:
           items:
             $ref: '#/components/schemas/codevaluepair'
       example:
-        drillholeNumber: 230
-        drillholeName: A-29 (MT DAVIES)
-        unitNumber: 474500070
-        nrmRegionCode: Alinytjara Wilurara
-        waterWellClass: "N"
-        map100000Number: 4745
-        sequenceNumber: 70
-        latitude: -26.1130886
-        longitude: 129.02301
-        comments: South Western Mining Company
-        createdDate: 1992-12-10T18:04:24.000Z
-        modifiedDate: 2019-08-30T09:32:00.000Z
+        unitNumber: 94
+        landscapeSARegionCode: EYRPEN
+        sequenceNumber: 54
+        obsWellPlan: some text
+        obsWellSequenceNumber: some text
+        aquiferIntersected: some text
+        hundreds: some text
+        comments: some text
+        createdDate: 2018-02-10T09:30Z
+        modifiedDate: 2018-02-10T09:30Z
+        name: some text
+        elevationMeasurementsURL: some text
+        notesURL: some text
+        waterLevelMeasurementsURL: some text
+        map100kNumber: 69
+        drillholeNumber: 86
+        status: some text
+        prescribedWellAreaName: some text
+        prescribedWaterResourceAreaName: some text
+        monitoringNetworks:
+        - some text
+        - some text
+        nrmRegion: CTRADL
+        coordinates:
+          datum: WGS84
+          easting: 90
+          northing: 67
+          zone: 85
+          lat: 13.23
+          long: 70.35
+        groups:
+        - Value: some text
+          Code: some text
+        - Value: some text
+          Code: some text
     coordinatedata:
       description: Coordinate Data
       required:
@@ -2178,6 +2492,13 @@ components:
           format: double
           description: Longitude
           type: number
+      example:
+        datum: WGS84
+        easting: 66
+        northing: 47
+        zone: 55
+        lat: 63.94
+        long: 64.39
     wcr-coordinatedata:
       description: Well Completion Report - Coordinate Data
       required:
@@ -2355,15 +2676,17 @@ components:
           description: If true, indicates that the reading was an anomaly.
           type: boolean
       example:
-        drillholeNumber: 4
-        measurementNumber: 1
-        measurementDate: 1990-12-06T00:00:00.000Z
-        depthToWater: 71.6
-        artesianPressure: 10
-        agencyResponsible: DEWNR
-        conductedBy: DHDB
-        createdDate: 1997-07-02T18:23:52.000Z
-        modifiedDate: 2012-09-20T15:56:31.000Z
+        measurementDate: 2018-02-10T09:30Z
+        depthToWater: 94.87
+        artesianPressure: 36.74
+        comments: some text
+        agencyResponsible: some text
+        conductedBy: some text
+        createdDate: 2018-02-10T09:30Z
+        modifiedDate: 2018-02-10T09:30Z
+        measurementNumber: 29
+        drillholeNumber: 49
+        anomalous: true
     wellpermit:
       description: Well Permit data
       required:
@@ -2510,6 +2833,31 @@ components:
         propertyHundredName:
           description: Hundred Name of the property
           type: string
+      example:
+        permitNumber: 999944
+        issueDate: 2020-01-01
+        purpose: notSpecified
+        permitHolderName: JOHN CITIZEN
+        wellUse: not_Specified
+        expiryDate: 2021-01-01
+        address:
+          addressLineOne: Street 1
+          addressLineTwo: Street 2
+          suburb: Adelaide
+          postCode: 5000
+          state: sa
+        notes:
+        - To minimise the risk of contamination, the well should be sited as far as
+          practicable, preferably further than 50 metres from any septic or waste
+          disposal area.
+        conditions:
+        - If the well is considered unsatisfactory, it must be backfilled.
+        specialConditions: []
+        propertyTitle: 44-1111-11
+        propertyParcel: A-111111
+        propertyPlan: G-111111
+        sectionLotDetail: 1111111-1111111
+        pastoralDetails: 1111111-1111111
     wellcompletionreport:
       description: Well Completion Report data
       required:
@@ -2563,9 +2911,6 @@ components:
           type: boolean
         isWaterWellLicenced:
           description: Is Water Well Licenced
-          type: boolean
-        isTradeWell:
-          description: Is Trade Well
           type: boolean
         isBackFill:
           description: Is back-fill
@@ -2701,6 +3046,135 @@ components:
 
             Applicable only for `REPLACE` events
           type: integer
+        isTraditionalWell:
+          description: Is Traditional Well
+          type: boolean
+      example:
+        id: WCR-Example
+        eventType: replace
+        unitNumber: 4745
+        drillholeNumber: 314545
+        drillholeName: DHNAME
+        drillholeOtherName: DHOTHERNAME
+        waterPointType: LAK
+        isWaterWellClass: false
+        isWaterWellLicenced: true
+        isTraditionalWell: true
+        isBackFill: false
+        isDeepened: true
+        isEnlarged: true
+        isRehabilitate: true
+        isInspected: true
+        isAbandoned: true
+        isFlowing: true
+        isDry: false
+        isReplacement: true
+        plantOperator: STRING
+        wellPurposes:
+        - SPR
+        - SOK
+        - RIV
+        coordinateData:
+          coordinateData:
+            datum: gdA94
+            easting: 524286
+            northing: 7104528
+            zone: 52
+            lat: 26.178473
+            long: 129.243042
+          surveyAccuracyInMetres: 1
+          surveyMethod: amgrd
+        constructionDetails:
+        - commenceDate: 2020-01-01
+          completionDate: 2020-01-01
+          maxDepthInMeters: 10
+          finalDepthInMeters: 1
+          currentDepthInMeters: 1
+          isOriginal: true
+          permitNumber: 28043
+          permitHolderName: PENFOLD WINE GROUP (SEPPELTS)
+        drillingDetails:
+        - fromInMeters: 1
+          toInMeters: 1
+          diamInMillis: 1
+          widthInMeters: 1
+          lengthInMeters: 1
+          drillingMethodCode: acr
+        casingDetails:
+        - casingDepthFromInMeters: 0
+          casingDiamInMillis: 1
+          casingMaterial: ABS
+          cementingType: g
+          cementingMethod: disp
+          doesShoeExist: false
+          isShoeCemented: false
+        - casingType: p
+          casingDepthFromInMeters: 1
+          casingDepthToInMeters: 2
+          casingDiamInMillis: 2
+          casingMaterial: BEN
+          cementingType: g
+          cementDepthFromInMeters: 1
+          cementDepthToInMeters: 1
+          cementingMethod: disp
+          doesShoeExist: true
+          shoeDiamInMillis: 1
+          isShoeCemented: true
+          comments: string
+        productionDetails:
+        - levelType: oh
+          fromInMeters: 1
+          toInMeters: 1
+          material: abs
+          apertureInMillis: 1
+          outerDiamInMillis: 2
+          innerDiamInMillis: 1
+          comments: string
+        constructionComment: string
+        linearSealDetails:
+        - sealDepthInMeters: 1
+          caseDiamInMillis: 1
+          caseMaterial: abs
+        - caseDiamInMillis: 2
+          caseMaterial: ben
+        gravelPackDetails: []
+        wellDevelopmentDetails:
+        - devMethod: airl
+          durationInHours: 1
+          comments: string
+        waterCutDetails:
+        - date: 2020-01-01
+          isArtesian: true
+          fromInMeters: 1
+          toInMeters: 2
+          depthToWaterInMeters: 2
+          depthAtTestInMeters: 1
+          casingAtTestInMeters: 1
+          wellYieldInLitreSec: 1
+          extractionMethod: airl
+          salinityExtractionMethod: airl
+          salinityUnit: tds
+          salinity: "1"
+          ph: ""
+          tempInCelcius: "1"
+          comments: string
+        pumpTestDetails:
+        - fromInMeters: 1
+          toInMeters: 1
+          waterLevelInMeters: 0
+          testMethod: airl
+          depthOfPumpInMeters: 1
+          dischargeRateInLitersPerSec: 1
+          dischargeMeasurementMethod: airl
+          noOfHoursPumped: 0
+          drawDownInMeters: 0
+        formationLogDetails:
+        - fromInMeters: 1
+          toInMeters: 1
+          material: CGLM
+          isConfidential: false
+          description: string
+        unitSequenceNumber: 645
     wellcompletionreport-page:
       description: Page of Well Completion Report Summary
       required:
@@ -2730,6 +3204,19 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
+      example:
+        results:
+        - id: WCR-Example
+          unitSequenceNumber: 645
+          unitNumber: 4745
+          eventType: replace
+          reportDetails: /api/v1.0/wellcompletionreports/WCR-Example
+          completionDate: 2020-01-01
+          drillholeNumber: 314545
+          permitNumber: "28043"
+        totalRecords: 1
+        pageSize: 100
+        pageNumber: 1
     monitoringnetwork:
       title: Root Type for monitoringNetwork
       description: A monitoring network that an well may belong to
