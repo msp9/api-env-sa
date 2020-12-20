@@ -848,6 +848,68 @@ paths:
         type: integer
       in: path
       required: true
+  /api/v1.0/drillholes/{id}:
+    summary: Path used to manage a single drillhole.
+    description: The REST endpoint/path used to get, update, and delete single instances
+      of an `drillhole`.  This path contains `GET`, `PUT`, and `DELETE` operations
+      used to perform the get, update, and delete tasks, respectively.
+    get:
+      tags:
+      - dh
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drillhole'
+          description: Successful response - returns a single `drillhole`.
+      operationId: getdrillhole
+      summary: Get a drillhole
+      description: Gets the details of a single instance of a `drillhole`.
+    parameters:
+    - name: id
+      description: A unique identifier for a `drillhole`.
+      schema:
+        type: string
+      in: path
+      required: true
+  /api/v1.0/drillholes:
+    summary: Path used to manage the list of drillholes.
+    description: The REST endpoint/path used to list and create zero or more `drillhole`
+      entities.  This path contains a `GET` and `POST` operation to perform the list
+      and create tasks, respectively.
+    get:
+      tags:
+      - dh
+      parameters:
+      - name: unitNumber
+        description: Unit Number of format `unit number`-`sequence number`
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/drillhole-page'
+          description: Successful response - returns an array of `drillhole` entities.
+      operationId: GetDrillholes
+      summary: List drillholes
+      description: Gets a list of `drillhole` entities.
 components:
   schemas:
     address:
@@ -2459,9 +2521,6 @@ components:
       description: Coordinate Data
       required:
       - datum
-      - easting
-      - northing
-      - zone
       type: object
       properties:
         datum:
@@ -2471,6 +2530,9 @@ components:
           - GDA94
           - GDA2020
           - WGS84
+          - AGD66
+          - CLARKE1880
+          - AGD84
           type: string
         easting:
           format: int32
@@ -2696,7 +2758,6 @@ components:
       - wellUse
       - expiryDate
       - address
-      - areaDescription
       - permitNumber
       type: object
       properties:
@@ -3285,6 +3346,223 @@ components:
           type: string
       example:
         token: tokenvalue
+    drillhole-page:
+      description: Page of drillhole summaries
+      required:
+      - results
+      type: object
+      properties:
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+        results:
+          description: Collection of drillhole summaries
+          type: array
+          items:
+            $ref: '#/components/schemas/drillhole'
+      example:
+        totalRecords: 1
+        pageSize: 1
+        pageNumber: 1
+        results:
+        - latestPermitNumber: 234567
+          drillholeName: BORE 2
+          originalDrilledDate: 1991-06-17
+          originalDrilledDepth: 65.23
+          minimumDiameter: 150
+          statusCode: EQP
+          statusDate: 1991-06-17
+          purposeCode: IRR
+          map100kNumber: 6628
+          sequenceNumber: 1234
+          permitNumberExt: B
+    drillhole:
+      description: Holds the summary of a drillhole
+      type: object
+      properties:
+        latestPermitNumber:
+          description: Latest Permit Number for the drillhole
+          type: number
+        drillholeName:
+          description: Name of drillhole – often something meaningful to the landholder
+            as it used to come via the well construction report’s Schedule 8 form.
+          type: string
+        originalDrilledDate:
+          format: date
+          description: Date for the depth of consturction
+          type: string
+        originalDrilledDepth:
+          format: double
+          description: Final depth the drillhole was completed at
+          type: number
+        minimumDiameter:
+          format: double
+          description: Minimum diameter (i.e. production casing string) casing diameter
+            in millimetres.
+          type: number
+        statusCode:
+          description: "Represents the latest known state of a well.\nPossible values\
+            \ are: \n\n\n\n`ABD` - Abandoned\t\n`BKF` - Backfilled\t\n`BLK` - Blocked\t\
+            \n`CAP` - Capped\t\n`CAM` - Care and Maintenance\t\n`CAS` - Cased\t\n\
+            `CLP` - Collapsed\t\n`COM` - Completed\t\n`CSH` - Controlled - shut in\t\
+            \n`CFL` - Controlled Flowing\t\n`WWT` - Converted to WW\t\n`DMG` - Damaged\t\
+            \n`DMP` - Damp\t\n`DEC` - Decommissioned\t\n`DRY` - Dry\t\n`DCM` - Dual\
+            \ Completion\t\n`EQP` - Equipped (pump\t windmill\t etc)\t\n`EXS` - Extinct\
+            \ Spring\t\n`FL` \t  Flowing\t\n`FWT` - Free water and tail\t\n`GEQ` -\
+            \ Geotechnically Equiped\t\n`INJ` - Injector\t\n`MND` - Mined (removed\
+            \ by mining)\t\n`NEQ` - Not Equipped\t\n`NIU` - Not In Use\t\n`NL` \t\
+            \  Not Located\t\n`NOP` - Not Operational\t\n`OPR` - Operational\t\n`OPQ`\
+            \ - Operational as required\t\n`PLG` - Plugged\t\n`PND` - Pond\t free\
+            \ water\t\n`RHB` - Rehabilitated\t\n`SAT` - Saturated\t\n`SHT` - Shut\
+            \ In\t\n`SCM` - Single Completion\t\n`STO` - Storage\t\n`SUS` - Suspended\t\
+            \n`UFL` - Uncontrolled Flowing\t\n`UEQ` - Unequipped\t\n`UKN` - Unknown\t\
+            \n`UNW` - Unworked"
+          enum:
+          - ABD
+          - BKF
+          - BLK
+          - CAP
+          - CAM
+          - CAS
+          - CLP
+          - COM
+          - CSH
+          - CFL
+          - WWT
+          - DMG
+          - DMP
+          - DEC
+          - DRY
+          - DCM
+          - EQP
+          - EXS
+          - FL
+          - FWT
+          - GEQ
+          - INJ
+          - MND
+          - NEQ
+          - NIU
+          - NL
+          - NOP
+          - OPR
+          - OPQ
+          - PLG
+          - PND
+          - RHB
+          - SAT
+          - SHT
+          - SCM
+          type: string
+        statusDate:
+          format: date
+          description: Date of the status code
+          type: string
+        purposeCode:
+          description: "Represents the purpose of the well  \n\n`APN` - Anode Protection\t\
+            \n`APP` - Appraisal\t\n`CMT` - Construction Materials\t\n`COA` - Coal\t\
+            \n`DAM` - Dam\t\n`DEP` - Deepening\t\n`DEV` - Development\t\n`DOM` - Domestic\t\
+            \n`DRN` - Drainage\t\n`DWT` - Dewatering\t\n`ENV` - Environmental\t\n\
+            `ETH` - Earthing\t\n`EXP` - Exploration\t\n`FIR` - Fire Fighting\t\n`FND`\
+            \ - Foundations\t\n`GEN` - General Usage\t\n`GTH` - Geothermal Energy\t\
+            \n`HOL` - Water Hole\t\n`IND` - Industrial\t\n`INV` - Investigation\t\n\
+            `IRR` - Irrigation\t\n`LAK` - Lake\t\n`MON` - Monitoring\t\n`OBS` - Observation\t\
+            \n`PRO` - Production\t\n`RCL` - Recreational\t\n`REC` - Recharge\t\n`RHL`\
+            \ - Rock Hole\t\n`RIV` - River\t\n`SCI` - Scientific\t\n`SEA` - Sea Water\t\
+            \n`SEI` - Seismic\t\n`SOK` - Soak\t\n`SPR` - Spring\t\n`STK` - Stock\t\
+            \n`TNK` - Tank\t\n`TWS` - Town Water Supply (Public/Muncipal)\t\n`UKN`\
+            \ - Unknown\t\n`WAS` - Waste Disposal\t\n`ASR` - Aquifer Storage and Recovery\t\
+            \n`RDC` - Road Construction / Maintenance\t\n`LWD` - Liquid Waste Disposal\t\
+            \n`MWS` - Mine Water Supply\t\n`SIS` - Interception scheme production\
+            \ well\t\n`MAR` - Managed Aquifer Recharge (incl ASR)\t\n`ISR` - In-situ\
+            \ recovery\t\n`GHP` - Ground source heat pump exchange\t"
+          enum:
+          - APN
+          - APP
+          - CMT
+          - COA
+          - DAM
+          - DEP
+          - DEV
+          - DOM
+          - DRN
+          - DWT
+          - ENV
+          - ETH
+          - EXP
+          - FIR
+          - FND
+          - GEN
+          - GTH
+          - HOL
+          - IND
+          - INV
+          - IRR
+          - LAK
+          - MON
+          - OBS
+          - PRO
+          - RCL
+          - REC
+          - RHL
+          - RIV
+          - SCI
+          - SEA
+          - SEI
+          - SOK
+          - SPR
+          - STK
+          - TNK
+          - TWS
+          - UKN
+          - WAS
+          - ASR
+          - RDC
+          - LWD
+          - MWS
+          - SIS
+          - MAR
+          - ISR
+          - GHP
+          type: string
+        map100kNumber:
+          format: int32
+          description: The 1:100000 map sheet number on which the well is located.
+            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
+            into SAGeoData.
+          type: integer
+        sequenceNumber:
+          format: int32
+          description: A unique number identifying the well on the 1:100000 map sheet
+            for which the well is located.
+          type: integer
+        permitNumberExt:
+          description: Permit Number extension
+          type: string
+      example:
+        latestPermitNumber: 234567
+        drillholeName: BORE 2
+        originalDrilledDate: 1991-06-17
+        originalDrilledDepth: 65.23
+        minimumDiameter: 150
+        statusCode: EQP
+        statusDate: 1991-06-17
+        purposeCode: IRR
+        map100kNumber: 6628
+        sequenceNumber: 1234
+        permitNumberExt: B
   responses:
     UnauthorizedError:
       headers:
@@ -3311,6 +3589,8 @@ tags:
   description: API endpoints related to Authentication
 - name: omnwell
   description: API endpoints that relate to Monitored Wells
+- name: dh
+  description: API endpoints that relate to Drillholes in general
 externalDocs:
   description: Find out more about SA Geodata API - iShare location
   url: http://swagger.io
