@@ -36,7 +36,7 @@ paths:
           unitNumber:
             value: 6130-1358
         name: unitNumber
-        description: Unit Number (including unit sequence number)
+        description: Unit Number (in format `map100knumber-unitSequenceNumber`)
         schema:
           type: string
         in: query
@@ -379,7 +379,7 @@ paths:
           type: integer
         in: query
       - name: unitNumber
-        description: Unit Number of format `unit number`-`sequence number`
+        description: Unit Number (in format `map100knumber-unitSequenceNumber`)
         schema:
           type: string
         in: query
@@ -883,7 +883,7 @@ paths:
       - dh
       parameters:
       - name: unitNumber
-        description: Unit Number of format `unit number`-`sequence number`
+        description: Unit Number (in format `map100knumber-unitSequenceNumber`)
         schema:
           type: string
         in: query
@@ -1786,7 +1786,7 @@ components:
         pageSize: 60
         pageNumber: 2
         results:
-        - unitNumber: 54
+        - unitNumber: 6120-27
           landscapeSARegionCode: EYRPEN
           sequenceNumber: 27
           obsWellPlan: some text
@@ -1800,7 +1800,7 @@ components:
           elevationMeasurementsURL: some text
           notesURL: some text
           waterLevelMeasurementsURL: some text
-          map100kNumber: 21
+          map100kNumber: 6120
           drillholeNumber: 34
           status: some text
           prescribedWellAreaName: some text
@@ -1821,7 +1821,7 @@ components:
             Code: some text
           - Value: some text
             Code: some text
-        - unitNumber: 66
+        - unitNumber: 6120-57
           landscapeSARegionCode: EYRPEN
           sequenceNumber: 57
           obsWellPlan: some text
@@ -1835,7 +1835,7 @@ components:
           elevationMeasurementsURL: some text
           notesURL: some text
           waterLevelMeasurementsURL: some text
-          map100kNumber: 76
+          map100kNumber: 6120
           drillholeNumber: 51
           status: some text
           prescribedWellAreaName: some text
@@ -2243,9 +2243,9 @@ components:
       type: object
       properties:
         unitNumber:
-          format: int32
-          description: A combination of the map100000Number and sequence number.
-          type: integer
+          description: A combination of the map100KNumber and sequence number with
+            format `map100kNumber`-`sequence number`
+          type: string
         landscapeSARegionCode:
           description: "Landscape SA Region Code. Possible values:\n\n`ALTJWIL` Alinytjara\
             \ Wilurara \n`EYRPEN` Eyre Peninsula \n`GRNADL` Green Adelaide \n`HILFLE`\
@@ -2482,7 +2482,7 @@ components:
           items:
             $ref: '#/components/schemas/codevaluepair'
       example:
-        unitNumber: 94
+        unitNumber: 6628-54
         landscapeSARegionCode: EYRPEN
         sequenceNumber: 54
         obsWellPlan: some text
@@ -2496,7 +2496,7 @@ components:
         elevationMeasurementsURL: some text
         notesURL: some text
         waterLevelMeasurementsURL: some text
-        map100kNumber: 69
+        map100kNumber: 6628
         drillholeNumber: 86
         status: some text
         prescribedWellAreaName: some text
@@ -2643,52 +2643,6 @@ components:
           - UKN
           - VERBL
           type: string
-    wcr-summary:
-      description: Summary of Well Completion Report with minimal infomration
-      required:
-      - id
-      - reportDetails
-      - eventType
-      - unitNumber
-      - unitSequenceNumber
-      - completionDate
-      - drillholeNumber
-      - permitNumber
-      type: object
-      properties:
-        id:
-          description: Well Completion Report ID
-          type: string
-        unitSequenceNumber:
-          format: int32
-          description: Unit Sequence Number of the well.
-          type: integer
-        unitNumber:
-          format: int32
-          description: Unit Number of the well.
-          type: integer
-        eventType:
-          description: "Event type of the well work. \n\nPossible values are: `New`,\
-            \ `Alter`, `Replace`, and `Decommission`"
-          enum:
-          - NEW
-          - ALTER
-          - REPLACE
-          - DECOMM
-          type: string
-        reportDetails:
-          description: URL to WCR detail
-          type: string
-        completionDate:
-          format: date
-          description: Completion date
-          type: string
-        drillholeNumber:
-          description: Drillhole Number
-          type: integer
-        permitNumber:
-          description: Well Construction Permit Number
-          type: string
     waterlevelmeasurement:
       title: Root Type for waterlevelmeasurement
       description: Data type representing a water level measurement recorded during
@@ -2749,176 +2703,6 @@ components:
         measurementNumber: 29
         drillholeNumber: 49
         anomalous: true
-    wellpermit:
-      description: Well Permit data
-      required:
-      - issueDate
-      - purpose
-      - permitHolderName
-      - wellUse
-      - expiryDate
-      - address
-      - permitNumber
-      type: object
-      properties:
-        permitNumber:
-          description: Well Construction Permit Number
-          type: number
-        issueDate:
-          format: date
-          description: Permit Issue Date
-          type: string
-        purpose:
-          description: "Permit purpose. Possible values: \n\n`0` - (Not Specified)\
-            \   \n`1034941140` - Well Backfill\t\n`1034941150` - Well Construction\t\
-            \n`1034941151` - Well Construction and Backfill\t\n`1034941160` - Well\
-            \ Deepen\t\n`1034941170` - Well Enlarge\t\n`1034941240` - Well Line\t\n\
-            `1034941280` - Well Plug/Seal\t\n`1034941300` - Well Recase\t\n`1034941301`\
-            \ - Well Rehabilitation"
-          enum:
-          - "0"
-          - "1034941140"
-          - "1034941150"
-          - "1034941151"
-          - "1034941160"
-          - "1034941170"
-          - "1034941240"
-          - "1034941280"
-          - "1034941300"
-          - "1034941301"
-          type: string
-        permitHolderName:
-          description: Permit Holder Name
-          type: string
-        wellUse:
-          description: "Well Use. Possible values: \n\n`0` - (Not Specified)\t\n`135724070`\
-            \ - Cathodic Protection\t\n`196644160` - Drainage\t\n`237652240` - Engineering\t\
-            \n`417066090` - Investigation\t\n`596970260` - Monitoring\t\n`1031213920`\
-            \ - Water Supply"
-          enum:
-          - "0"
-          - "135724070"
-          - "196644160"
-          - "237652240"
-          - "417066090"
-          - "596970260"
-          - "1031213920"
-          type: string
-        expiryDate:
-          format: date
-          description: Permit Expiry Date
-          type: string
-        address:
-          $ref: '#/components/schemas/address'
-          description: Permit Holder Address
-        areaDescription:
-          description: Area Description
-          type: string
-        notes:
-          description: List of Notes against the permit
-          type: array
-          items:
-            type: string
-        conditions:
-          description: List of conditions against the permit
-          type: array
-          items:
-            type: string
-        specialConditions:
-          description: List of special conditions against the permit
-          type: array
-          items:
-            type: string
-        propertyTitle:
-          description: "Property Title details in the format `<prefix>-<volume>-<folio>`\
-            \   \n\nSupported format: `^(\\w{2})?[-](\\w{1,4})?[-](\\w{1,2})?$`  \
-            \ \n`prefix` - alphanumeric of max size 2 (can be blank)   \n`volume`\
-            \ - alphanumeric of max size 4 (can be blank)  \n`folio`  - alphanumeric\
-            \ of max size 4 (can be blank)  \n\nPossible values for `prefix` are:\
-            \   \n`44` - 44\t\n`CL` - CL\t\n`CR` - CR\t\n`CT` - CT\t\n`D3` - D3\t\n\
-            `GM` - GM\t\n`LT` - LT\t\n`R2` - R2\t\n`R3` - R3\t\n`R4` - R4\t\n`R5`\
-            \ - R5\t\n`R6` - R6\t\n`R7` - R7\t\n`R8` - R8\t\n`D1` - D1\t\n`D2` - D2\t\
-            \n`F4` - F4\t\n`R1` - R1\t\n`F1` - F1"
-          type: string
-        propertyParcel:
-          description: "Property Parcel details in the format `<type>-<number>`  \n\
-            \nSupported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
-            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
-            \ 6 (can be blank)  \n\nPossible values for `type` are: \n`*` - *\t\n\
-            `9` - 9\t\n`A` - Allotment\t\n`B` - Block\t\n`C` - Closed Road\t\n`M`\
-            \ - Mineral Section\t\n`P` - Pastoral Run\t\n`Q` - Pieces\t\n`S` - Section\t\
-            \n`X` - Site "
-          type: string
-        propertyPlan:
-          description: "Property Plan details in the format `<type>-<number>`  \n\n\
-            Supported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
-            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
-            \ 6 (can be blank)  \n\nPossible values for `type` are:     \n`C` - Cluster\
-            \ Plan\t\n`D` - Deposited Plan\t\n`F` - Filed Plan\t\n`G` - G.R.O. Deposited\
-            \ Plan\t\n`E` - G.R.O. Enrolled Plan\t\n`H` - Hundred Plan\t\n`N` - N\t\
-            \n`P` - Parish (Outside SA)\t\n`R` - Road Plan\t\n`S` - Strata Plan\t\n\
-            `T` - Township Plan"
-          type: string
-        sectionLotDetail:
-          description: "Section No and Lot No of the property in the format `<section_no>-<lot_no>`\
-            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`section_no`\
-            \   - alphanumeric of max size 7 (can be blank)   \n`lot_no` - alphanumeric\
-            \ of max size 7 (can be blank)  "
-          type: string
-        pastoralDetails:
-          description: "Pastoral details of the property in the format `<block_no>-<lease_no>`\
-            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`block_no`\
-            \   - alphanumeric of max size 7 (can be blank)   \n`lease_no` - alphanumeric\
-            \ of max size 7 (can be blank)  "
-          type: string
-        unitNumber:
-          format: int32
-          description: Unit Number of the well.
-          type: integer
-        unitSequenceNumber:
-          format: int32
-          description: Unit Sequence Number of the well.
-          type: integer
-        drillholeNumber:
-          format: int32
-          description: Unique identifier specified by SAGeoData.
-          type: integer
-        legacyPurpose:
-          description: |-
-            Text description of permit purpose for pre-WILMA well-permits.
-
-            This field had data only for WLS issued well-permits.
-
-            Note: Any value supplied in this field for POST queries are ignored.
-          type: string
-        propertyHundredName:
-          description: Hundred Name of the property
-          type: string
-      example:
-        permitNumber: 999944
-        issueDate: 2020-01-01
-        purpose: notSpecified
-        permitHolderName: JOHN CITIZEN
-        wellUse: not_Specified
-        expiryDate: 2021-01-01
-        address:
-          addressLineOne: Street 1
-          addressLineTwo: Street 2
-          suburb: Adelaide
-          postCode: 5000
-          state: sa
-        notes:
-        - To minimise the risk of contamination, the well should be sited as far as
-          practicable, preferably further than 50 metres from any septic or waste
-          disposal area.
-        conditions:
-        - If the well is considered unsatisfactory, it must be backfilled.
-        specialConditions: []
-        propertyTitle: 44-1111-11
-        propertyParcel: A-111111
-        propertyPlan: G-111111
-        sectionLotDetail: 1111111-1111111
-        pastoralDetails: 1111111-1111111
     wellcompletionreport:
       description: Well Completion Report data
       required:
@@ -3563,6 +3347,235 @@ components:
         map100kNumber: 6628
         sequenceNumber: 1234
         permitNumberExt: B
+    wcr-summary:
+      description: Summary of Well Completion Report with minimal infomration
+      required:
+      - id
+      - reportDetails
+      - eventType
+      - unitNumber
+      - unitSequenceNumber
+      - completionDate
+      - drillholeNumber
+      - permitNumber
+      - map100kNumber
+      type: object
+      properties:
+        id:
+          description: Well Completion Report ID
+          type: string
+        map100kNumber:
+          format: int32
+          description: The 1:100000 map sheet number on which the well is located.
+            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
+            into SAGeoData.
+          type: integer
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+        unitNumber:
+          description: A combination of the map100KNumber and sequence number with
+            format `map100kNumber`-`sequence number`
+          type: string
+        eventType:
+          description: "Event type of the well work. \n\nPossible values are: `New`,\
+            \ `Alter`, `Replace`, and `Decommission`"
+          enum:
+          - NEW
+          - ALTER
+          - REPLACE
+          - DECOMM
+          type: string
+        reportDetails:
+          description: URL to WCR detail
+          type: string
+        completionDate:
+          format: date
+          description: Completion date
+          type: string
+        drillholeNumber:
+          description: Drillhole Number
+          type: integer
+        permitNumber:
+          description: Well Construction Permit Number
+          type: string
+    wellpermit:
+      description: Well Permit data
+      required:
+      - issueDate
+      - purpose
+      - permitHolderName
+      - wellUse
+      - expiryDate
+      - address
+      - permitNumber
+      type: object
+      properties:
+        permitNumber:
+          description: Well Construction Permit Number
+          type: number
+        issueDate:
+          format: date
+          description: Permit Issue Date
+          type: string
+        purpose:
+          description: "Permit purpose. Possible values: \n\n`0` - (Not Specified)\
+            \   \n`1034941140` - Well Backfill\t\n`1034941150` - Well Construction\t\
+            \n`1034941151` - Well Construction and Backfill\t\n`1034941160` - Well\
+            \ Deepen\t\n`1034941170` - Well Enlarge\t\n`1034941240` - Well Line\t\n\
+            `1034941280` - Well Plug/Seal\t\n`1034941300` - Well Recase\t\n`1034941301`\
+            \ - Well Rehabilitation"
+          enum:
+          - "0"
+          - "1034941140"
+          - "1034941150"
+          - "1034941151"
+          - "1034941160"
+          - "1034941170"
+          - "1034941240"
+          - "1034941280"
+          - "1034941300"
+          - "1034941301"
+          type: string
+        permitHolderName:
+          description: Permit Holder Name
+          type: string
+        wellUse:
+          description: "Well Use. Possible values: \n\n`0` - (Not Specified)\t\n`135724070`\
+            \ - Cathodic Protection\t\n`196644160` - Drainage\t\n`237652240` - Engineering\t\
+            \n`417066090` - Investigation\t\n`596970260` - Monitoring\t\n`1031213920`\
+            \ - Water Supply"
+          enum:
+          - "0"
+          - "135724070"
+          - "196644160"
+          - "237652240"
+          - "417066090"
+          - "596970260"
+          - "1031213920"
+          type: string
+        expiryDate:
+          format: date
+          description: Permit Expiry Date
+          type: string
+        address:
+          $ref: '#/components/schemas/address'
+          description: Permit Holder Address
+        areaDescription:
+          description: Area Description
+          type: string
+        notes:
+          description: List of Notes against the permit
+          type: array
+          items:
+            type: string
+        conditions:
+          description: List of conditions against the permit
+          type: array
+          items:
+            type: string
+        specialConditions:
+          description: List of special conditions against the permit
+          type: array
+          items:
+            type: string
+        propertyTitle:
+          description: "Property Title details in the format `<prefix>-<volume>-<folio>`\
+            \   \n\nSupported format: `^(\\w{2})?[-](\\w{1,4})?[-](\\w{1,2})?$`  \
+            \ \n`prefix` - alphanumeric of max size 2 (can be blank)   \n`volume`\
+            \ - alphanumeric of max size 4 (can be blank)  \n`folio`  - alphanumeric\
+            \ of max size 4 (can be blank)  \n\nPossible values for `prefix` are:\
+            \   \n`44` - 44\t\n`CL` - CL\t\n`CR` - CR\t\n`CT` - CT\t\n`D3` - D3\t\n\
+            `GM` - GM\t\n`LT` - LT\t\n`R2` - R2\t\n`R3` - R3\t\n`R4` - R4\t\n`R5`\
+            \ - R5\t\n`R6` - R6\t\n`R7` - R7\t\n`R8` - R8\t\n`D1` - D1\t\n`D2` - D2\t\
+            \n`F4` - F4\t\n`R1` - R1\t\n`F1` - F1"
+          type: string
+        propertyParcel:
+          description: "Property Parcel details in the format `<type>-<number>`  \n\
+            \nSupported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
+            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
+            \ 6 (can be blank)  \n\nPossible values for `type` are: \n`*` - *\t\n\
+            `9` - 9\t\n`A` - Allotment\t\n`B` - Block\t\n`C` - Closed Road\t\n`M`\
+            \ - Mineral Section\t\n`P` - Pastoral Run\t\n`Q` - Pieces\t\n`S` - Section\t\
+            \n`X` - Site "
+          type: string
+        propertyPlan:
+          description: "Property Plan details in the format `<type>-<number>`  \n\n\
+            Supported format: `^(\\w{1})?[-](\\w{1,6})?$`   \n`type`   - alphanumeric\
+            \ of max size 1 (can be blank)   \n`number` - alphanumeric of max size\
+            \ 6 (can be blank)  \n\nPossible values for `type` are:     \n`C` - Cluster\
+            \ Plan\t\n`D` - Deposited Plan\t\n`F` - Filed Plan\t\n`G` - G.R.O. Deposited\
+            \ Plan\t\n`E` - G.R.O. Enrolled Plan\t\n`H` - Hundred Plan\t\n`N` - N\t\
+            \n`P` - Parish (Outside SA)\t\n`R` - Road Plan\t\n`S` - Strata Plan\t\n\
+            `T` - Township Plan"
+          type: string
+        sectionLotDetail:
+          description: "Section No and Lot No of the property in the format `<section_no>-<lot_no>`\
+            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`section_no`\
+            \   - alphanumeric of max size 7 (can be blank)   \n`lot_no` - alphanumeric\
+            \ of max size 7 (can be blank)  "
+          type: string
+        pastoralDetails:
+          description: "Pastoral details of the property in the format `<block_no>-<lease_no>`\
+            \  \n\nSupported format: `^(\\w{1,7})?[-](\\w{1,7})?$`   \n`block_no`\
+            \   - alphanumeric of max size 7 (can be blank)   \n`lease_no` - alphanumeric\
+            \ of max size 7 (can be blank)  "
+          type: string
+        unitNumber:
+          description: A combination of the map100KNumber and sequence number with
+            format `map100kNumber`-`sequence number`
+          type: string
+        map100kNumber:
+          format: int32
+          description: The 1:100000 map sheet number on which the well is located.
+            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
+            into SAGeoData.
+          type: integer
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
+        legacyPurpose:
+          description: |-
+            Text description of permit purpose for pre-WILMA well-permits.
+
+            This field had data only for WLS issued well-permits.
+
+            Note: Any value supplied in this field for POST queries are ignored.
+          type: string
+        propertyHundredName:
+          description: Hundred Name of the property
+          type: string
+      example:
+        permitNumber: 999944
+        issueDate: 2020-01-01
+        purpose: notSpecified
+        permitHolderName: JOHN CITIZEN
+        wellUse: not_Specified
+        expiryDate: 2021-01-01
+        address:
+          addressLineOne: Street 1
+          addressLineTwo: Street 2
+          suburb: Adelaide
+          postCode: 5000
+          state: sa
+        notes:
+        - To minimise the risk of contamination, the well should be sited as far as
+          practicable, preferably further than 50 metres from any septic or waste
+          disposal area.
+        conditions:
+        - If the well is considered unsatisfactory, it must be backfilled.
+        specialConditions: []
+        propertyTitle: 44-1111-11
+        propertyParcel: A-111111
+        propertyPlan: G-111111
+        sectionLotDetail: 1111111-1111111
+        pastoralDetails: 1111111-1111111
   responses:
     UnauthorizedError:
       headers:
