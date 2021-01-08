@@ -2703,319 +2703,6 @@ components:
         measurementNumber: 29
         drillholeNumber: 49
         anomalous: true
-    wellcompletionreport:
-      description: Well Completion Report data
-      required:
-      - eventType
-      - wellPurposes
-      - coordinateData
-      - constructionDetails
-      - id
-      type: object
-      properties:
-        id:
-          description: Well Completion Report ID
-          type: string
-        eventType:
-          description: "Event type of the well work. \n\nPossible values are: `New`,\
-            \ `Alter`, `Replace`, and `Decommission`"
-          enum:
-          - NEW
-          - ALTER
-          - REPLACE
-          - DECOMM
-          type: string
-        unitNumber:
-          format: int32
-          description: Unit Number of the well.
-          type: integer
-        drillholeName:
-          description: Drillhole name
-          type: string
-        drillholeOtherName:
-          description: Drillhole othere name
-          type: string
-        waterPointType:
-          description: "Water Point Type. If left blank the well is marked as NOT\
-            \ a Water Point Type. \n\nPossible values:  \n`DAM` - Dam\t\n`HOL` - Water\
-            \ Hole\t\n`LAK` - Lake\t\n`RIV` - River\t\n`SEA` - Sea Water\t\n`SOK`\
-            \ - Soak\t\n`SPR` - Spring\t\n`MDS` - Mound Spring\t\n`MWS` - Mine Water\
-            \ Supply\t\n`UKN` - Water Point type not known\t\n`SMP` - Swamp\t\n`DRN`\
-            \ - drain; Bore drain\t\n`CRK` - Creek\t\n`SNK` - Sink hole\t\n`GSP` -\
-            \ GAB Spring (incl previous mound springs)\t\n`RES` - Reservoir\t\n`VWP`\
-            \ - Vibrating Wire Piezometer\t\n`MIN` - Mine"
-          maxLength: 3
-          minLength: 3
-          type: string
-        isWaterWellClass:
-          description: Is the well a Waterwell Class
-          type: boolean
-        isWaterWellLicenced:
-          description: Is Water Well Licenced
-          type: boolean
-        isBackFill:
-          description: Is back-fill
-          type: boolean
-        isDeepened:
-          description: Is Deepened
-          type: boolean
-        isEnlarged:
-          description: Is Enlarged
-          type: boolean
-        isRehabilitate:
-          description: Is rehabilitate
-          type: boolean
-        isInspected:
-          description: Is Inspected
-          type: boolean
-        isAbandoned:
-          description: Is Abandoned
-          type: boolean
-        isFlowing:
-          description: Is Flowing
-          type: boolean
-        isDry:
-          description: Is Dry
-          type: boolean
-        isReplacement:
-          description: Is Replacement
-          type: boolean
-        finalSWLInMeters:
-          format: double
-          description: Final Standing Water Level in meters
-          type: number
-        finalYieldInMeters:
-          format: double
-          description: Final Yield in meters
-          type: number
-        plantOperator:
-          description: Plant Operator
-          type: string
-        wellPurposes:
-          description: "Well Purposes.\n\nArray of one or more purpose from the list\
-            \ below:   \n`DEP` - Deepening\t\n`DOM` - Domestic\t\n`DRN` - Drainage\t\
-            \n`DWT` - Dewatering\t\n`ENV` - Environmental\t\n`ETH` - Earthing\t\n\
-            `EXP` - Exploration\t\n`FIR` - Fire Fighting\t\n`GEN` - General Usage\t\
-            \n`GHP` - Ground source heat pump exchange\t\n`GTH` - Geothermal Energy\t\
-            \n`HOL` - Water Hole\t\n`IND` - Industrial\t\n`INV` - Investigation\t\n\
-            `IRR` - Irrigation\t\n`ISR` - In-situ recovery\t\n`LAK` - Lake\t\n`LWD`\
-            \ - Liquid Waste Disposal\t\n`MAR` - Managed Aquifer Recharge (incl ASR)\t\
-            \n`MON` - Monitoring\t\n`MWS` - Mine Water Supply\t\n`OBS` - Observation\t\
-            \n`RCL` - Recreational\t\n`RDC` - Road Construction / Maintenance\t\n\
-            `REC` - Recharge\t\n`RHL` - Rock Hole\t\n`RIV` - River\t\n`SEA` - Sea\
-            \ Water\t\n`SIS` - Interception scheme production well\t\n`SOK` - Soak\t\
-            \n`SPR` - Spring\t\n`STK` - Stock\t\n`TNK` - Tank\t\n`TWS` - Town Water\
-            \ Supply (Public/Muncipal)\t\n`WAS` - Waste Disposal"
-          type: array
-          items:
-            type: string
-        coordinateData:
-          $ref: '#/components/schemas/wcr-coordinatedata'
-          description: Coordinate information
-        constructionDetails:
-          description: Array of Construction details
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-constructiondata'
-        drillingDetails:
-          description: Array of Drilling data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-drillingdata'
-        casingDetails:
-          description: Array of Casing data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-casingdata'
-        productionDetails:
-          description: Array of Production Data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-productiondata'
-        constructionComment:
-          description: Construction comment
-          type: string
-        linearSealDetails:
-          description: Array of Linear Seal Data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-linearsealdata'
-        gravelPackingDetails:
-          description: Array of Gravel Packing data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-gravelpackingdata'
-        wellDevelopmentDetails:
-          description: Array of Well Development data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-welldevelopmentdata'
-        waterCutDetails:
-          description: Array of Water Cut data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-watercutdata'
-        pumpTestDetails:
-          description: Array of Pump Test data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-pumptestdata'
-        formationLogDetails:
-          description: Array of Formation Log data
-          type: array
-          items:
-            $ref: '#/components/schemas/wcr-formationlogdata'
-        unitSequenceNumber:
-          format: int32
-          description: Unit Sequence Number of the well.
-          type: integer
-        drillholeNumber:
-          format: int32
-          description: Unique identifier specified by SAGeoData.
-          type: integer
-        replacementUnitNo:
-          format: int32
-          description: |-
-            Unit Number of the well that is being replaced.
-
-            Applicable only for `REPLACE` events
-          type: integer
-        replacementUnitSeqNo:
-          format: int32
-          description: |-
-            Unit Sequence Number of the well that is being replaced.
-
-            Applicable only for `REPLACE` events
-          type: integer
-        isTraditionalWell:
-          description: Is Traditional Well
-          type: boolean
-      example:
-        id: WCR-Example
-        eventType: replace
-        unitNumber: 4745
-        drillholeNumber: 314545
-        drillholeName: DHNAME
-        drillholeOtherName: DHOTHERNAME
-        waterPointType: LAK
-        isWaterWellClass: false
-        isWaterWellLicenced: true
-        isTraditionalWell: true
-        isBackFill: false
-        isDeepened: true
-        isEnlarged: true
-        isRehabilitate: true
-        isInspected: true
-        isAbandoned: true
-        isFlowing: true
-        isDry: false
-        isReplacement: true
-        plantOperator: STRING
-        wellPurposes:
-        - SPR
-        - SOK
-        - RIV
-        coordinateData:
-          coordinateData:
-            datum: gdA94
-            easting: 524286
-            northing: 7104528
-            zone: 52
-            lat: 26.178473
-            long: 129.243042
-          surveyAccuracyInMetres: 1
-          surveyMethod: amgrd
-        constructionDetails:
-        - commenceDate: 2020-01-01
-          completionDate: 2020-01-01
-          maxDepthInMeters: 10
-          finalDepthInMeters: 1
-          currentDepthInMeters: 1
-          isOriginal: true
-          permitNumber: 28043
-          permitHolderName: PENFOLD WINE GROUP (SEPPELTS)
-        drillingDetails:
-        - fromInMeters: 1
-          toInMeters: 1
-          diamInMillis: 1
-          widthInMeters: 1
-          lengthInMeters: 1
-          drillingMethodCode: acr
-        casingDetails:
-        - casingDepthFromInMeters: 0
-          casingDiamInMillis: 1
-          casingMaterial: ABS
-          cementingType: g
-          cementingMethod: disp
-          doesShoeExist: false
-          isShoeCemented: false
-        - casingType: p
-          casingDepthFromInMeters: 1
-          casingDepthToInMeters: 2
-          casingDiamInMillis: 2
-          casingMaterial: BEN
-          cementingType: g
-          cementDepthFromInMeters: 1
-          cementDepthToInMeters: 1
-          cementingMethod: disp
-          doesShoeExist: true
-          shoeDiamInMillis: 1
-          isShoeCemented: true
-          comments: string
-        productionDetails:
-        - levelType: oh
-          fromInMeters: 1
-          toInMeters: 1
-          material: abs
-          apertureInMillis: 1
-          outerDiamInMillis: 2
-          innerDiamInMillis: 1
-          comments: string
-        constructionComment: string
-        linearSealDetails:
-        - sealDepthInMeters: 1
-          caseDiamInMillis: 1
-          caseMaterial: abs
-        - caseDiamInMillis: 2
-          caseMaterial: ben
-        gravelPackDetails: []
-        wellDevelopmentDetails:
-        - devMethod: airl
-          durationInHours: 1
-          comments: string
-        waterCutDetails:
-        - date: 2020-01-01
-          isArtesian: true
-          fromInMeters: 1
-          toInMeters: 2
-          depthToWaterInMeters: 2
-          depthAtTestInMeters: 1
-          casingAtTestInMeters: 1
-          wellYieldInLitreSec: 1
-          extractionMethod: airl
-          salinityExtractionMethod: airl
-          salinityUnit: tds
-          salinity: "1"
-          ph: ""
-          tempInCelcius: "1"
-          comments: string
-        pumpTestDetails:
-        - fromInMeters: 1
-          toInMeters: 1
-          waterLevelInMeters: 0
-          testMethod: airl
-          depthOfPumpInMeters: 1
-          dischargeRateInLitersPerSec: 1
-          dischargeMeasurementMethod: airl
-          noOfHoursPumped: 0
-          drawDownInMeters: 0
-        formationLogDetails:
-        - fromInMeters: 1
-          toInMeters: 1
-          material: CGLM
-          isConfidential: false
-          description: string
-        unitSequenceNumber: 645
     wellcompletionreport-page:
       description: Page of Well Completion Report Summary
       required:
@@ -3576,6 +3263,325 @@ components:
         propertyPlan: G-111111
         sectionLotDetail: 1111111-1111111
         pastoralDetails: 1111111-1111111
+    wellcompletionreport:
+      description: Well Completion Report data
+      required:
+      - eventType
+      - wellPurposes
+      - coordinateData
+      - constructionDetails
+      - id
+      type: object
+      properties:
+        id:
+          description: Well Completion Report ID
+          type: string
+        eventType:
+          description: "Event type of the well work. \n\nPossible values are: `New`,\
+            \ `Alter`, `Replace`, and `Decommission`"
+          enum:
+          - NEW
+          - ALTER
+          - REPLACE
+          - DECOMM
+          type: string
+        drillholeName:
+          description: Drillhole name
+          type: string
+        drillholeOtherName:
+          description: Drillhole othere name
+          type: string
+        waterPointType:
+          description: "Water Point Type. If left blank the well is marked as NOT\
+            \ a Water Point Type. \n\nPossible values:  \n`DAM` - Dam\t\n`HOL` - Water\
+            \ Hole\t\n`LAK` - Lake\t\n`RIV` - River\t\n`SEA` - Sea Water\t\n`SOK`\
+            \ - Soak\t\n`SPR` - Spring\t\n`MDS` - Mound Spring\t\n`MWS` - Mine Water\
+            \ Supply\t\n`UKN` - Water Point type not known\t\n`SMP` - Swamp\t\n`DRN`\
+            \ - drain; Bore drain\t\n`CRK` - Creek\t\n`SNK` - Sink hole\t\n`GSP` -\
+            \ GAB Spring (incl previous mound springs)\t\n`RES` - Reservoir\t\n`VWP`\
+            \ - Vibrating Wire Piezometer\t\n`MIN` - Mine"
+          maxLength: 3
+          minLength: 3
+          type: string
+        isWaterWellClass:
+          description: Is the well a Waterwell Class
+          type: boolean
+        isWaterWellLicenced:
+          description: Is Water Well Licenced
+          type: boolean
+        isBackFill:
+          description: Is back-fill
+          type: boolean
+        isDeepened:
+          description: Is Deepened
+          type: boolean
+        isEnlarged:
+          description: Is Enlarged
+          type: boolean
+        isRehabilitate:
+          description: Is rehabilitate
+          type: boolean
+        isInspected:
+          description: Is Inspected
+          type: boolean
+        isAbandoned:
+          description: Is Abandoned
+          type: boolean
+        isFlowing:
+          description: Is Flowing
+          type: boolean
+        isDry:
+          description: Is Dry
+          type: boolean
+        isReplacement:
+          description: Is Replacement
+          type: boolean
+        finalSWLInMeters:
+          format: double
+          description: Final Standing Water Level in meters
+          type: number
+        finalYieldInMeters:
+          format: double
+          description: Final Yield in meters
+          type: number
+        plantOperator:
+          description: Plant Operator
+          type: string
+        wellPurposes:
+          description: "Well Purposes.\n\nArray of one or more purpose from the list\
+            \ below:   \n`DEP` - Deepening\t\n`DOM` - Domestic\t\n`DRN` - Drainage\t\
+            \n`DWT` - Dewatering\t\n`ENV` - Environmental\t\n`ETH` - Earthing\t\n\
+            `EXP` - Exploration\t\n`FIR` - Fire Fighting\t\n`GEN` - General Usage\t\
+            \n`GHP` - Ground source heat pump exchange\t\n`GTH` - Geothermal Energy\t\
+            \n`HOL` - Water Hole\t\n`IND` - Industrial\t\n`INV` - Investigation\t\n\
+            `IRR` - Irrigation\t\n`ISR` - In-situ recovery\t\n`LAK` - Lake\t\n`LWD`\
+            \ - Liquid Waste Disposal\t\n`MAR` - Managed Aquifer Recharge (incl ASR)\t\
+            \n`MON` - Monitoring\t\n`MWS` - Mine Water Supply\t\n`OBS` - Observation\t\
+            \n`RCL` - Recreational\t\n`RDC` - Road Construction / Maintenance\t\n\
+            `REC` - Recharge\t\n`RHL` - Rock Hole\t\n`RIV` - River\t\n`SEA` - Sea\
+            \ Water\t\n`SIS` - Interception scheme production well\t\n`SOK` - Soak\t\
+            \n`SPR` - Spring\t\n`STK` - Stock\t\n`TNK` - Tank\t\n`TWS` - Town Water\
+            \ Supply (Public/Muncipal)\t\n`WAS` - Waste Disposal"
+          type: array
+          items:
+            type: string
+        coordinateData:
+          $ref: '#/components/schemas/wcr-coordinatedata'
+          description: Coordinate information
+        constructionDetails:
+          description: Array of Construction details
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-constructiondata'
+        drillingDetails:
+          description: Array of Drilling data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-drillingdata'
+        casingDetails:
+          description: Array of Casing data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-casingdata'
+        productionDetails:
+          description: Array of Production Data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-productiondata'
+        constructionComment:
+          description: Construction comment
+          type: string
+        linearSealDetails:
+          description: Array of Linear Seal Data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-linearsealdata'
+        gravelPackingDetails:
+          description: Array of Gravel Packing data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-gravelpackingdata'
+        wellDevelopmentDetails:
+          description: Array of Well Development data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-welldevelopmentdata'
+        waterCutDetails:
+          description: Array of Water Cut data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-watercutdata'
+        pumpTestDetails:
+          description: Array of Pump Test data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-pumptestdata'
+        formationLogDetails:
+          description: Array of Formation Log data
+          type: array
+          items:
+            $ref: '#/components/schemas/wcr-formationlogdata'
+        map100kNumber:
+          format: int32
+          description: The 1:100000 map sheet number on which the well is located.
+            Unique per 1:100000 map sheet. Generated by SAGeoData upon entry of coordinates
+            into SAGeoData.
+          type: integer
+        unitSequenceNumber:
+          format: int32
+          description: Unit Sequence Number of the well.
+          type: integer
+        unitNumber:
+          description: A combination of the map100KNumber and sequence number with
+            format `map100kNumber`-`sequence number`
+          type: string
+        drillholeNumber:
+          format: int32
+          description: Unique identifier specified by SAGeoData.
+          type: integer
+        replacementUnitMap100K:
+          format: int32
+          description: |-
+            Map100K Number of the well that is being replaced.
+
+            Applicable only for `REPLACE` events
+          type: integer
+        replacementUnitSeqNo:
+          format: int32
+          description: |-
+            Unit Sequence Number of the well that is being replaced.
+
+            Applicable only for `REPLACE` events
+          type: integer
+        isTraditionalWell:
+          description: Is Traditional Well
+          type: boolean
+      example:
+        id: WCR-Example
+        eventType: replace
+        unitNumber: 4745
+        drillholeNumber: 314545
+        drillholeName: DHNAME
+        drillholeOtherName: DHOTHERNAME
+        waterPointType: LAK
+        isWaterWellClass: false
+        isWaterWellLicenced: true
+        isTraditionalWell: true
+        isBackFill: false
+        isDeepened: true
+        isEnlarged: true
+        isRehabilitate: true
+        isInspected: true
+        isAbandoned: true
+        isFlowing: true
+        isDry: false
+        isReplacement: true
+        plantOperator: STRING
+        wellPurposes:
+        - SPR
+        - SOK
+        - RIV
+        coordinateData:
+          coordinateData:
+            datum: gdA94
+            easting: 524286
+            northing: 7104528
+            zone: 52
+            lat: 26.178473
+            long: 129.243042
+          surveyAccuracyInMetres: 1
+          surveyMethod: amgrd
+        constructionDetails:
+        - commenceDate: 2020-01-01
+          completionDate: 2020-01-01
+          maxDepthInMeters: 10
+          finalDepthInMeters: 1
+          currentDepthInMeters: 1
+          isOriginal: true
+          permitNumber: 28043
+          permitHolderName: PENFOLD WINE GROUP (SEPPELTS)
+        drillingDetails:
+        - fromInMeters: 1
+          toInMeters: 1
+          diamInMillis: 1
+          widthInMeters: 1
+          lengthInMeters: 1
+          drillingMethodCode: acr
+        casingDetails:
+        - casingDepthFromInMeters: 0
+          casingDiamInMillis: 1
+          casingMaterial: ABS
+          cementingType: g
+          cementingMethod: disp
+          doesShoeExist: false
+          isShoeCemented: false
+        - casingType: p
+          casingDepthFromInMeters: 1
+          casingDepthToInMeters: 2
+          casingDiamInMillis: 2
+          casingMaterial: BEN
+          cementingType: g
+          cementDepthFromInMeters: 1
+          cementDepthToInMeters: 1
+          cementingMethod: disp
+          doesShoeExist: true
+          shoeDiamInMillis: 1
+          isShoeCemented: true
+          comments: string
+        productionDetails:
+        - levelType: oh
+          fromInMeters: 1
+          toInMeters: 1
+          material: abs
+          apertureInMillis: 1
+          outerDiamInMillis: 2
+          innerDiamInMillis: 1
+          comments: string
+        constructionComment: string
+        linearSealDetails:
+        - sealDepthInMeters: 1
+          caseDiamInMillis: 1
+          caseMaterial: abs
+        - caseDiamInMillis: 2
+          caseMaterial: ben
+        gravelPackDetails: []
+        wellDevelopmentDetails:
+        - devMethod: airl
+          durationInHours: 1
+          comments: string
+        waterCutDetails:
+        - date: 2020-01-01
+          isArtesian: true
+          fromInMeters: 1
+          toInMeters: 2
+          depthToWaterInMeters: 2
+          depthAtTestInMeters: 1
+          casingAtTestInMeters: 1
+          wellYieldInLitreSec: 1
+          extractionMethod: airl
+          salinityExtractionMethod: airl
+          salinityUnit: tds
+          salinity: "1"
+          ph: ""
+          tempInCelcius: "1"
+          comments: string
+        pumpTestDetails:
+        - fromInMeters: 1
+          toInMeters: 1
+          waterLevelInMeters: 0
+          testMethod: airl
+          depthOfPumpInMeters: 1
+          dischargeRateInLitersPerSec: 1
+          dischargeMeasurementMethod: airl
+          noOfHoursPumped: 0
+          drawDownInMeters: 0
+        formationLogDetails:
+        - fromInMeters: 1
+          toInMeters: 1
+          material: CGLM
+          isConfidential: false
+          description: string
+        unitSequenceNumber: 645
   responses:
     UnauthorizedError:
       headers:
