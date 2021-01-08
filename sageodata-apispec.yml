@@ -1633,16 +1633,12 @@ components:
           $ref: '#/components/schemas/address'
           description: Address Details
         drillerClass:
-          description: |-
-            Driller Class. Possible values are:
-
-            `1` - Class 1
-            `2` - Class 2
-            `3` - Class 3
+          description: "Driller Class. Possible values are:\n\n`C1` - Class 1  \n\
+            `C2` - Class 2  \n`C3` - Class 3  "
           enum:
-          - "1"
-          - "2"
-          - "3"
+          - C1
+          - C2
+          - C3
           type: string
         drillerMiddleName:
           description: 'Driller''s Middle Name '
@@ -3107,40 +3103,38 @@ components:
           description: Permit Issue Date
           type: string
         purpose:
-          description: "Permit purpose. Possible values: \n\n`0` - (Not Specified)\
-            \   \n`1034941140` - Well Backfill\t\n`1034941150` - Well Construction\t\
-            \n`1034941151` - Well Construction and Backfill\t\n`1034941160` - Well\
-            \ Deepen\t\n`1034941170` - Well Enlarge\t\n`1034941240` - Well Line\t\n\
-            `1034941280` - Well Plug/Seal\t\n`1034941300` - Well Recase\t\n`1034941301`\
-            \ - Well Rehabilitation"
+          description: "Permit purpose. Possible values: \n\n`NOVAL` - (Not Specified)\
+            \   \n`BKFILL` - Well Backfill\t\n`CNSTR` - Well Construction\t\n`CNSBKF`\
+            \ - Well Construction and Backfill\t\n`DEEPN` - Well Deepen\t\n`ENLRG`\
+            \ - Well Enlarge\t\n`WLINE` - Well Line\t\n`PLGSEL` - Well Plug/Seal\t\
+            \n`RECSE` - Well Recase\t\n`REHAB` - Well Rehabilitation"
           enum:
-          - "0"
-          - "1034941140"
-          - "1034941150"
-          - "1034941151"
-          - "1034941160"
-          - "1034941170"
-          - "1034941240"
-          - "1034941280"
-          - "1034941300"
-          - "1034941301"
+          - NOVAL
+          - BKFIL
+          - CNSTR
+          - CNSBKF
+          - DEEPN
+          - ENLRG
+          - WLINE
+          - PLGSEL
+          - RECSE
+          - REHAB
           type: string
         permitHolderName:
           description: Permit Holder Name
           type: string
         wellUse:
-          description: "Well Use. Possible values: \n\n`0` - (Not Specified)\t\n`135724070`\
-            \ - Cathodic Protection\t\n`196644160` - Drainage\t\n`237652240` - Engineering\t\
-            \n`417066090` - Investigation\t\n`596970260` - Monitoring\t\n`1031213920`\
-            \ - Water Supply"
+          description: "Well Use. Possible values: \n\n`NOVAL` - (Not Specified)\t\
+            \n`CTPRT` - Cathodic Protection\t\n`DRNG` - Drainage\t\n`ENG` - Engineering\t\
+            \n`INV` - Investigation\t\n`MON` - Monitoring\t\n`WSPLY` - Water Supply"
           enum:
-          - "0"
-          - "135724070"
-          - "196644160"
-          - "237652240"
-          - "417066090"
-          - "596970260"
-          - "1031213920"
+          - NOVAL
+          - CTPRT
+          - DRNG
+          - ENG
+          - INV
+          - MON
+          - WSPLY
           type: string
         expiryDate:
           format: date
@@ -3241,9 +3235,9 @@ components:
       example:
         permitNumber: 999944
         issueDate: 2020-01-01
-        purpose: notSpecified
+        purpose: BKFIL
         permitHolderName: JOHN CITIZEN
-        wellUse: not_Specified
+        wellUse: ENG
         expiryDate: 2021-01-01
         address:
           addressLineOne: Street 1
