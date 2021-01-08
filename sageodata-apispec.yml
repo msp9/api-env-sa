@@ -3401,11 +3401,11 @@ components:
           type: string
         originalDrilledDate:
           format: date
-          description: Date for the depth of consturction
+          description: Date for the depth of construction
           type: string
         originalDrilledDepth:
           format: double
-          description: Final depth the drillhole was completed at
+          description: Final depth (in meters) the drillhole was completed at.
           type: number
         minimumDiameter:
           format: double
