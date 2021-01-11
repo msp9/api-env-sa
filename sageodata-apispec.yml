@@ -66,6 +66,9 @@ paths:
           description: Successful response - returns an array of `wcr-summary` entities.
         "404":
           description: No matching results
+        "400":
+          description: 'Atleast one of the following query parameters required: `drillholeNumber`,
+            `permitNumber` or `unitNumber`'
       operationId: getwellcompletionreports
       summary: List All wellcompletionreports
       description: Gets a list of all Well Completion Reports as summaries.
