@@ -1637,11 +1637,13 @@ components:
           description: Address Details
         drillerClass:
           description: "Driller Class. Possible values are:\n\n`C1` - Class 1  \n\
-            `C2` - Class 2  \n`C3` - Class 3  "
+            `C2` - Class 2  \n`C3` - Class 3  \n`U` - Legacy Class (does not support\
+            \ POST/PUT)"
           enum:
           - C1
           - C2
           - C3
+          - U
           type: string
         drillerMiddleName:
           description: 'Driller''s Middle Name '
