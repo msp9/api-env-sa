@@ -64,11 +64,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/wellcompletionreport-page'
           description: Successful response - returns an array of `wcr-summary` entities.
-        "404":
-          description: No matching results
         "400":
           description: 'Atleast one of the following query parameters required: `drillholeNumber`,
             `permitNumber` or `unitNumber`'
+        "404":
+          description: No matching results
       operationId: getwellcompletionreports
       summary: List All wellcompletionreports
       description: Gets a list of all Well Completion Reports as summaries.
@@ -538,27 +538,6 @@ paths:
                     Value: Reference
           description: Successful operation
       summary: List all reference point types
-  /api/v1.0/monitoringnetworkwells/surveymethods/:
-    summary: Endpoint to retrieve the list of possible survey methods and their code
-      values
-    get:
-      tags:
-      - omnwell
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/codevaluepair'
-              examples:
-                Example:
-                  value: "[\r\n  {\r\n    \"Code\": \"DEM\",\r\n    \"Value\": \"\
-                    Digital Elevation Model\t\"\r\n  },\r\n  {\r\n    \"Code\": \"\
-                    DIG\",\r\n    \"Value\": \"Digitised\"\r\n  }\r\n]"
-          description: Successful operation
-      summary: List all survey methods
   /api/v1.0/monitoringnetworks:
     summary: Endpoint to return a list of available monitoring networks
     get:
@@ -623,190 +602,6 @@ paths:
       operationId: GetMonitoringNetworkWells
       summary: List all obwells
       description: ""
-  /api/v1.0/monitoringnetworkwells/{id}/elevationmeasurements/:
-    summary: Endpoint to interact with the list of elevation measurements for a single
-      well.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only elevation measurements that have been modified
-          more recently than the supplied value will be returned.
-        schema:
-          format: date-time
-          type: string
-        in: query
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/elevationmeasurement-page'
-          description: Successful operation
-      operationId: GetElevationMeasurementsByDrillhole
-      summary: List all elevation measurements
-      description: ""
-    parameters:
-    - name: id
-      description: DrillholeId specifying which well to retrieve measurements for.
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
-  /api/v1.0/monitoringnetworkwells/elevationmeasurements/:
-    summary: Endpoint to interact with elevation measurements.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only elevation measurements that have been modified
-          more recently than the supplied value will be returned. Must be less than
-          1 year prior to current date.
-        schema:
-          format: date-time
-          type: string
-        in: query
-        required: true
-      - name: groupCode
-        description: If specified, only measurements recorded for drillholes with
-          the matching group code will be returned.
-        schema:
-          type: string
-        in: query
-        required: true
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/elevationmeasurement-page'
-          description: Successful operation
-        "400":
-          description: Parameters were not supplied or were invalid.
-      operationId: GetElevationMeasurements
-      summary: List all elevation measurements
-      description: ""
-  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements/:
-    summary: Endpoint to interact with the list of water level measurements for a
-      single well.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only water level measurements that have been modified
-          more recently than the supplied value will be returned.
-        schema:
-          format: date-time
-          type: string
-        in: query
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterlevelmeasurement-page'
-          description: Successful operation
-      operationId: GetWaterLevelMeasurementsByDrillhole
-      summary: List all water level measurements
-      description: ""
-    parameters:
-    - name: id
-      description: DrillholeId specifying which well to retrieve measurements for.
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
-  /api/v1.0/monitoringnetworkwells/waterlevelmeasurements/:
-    summary: Endpoint to interact with water level measurements.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only elevation measurements that have been modified
-          more recently than the supplied value will be returned. Must be less than
-          1 year prior to current date.
-        schema:
-          format: date-time
-          type: string
-        in: query
-        required: true
-      - name: groupCode
-        description: If specified, only measurements recorded for drillholes with
-          the matching group code will be returned.
-        schema:
-          type: string
-        in: query
-        required: true
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterlevelmeasurement-page'
-          description: Successful operation
-        "400":
-          description: Parameters were not supplied or were invalid.
-      operationId: GetWaterLevelMeasurements
-      summary: List all water level measurements
-      description: ""
   /api/v1.0/monitoringnetworkwells/{id}/notes/:
     summary: Endpoint to interact with the list of notes for a single well.
     description: ""
@@ -840,8 +635,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/note-page'
           description: Successful operation
-      operationId: GetNotes
-      summary: List all notes
+      operationId: GetNotesByDrillhole
+      summary: List all notes for a drillhole
       description: ""
     parameters:
     - name: id
@@ -913,6 +708,258 @@ paths:
       operationId: GetDrillholes
       summary: List drillholes
       description: Gets a list of `drillhole` entities.
+  /api/v1.0/monitoringnetworkwells/notes:
+    summary: Endpoint to interact with notes.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only notes that have been modified more recently
+          than the supplied value will be returned. Must be less than 1 year prior
+          to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: If specified, only notes recorded for drillholes with the matching
+          group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/note-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetNotes
+      summary: List all notes
+      description: ""
+  /api/v1.0/monitoringnetworkwells/waterlevelmeasurements:
+    summary: Endpoint to interact with water level measurements.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned. Must be less than
+          1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: If specified, only measurements recorded for drillholes with
+          the matching group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetWaterLevelMeasurements
+      summary: List all water level measurements
+      description: ""
+  /api/v1.0/monitoringnetworkwells/surveymethods:
+    summary: Endpoint to retrieve the list of possible survey methods and their code
+      values
+    get:
+      tags:
+      - omnwell
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/codevaluepair'
+              examples:
+                Example:
+                  value: "[\r\n  {\r\n    \"Code\": \"DEM\",\r\n    \"Value\": \"\
+                    Digital Elevation Model\t\"\r\n  },\r\n  {\r\n    \"Code\": \"\
+                    DIG\",\r\n    \"Value\": \"Digitised\"\r\n  }\r\n]"
+          description: Successful operation
+      summary: List all survey methods
+  /api/v1.0/monitoringnetworkwells/elevationmeasurements:
+    summary: Endpoint to interact with elevation measurements.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned. Must be less than
+          1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: If specified, only measurements recorded for drillholes with
+          the matching group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elevationmeasurement-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetElevationMeasurements
+      summary: List all elevation measurements
+      description: ""
+  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements:
+    summary: Endpoint to interact with the list of water level measurements for a
+      single well.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only water level measurements that have been modified
+          more recently than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+      operationId: GetWaterLevelMeasurementsByDrillhole
+      summary: List all water level measurements
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which well to retrieve measurements for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /api/v1.0/monitoringnetworkwells/{id}/elevationmeasurements:
+    summary: Endpoint to interact with the list of elevation measurements for a single
+      well.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elevationmeasurement-page'
+          description: Successful operation
+      operationId: GetElevationMeasurementsByDrillhole
+      summary: List all elevation measurements
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which well to retrieve measurements for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
 components:
   schemas:
     address:
@@ -2192,8 +2239,13 @@ components:
           format: int32
           description: Unique identifier of the note.
           type: integer
+        drillholeNumber:
+          format: int32
+          description: The drillhole number that the note is for.
+          type: integer
       example:
         noteId: 10000
+        drillholeNumber: 70
         note: note text here
         noteDate: 2020-09-02 00:00
         createdBy: KINVERARITY
