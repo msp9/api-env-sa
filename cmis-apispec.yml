@@ -575,58 +575,6 @@ paths:
         type: string
       in: path
       required: true
-  /whs-apis/v1/whsrisks/{id}:
-    summary: End-point for interacting with a single WHS Risk
-    description: End-point for interacting with a single WHS Risk
-    get:
-      tags:
-      - whs-apis
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/whsrisk'
-          description: Success
-      operationId: GetWHSRiskDetails
-      summary: Get WHS Risk details
-      description: Get details of the WHS Risk
-    put:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/whsrisk'
-        required: true
-      tags:
-      - whs-apis
-      responses:
-        "204":
-          description: Success
-      operationId: UpdateWHSRisk
-      summary: Update details of a WHS Risk
-      description: "Update details of a WHS Risk. \nNote: Does not allow updating\
-        \ or changing the existing association of this risk to a client/location.\n\
-        The WHS Risk has to be deleted and added to the new client/location if the\
-        \ association has to be changed."
-    delete:
-      tags:
-      - whs-apis
-      responses:
-        "204":
-          description: Success
-      operationId: removeWHSRisk
-      summary: Remove a WHS Risk
-      description: |-
-        Remove a WHS Risk.
-        Note: The risk association with its client/location will be removed too
-    parameters:
-    - name: id
-      description: riskId
-      schema:
-        type: string
-      in: path
-      required: true
   /whs-apis/v1/whsriskcategories:
     summary: Endpoint to look up risk categories registered in CMIS
     description: Endpoint to look up risk categories registered in CMIS
@@ -774,6 +722,60 @@ paths:
     parameters:
     - name: id
       description: System generated ID of the client
+      in: path
+      required: true
+  /whs-apis/v1/whsrisks/{id}:
+    summary: End-point for interacting with a single WHS Risk
+    description: End-point for interacting with a single WHS Risk
+    get:
+      tags:
+      - whs-apis
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/whsrisk'
+          description: Success
+      operationId: GetWHSRiskDetails
+      summary: Get WHS Risk details
+      description: Get details of the WHS Risk
+    delete:
+      tags:
+      - whs-apis
+      responses:
+        "204":
+          description: Success
+      operationId: removeWHSRisk
+      summary: Remove a WHS Risk
+      description: |-
+        Remove a WHS Risk.
+        Note: The risk association with its client/location will be removed too
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/whsrisk'
+        required: true
+      tags:
+      - whs-apis
+      responses:
+        "204":
+          description: Success
+        "409":
+          description: Cannot change an Obsolete risk back to Active state
+      operationId: UpdateWHSRisk
+      summary: Update details of a WHS Risk
+      description: "Update details of a WHS Risk. Only allows updating the `description`\
+        \ and/or `status`.   \n\nNote: Does not allow updating or changing the existing\
+        \ association of this risk to a client/location.\nThe WHS Risk has to be deleted\
+        \ and added to the new client/location if the association has to be changed."
+    parameters:
+    - name: id
+      description: riskId
+      schema:
+        type: string
       in: path
       required: true
 components:
