@@ -588,7 +588,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/codevaluepair'
           description: Success
       operationId: GetRiskCategories
       summary: Get list of risk categories
@@ -1282,20 +1282,21 @@ components:
       description: Workplace Health and Safety risk details
       required:
       - whsSafetyRiskCategory
-      - creationDate
       - riskId
       - status
+      - whsSafetyRiskCategoryID
       type: object
       properties:
         whsSafetyRiskCategory:
-          description: Workplace Health and Safety risk category
+          description: Workplace Health and Safety Risk Category
           type: string
         description:
           description: Further comments / details
           type: string
         creationDate:
           format: date
-          description: Date when the risk was registered in the system
+          description: "Date when the risk was registered in the system.    \n\nAuto-generated\
+            \ system date and time. "
           type: string
         riskId:
           description: Unique (system-generated) identifier for a WHS Risk
@@ -1315,8 +1316,18 @@ components:
           - ACTIVE
           - OBSOLETE
           type: string
+        createdBy:
+          description: "Created by user name.   \nThis field is auto-populated during\
+            \ `POST` calls"
+          type: string
+        whsSafetyRiskCategoryID:
+          description: "Workplace Health and Safety Risk Category ID.   \n\nUsing\
+            \ an ID that is not supplied via `/whsriskcategories` endpoint will cause\
+            \ validation failure."
+          type: string
       example:
         whsSafetyRiskCategory: Agressive dog(s)
+        whsSafetyRiskCategoryID: dc8c6e61-68b4-e911-a2cd-005056a71934
         description: Owns two agressive dogs
         creationDate: 2018-01-17
         riskId: dc8c6e61-68b4-e911-a2cd-005056a719a3
@@ -1751,6 +1762,17 @@ components:
         pageNumber:
           description: Index (1-based) respresenting current page number
           type: integer
+    codevaluepair:
+      description: Key value pair used to display values of an `ID`-`Description`
+        nature
+      type: object
+      properties:
+        Value:
+          description: The string value itself
+          type: string
+        Code:
+          description: ID (or Code) of the associated value
+          type: string
   securitySchemes:
     Bearer:
       scheme: bearer
