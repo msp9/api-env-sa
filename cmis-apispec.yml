@@ -565,6 +565,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/whsrisk'
           description: Created successfully
+        "409":
+          description: Cannot create a new risk with 'OBSOLETE' status
       operationId: CreateClientRisk
       summary: Create a new WHS Risk associated with the client
       description: Create a new WHS Risk associated with the client
