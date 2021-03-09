@@ -2937,6 +2937,12 @@ components:
           - SAT
           - SHT
           - SCM
+          - STO
+          - SUS
+          - UFL
+          - UEQ
+          - UKN
+          - UNW
           type: string
         statusDate:
           format: date
