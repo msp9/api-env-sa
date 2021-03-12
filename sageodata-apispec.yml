@@ -723,7 +723,7 @@ paths:
           format: date-time
           type: string
         in: query
-        required: true
+        required: false
       - name: groupCode
         description: If specified, only notes recorded for drillholes with the matching
           group code will be returned.
@@ -754,53 +754,6 @@ paths:
           description: Parameters were not supplied or were invalid.
       operationId: GetNotes
       summary: List all notes
-      description: ""
-  /api/v1.0/monitoringnetworkwells/waterlevelmeasurements:
-    summary: Endpoint to interact with water level measurements.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only elevation measurements that have been modified
-          more recently than the supplied value will be returned. Must be less than
-          1 year prior to current date.
-        schema:
-          format: date-time
-          type: string
-        in: query
-        required: true
-      - name: groupCode
-        description: If specified, only measurements recorded for drillholes with
-          the matching group code will be returned.
-        schema:
-          type: string
-        in: query
-        required: true
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterlevelmeasurement-page'
-          description: Successful operation
-        "400":
-          description: Parameters were not supplied or were invalid.
-      operationId: GetWaterLevelMeasurements
-      summary: List all water level measurements
       description: ""
   /api/v1.0/monitoringnetworkwells/surveymethods:
     summary: Endpoint to retrieve the list of possible survey methods and their code
@@ -838,7 +791,7 @@ paths:
           format: date-time
           type: string
         in: query
-        required: true
+        required: false
       - name: groupCode
         description: If specified, only measurements recorded for drillholes with
           the matching group code will be returned.
@@ -870,51 +823,6 @@ paths:
       operationId: GetElevationMeasurements
       summary: List all elevation measurements
       description: ""
-  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements:
-    summary: Endpoint to interact with the list of water level measurements for a
-      single well.
-    description: ""
-    get:
-      tags:
-      - omnwell
-      parameters:
-      - name: modifiedSince
-        description: If specified, only water level measurements that have been modified
-          more recently than the supplied value will be returned.
-        schema:
-          format: date-time
-          type: string
-        in: query
-      - name: limit
-        description: Maximum number of results in the response
-        schema:
-          type: integer
-        in: query
-        required: false
-      - name: offset
-        description: Pagination index
-        schema:
-          type: integer
-        in: query
-        required: false
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/waterlevelmeasurement-page'
-          description: Successful operation
-      operationId: GetWaterLevelMeasurementsByDrillhole
-      summary: List all water level measurements
-      description: ""
-    parameters:
-    - name: id
-      description: DrillholeId specifying which well to retrieve measurements for.
-      schema:
-        format: int64
-        type: integer
-      in: path
-      required: true
   /api/v1.0/monitoringnetworkwells/{id}/elevationmeasurements:
     summary: Endpoint to interact with the list of elevation measurements for a single
       well.
@@ -960,6 +868,187 @@ paths:
         type: integer
       in: path
       required: true
+  /api/v1.0/monitoringnetworkwells/changes:
+    summary: Endpoint to retrieve changes to monitoring network wells.
+    description: Endpoint to retrieve changes to monitoring network wells. Returns
+      changes (add/update/delete) for a monitoring network well or any of it's objects
+      (water level measurements, elevation measurements, notes).
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: Only changes that have occurred more recently than the supplied
+          value will be returned. Must be less than 1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: Only changes recorded for drillholes with the matching group
+          code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: changeType
+        description: What change type to return, i.e. deletes (D), updates (U) or
+          additions (A).
+        schema:
+          enum:
+          - A
+          - U
+          - D
+          type: string
+        in: query
+        required: true
+      - name: changeObjectType
+        description: What objects to retrieve changes for, i.e. WaterLevelMeasurements,
+          ElevationMeasurements, Notes, etc.
+        schema:
+          enum:
+          - Drillhole
+          - WaterLevelMeasurement
+          - ElevationMeasurement
+          - Note
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/change-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetChanges
+      summary: List all changes
+      description: ""
+  /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements:
+    summary: Endpoint to interact with the list of water level measurements for a
+      single well.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only water level measurements that have been modified
+          more recently than the supplied value will be returned.
+        schema:
+          format: date-time
+          type: string
+        in: query
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: seriesType
+        description: Specify whether to retrieve the water level measurements as a
+          function of time (T), or a function of depth (D).
+        schema:
+          enum:
+          - T
+          - D
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+      operationId: GetWaterLevelMeasurementsByDrillhole
+      summary: List all water level measurements
+      description: ""
+    parameters:
+    - name: id
+      description: DrillholeId specifying which well to retrieve measurements for.
+      schema:
+        format: int64
+        type: integer
+      in: path
+      required: true
+  /api/v1.0/monitoringnetworkwells/waterlevelmeasurements:
+    summary: Endpoint to interact with water level measurements.
+    description: ""
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: If specified, only elevation measurements that have been modified
+          more recently than the supplied value will be returned. Must be less than
+          1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: false
+      - name: groupCode
+        description: If specified, only measurements recorded for drillholes with
+          the matching group code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: seriesType
+        description: Specify whether to retrieve the water level measurements as a
+          function of time (T), or a function of depth (D).
+        schema:
+          enum:
+          - T
+          - D
+          type: string
+        in: query
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/waterlevelmeasurement-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetWaterLevelMeasurements
+      summary: List all water level measurements
+      description: ""
 components:
   schemas:
     address:
@@ -2005,7 +2094,31 @@ components:
           description: Start date of period this elevation measurement should be used
             for deriving level measurements.
           type: string
-        surveyMethodCode:
+        referencePointType:
+          description: "Name of the reference point. Possible values:\n\n`GRD` Ground\n\
+            \n`KB\tKelly` Bushing\n\n`CAB` Cable Access (Top)\n\n`TOC` Casing (Top)\n\
+            \n`FLR` Floor (Top)\n\n`PBP` Pump Base Plate (Top)\n\n`REF` Reference\n\
+            \n`STP` Stand Pipe (Top)\n\n`SCB` Steel Cross Bar (Top)\n\n`WEL` Well\
+            \ (Top)\n\n`WLC` Well Cover (Top)\n\n`WIN` Windmill Clamp (Top)\n\n`WDC`\
+            \ Wooden Cover (Top)"
+          enum:
+          - GRD
+          - KB
+          - CAB
+          - TOC
+          - FLR
+          - PBP
+          - REF
+          - STP
+          - SCB
+          - WEL
+          - WLC
+          - WIN
+          - WDC
+          - COL
+          - FLN
+          type: string
+        surveyMethod:
           description: "Survey Method. Possible values: \n\n`AMGRD` - Controlled AMG/MGA\
             \ map\t\n`CAL` - (DISUSED) Calculated\t\n`CLGRD` - Controlled CLARKE map\t\
             \n`COCH` - (DISUSED) Compass and Chain\t\n`COOD` - (DISUSED) Compass and\
@@ -2073,30 +2186,6 @@ components:
           - UCMAP
           - UKN
           - VERBL
-          type: string
-        referencePointTypeCode:
-          description: "Name of the reference point. Possible values:\n\n`GRD` Ground\n\
-            \n`KB\tKelly` Bushing\n\n`CAB` Cable Access (Top)\n\n`TOC` Casing (Top)\n\
-            \n`FLR` Floor (Top)\n\n`PBP` Pump Base Plate (Top)\n\n`REF` Reference\n\
-            \n`STP` Stand Pipe (Top)\n\n`SCB` Steel Cross Bar (Top)\n\n`WEL` Well\
-            \ (Top)\n\n`WLC` Well Cover (Top)\n\n`WIN` Windmill Clamp (Top)\n\n`WDC`\
-            \ Wooden Cover (Top)"
-          enum:
-          - GRD
-          - KB
-          - CAB
-          - TOC
-          - FLR
-          - PBP
-          - REF
-          - STP
-          - SCB
-          - WEL
-          - WLC
-          - WIN
-          - WDC
-          - COL
-          - FLN
           type: string
       example:
         measurementDate: 2018-02-10T09:30Z
@@ -2228,9 +2317,6 @@ components:
         createdBy:
           description: SAGeoData username of the user who created the note.
           type: string
-        note:
-          description: The note text.
-          type: string
         noteDate:
           format: date-time
           description: The date of the note.
@@ -2243,6 +2329,9 @@ components:
           format: int32
           description: The drillhole number that the note is for.
           type: integer
+        notes:
+          description: The note text.
+          type: string
       example:
         noteId: 10000
         drillholeNumber: 70
@@ -2381,9 +2470,6 @@ components:
             \r\nOperational as required\t\r\nPlugged\t\r\nPond, free water\t\r\nRehabilitated\t\
             \r\nSaturated\t\r\nShut In\t\r\nSingle Completion\t\r\nStorage\t\r\nSuspended\t\
             \r\nUncontrolled Flowing\t\r\nUnequipped\t\r\nUnknown\t\r\nUnworked"
-          type: string
-        prescribedWellAreaName:
-          description: Prescribed well area
           type: string
         prescribedWaterResourceAreaName:
           description: Prescribed water resource area
@@ -2534,6 +2620,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/codevaluepair'
+        waterWellClass:
+          description: String value displaying the class of the water well
+          type: string
+        prescribedWellArea:
+          description: Prescribed well area
+          type: string
       example:
         unitNumber: 6628-54
         landscapeSARegionCode: EYRPEN
@@ -2710,10 +2802,6 @@ components:
           format: double
           description: The  Depth to Water measurment value.
           type: number
-        artesianPressure:
-          format: double
-          description: The Artesian Pressure measurment value.
-          type: number
         comments:
           description: Comments
           type: string
@@ -2744,6 +2832,10 @@ components:
         anomalous:
           description: If true, indicates that the reading was an anomaly.
           type: boolean
+        pressure:
+          format: double
+          description: The Artesian Pressure measurment value.
+          type: number
       example:
         measurementDate: 2018-02-10T09:30Z
         depthToWater: 94.87
@@ -3633,6 +3725,89 @@ components:
           isConfidential: false
           description: string
         unitSequenceNumber: 645
+    change:
+      title: Root Type for change
+      description: 'Data type representing a change (add, update, delete) to a drillhole
+        or an object belonging to a drillhole (elevation measurements, water level
+        measurements, notes). '
+      type: object
+      properties:
+        changeType:
+          description: The type of change (add/update/delete).
+          enum:
+          - Add
+          - Update
+          - Delete
+          type: string
+        objectType:
+          description: Object type that changed.
+          enum:
+          - WaterLevelMeasurement
+          - ElevationMeasurement
+          - Note
+          - Drillhole
+          type: string
+        primaryKey:
+          format: int32
+          description: Primary key for the object that changed.
+          type: integer
+        drillholeNumber:
+          format: int32
+          description: Drillhole number of the object that the change occurred for.
+          type: integer
+        changeDate:
+          format: date-time
+          description: Date/time that the change occured.
+          type: string
+      example:
+        changeType: Delete
+        objectType: WaterLevelMeasurement
+        primaryKey: 1121212
+        drillholeNumber: 700
+        changeDate: 2020-01-01 00:00
+    change-page:
+      description: Data type that represents a collection/page of changes
+      required:
+      - results
+      type: object
+      properties:
+        nextPage:
+          description: URI to next page of the collection
+          type: string
+        prevPage:
+          description: URI to previous page of the collection
+          type: string
+        totalRecords:
+          description: Indicates the total number of records (including all pages)
+          type: integer
+        pageSize:
+          description: Number of records displayed per page
+          type: integer
+        pageNumber:
+          description: Index (1-based) respresenting current page number
+          type: integer
+        results:
+          description: Collection of changes.
+          type: array
+          items:
+            $ref: '#/components/schemas/change'
+      example:
+        nextPage: some text
+        prevPage: some text
+        totalRecords: 82
+        pageSize: 29
+        pageNumber: 41
+        results:
+        - changeType: Delete
+          objectType: WaterLevelMeasurement
+          primaryKey: 1121212
+          drillholeNumber: 700
+          changeDate: 2020-01-01 00:00
+        - changeType: Add
+          objectType: ElevationMeasurement
+          primaryKey: 2333233
+          drillholeNumber: 701
+          changeDate: 2020-01-01 00:00
   responses:
     UnauthorizedError:
       headers:
