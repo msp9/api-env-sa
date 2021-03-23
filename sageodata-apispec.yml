@@ -2131,48 +2131,6 @@ components:
         Code:
           description: Code for the associated value.
           type: string
-    wcr-constructiondata:
-      description: Well Completion Report - Construction Data
-      required:
-      - commenceDate
-      - completionDate
-      - maxDepthInMeters
-      - finalDepthInMeters
-      - currentDepthInMeters
-      - isOriginal
-      - permitHolderName
-      - permitNumber
-      type: object
-      properties:
-        commenceDate:
-          format: date
-          description: Commencement date
-          type: string
-        completionDate:
-          format: date
-          description: Completion date
-          type: string
-        maxDepthInMeters:
-          format: double
-          description: Maximum depth in meters
-          type: number
-        finalDepthInMeters:
-          format: double
-          description: Final depth in meters
-          type: number
-        currentDepthInMeters:
-          format: double
-          description: Current depth in meters
-          type: number
-        isOriginal:
-          description: Is original
-          type: boolean
-        permitNumber:
-          description: Well Construction Permit Number
-          type: number
-        permitHolderName:
-          description: Permit Holder Name
-          type: string
     note:
       title: Root Type for note
       description: A note, for example a note for an well.
@@ -3587,6 +3545,51 @@ components:
           isConfidential: false
           description: string
         unitSequenceNumber: 645
+    wcr-constructiondata:
+      description: Well Completion Report - Construction Data
+      required:
+      - commenceDate
+      - completionDate
+      - maxDepthInMeters
+      - finalDepthInMeters
+      - currentDepthInMeters
+      - isOriginal
+      - permitHolderName
+      - permitNumber
+      type: object
+      properties:
+        commenceDate:
+          format: date
+          description: Commencement date
+          type: string
+        completionDate:
+          format: date
+          description: Completion date
+          type: string
+        maxDepthInMeters:
+          format: double
+          description: Maximum depth in meters
+          type: number
+        finalDepthInMeters:
+          format: double
+          description: Final depth in meters
+          type: number
+        currentDepthInMeters:
+          format: double
+          description: Current depth in meters
+          type: number
+        isOriginal:
+          description: Is original
+          type: boolean
+        permitNumber:
+          description: Well Construction Permit Number
+          type: number
+        permitHolderName:
+          description: Permit Holder Name
+          type: string
+        licenceNumber:
+          description: License Number
+          type: integer
   responses:
     UnauthorizedError:
       headers:
