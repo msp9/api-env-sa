@@ -871,8 +871,7 @@ paths:
   /api/v1.0/monitoringnetworkwells/changes:
     summary: Endpoint to retrieve changes to monitoring network wells.
     description: Endpoint to retrieve changes to monitoring network wells. Returns
-      changes (add/update/delete) for a monitoring network well or any of it's objects
-      (water level measurements, elevation measurements, notes).
+      changes (add/update/delete) for a monitoring network well.
     get:
       tags:
       - omnwell
@@ -915,18 +914,6 @@ paths:
           type: string
         in: query
         required: true
-      - name: changeObjectType
-        description: What objects to retrieve changes for, i.e. WaterLevelMeasurements,
-          ElevationMeasurements, Notes, etc.
-        schema:
-          enum:
-          - Drillhole
-          - WaterLevelMeasurement
-          - ElevationMeasurement
-          - Note
-          type: string
-        in: query
-        required: true
       responses:
         "200":
           content:
@@ -936,7 +923,7 @@ paths:
           description: Successful operation
         "400":
           description: Parameters were not supplied or were invalid.
-      operationId: GetChanges
+      operationId: GetDrillholeChanges
       summary: List all changes
       description: ""
   /api/v1.0/monitoringnetworkwells/{id}/waterlevelmeasurements:
@@ -1048,6 +1035,177 @@ paths:
           description: Parameters were not supplied or were invalid.
       operationId: GetWaterLevelMeasurements
       summary: List all water level measurements
+      description: ""
+  /api/v1.0/monitoringnetworkwells/elevationmeasurements/changes:
+    summary: Endpoint to retrieve changes to elevation measurements
+    description: Endpoint to retrieve changes to elevation measurments.
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: Only changes that have occurred more recently than the supplied
+          value will be returned. Must be less than 1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: Only changes recorded for drillholes with the matching group
+          code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: changeType
+        description: What change type to return, i.e. deletes (D), updates (U) or
+          additions (A).
+        schema:
+          enum:
+          - A
+          - U
+          - D
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/change-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetElevationMeasurementChanges
+      summary: List all elevation measurement changes
+      description: ""
+  /api/v1.0/monitoringnetworkwells/waterlevelmeasurements/changes:
+    summary: Endpoint to retrieve changes to water level measurements
+    description: Endpoint to retrieve changes to water level measurements
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: Only changes that have occurred more recently than the supplied
+          value will be returned. Must be less than 1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: Only changes recorded for drillholes with the matching group
+          code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: changeType
+        description: What change type to return, i.e. deletes (D), updates (U) or
+          additions (A).
+        schema:
+          enum:
+          - A
+          - U
+          - D
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/change-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetWaterLevelMeasurementChanges
+      summary: List all changes to water level measurements
+      description: ""
+  /api/v1.0/monitoringnetworkwells/notes/changes:
+    summary: Endpoint to retrieve changes to notes
+    description: Endpoint to retrieve changes to notes.
+    get:
+      tags:
+      - omnwell
+      parameters:
+      - name: modifiedSince
+        description: Only changes that have occurred more recently than the supplied
+          value will be returned. Must be less than 1 year prior to current date.
+        schema:
+          format: date-time
+          type: string
+        in: query
+        required: true
+      - name: groupCode
+        description: Only changes recorded for drillholes with the matching group
+          code will be returned.
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: limit
+        description: Maximum number of results in the response
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: offset
+        description: Pagination index
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: changeType
+        description: What change type to return, i.e. deletes (D), updates (U) or
+          additions (A).
+        schema:
+          enum:
+          - A
+          - U
+          - D
+          type: string
+        in: query
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/change-page'
+          description: Successful operation
+        "400":
+          description: Parameters were not supplied or were invalid.
+      operationId: GetNoteChanges
+      summary: List all note changes
       description: ""
 components:
   schemas:
